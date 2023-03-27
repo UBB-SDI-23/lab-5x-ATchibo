@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosResponse } from "axios";
+import axios, { AxiosResponse } from "axios";
 
 const BACKEND_BASE_URL = "http://localhost:8080";
 const BASE_URL: string = BACKEND_BASE_URL + "/dealerships";
@@ -15,4 +15,5 @@ class DealershipRequests {
     }
 }
 
-export default new DealershipRequests();
+let d = new DealershipRequests();
+export default d;
