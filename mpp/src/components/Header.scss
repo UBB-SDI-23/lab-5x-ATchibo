@@ -3,4 +3,23 @@
 .header {
     height: 50px;
     background-color: $main-red;
+
+    display: flex;
+}
+
+.header-icon {
+    color: white;
+    align-self: flex-start;   
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: $margin-lg;
+}
+
+.header-title {
+    color: white;
+    font-size: 2em;
+    text-transform: capitalize;
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: $margin-md;
 }
