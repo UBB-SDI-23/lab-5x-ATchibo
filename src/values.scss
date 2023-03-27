@@ -32,6 +32,7 @@ $form-title-w: 70vw;
 $form-title-max-w: 1000px;
 
 $footer-height: 100px;
+$header-height: 50px;
 
 $box-shadow-h-offset-sm: 2px; 
 $box-shadow-v-offset-sm: 2px;
@@ -43,11 +44,6 @@ $box-shadow-blur-sm: 2px;
 $box-shadow-spread-sm: 2px;
 
 $checkbox-h: 25px;
-
-$hermes-logo-header-w: 80px;
-$hermes-logo-header-h: 50px;
-$hermes-logo-w: 144px;
-$hermes-logo-h: 90px;
 
 $login-title-size: 70px;
 $login-title-size-sm: 30px;
@@ -84,4 +80,8 @@ $max-length-lg: 1000;
 $transition-duration: 270ms;
 
 // Fonts
-$default-font: "Roboto";
+$default-font: "Montserrat";
+
+* {
+    font-family: 'Montserrat', sans-serif;
+}

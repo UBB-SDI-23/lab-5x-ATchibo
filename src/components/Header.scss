@@ -1,7 +1,7 @@
 @import '../values.scss';
 
 .header {
-    height: 50px;
+    height: $header-height;
     background-color: $main-red;
 
     display: flex;
