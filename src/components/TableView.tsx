@@ -1,9 +1,9 @@
-import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import { Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import { useEffect, useState } from 'react';
 import Card from './Card';
 import './TableView.scss';
 
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridRowSelectionModel } from '@mui/x-data-grid';
 import DealershipRequests from '../api/DealershipRequests';
 
 const TableView = () => {
@@ -19,7 +19,7 @@ const TableView = () => {
     const columns: GridColDef[] = [
         { field: 'id', headerName: 'ID', width: 70 },
         { field: 'name', headerName: 'Name', width: 130 },
-        { field: 'address', headerName: 'Address', resizable: true},
+        { field: 'address', headerName: 'Address', width: 130},
         { field: 'phone', headerName: 'Phone', width: 130 },
         { field: 'email', headerName: 'Email', width: 130 },
         { field: 'website', headerName: 'Website', width: 130 }
@@ -47,7 +47,13 @@ const TableView = () => {
     }, []);
 
 
-    const pgSize = [5, 10, 25];
+    const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
+
+    const deleteRows = () => {
+        console.log("delete rows");
+
+        DealershipRequests.deleteDealerships(rowSelectionModel);
+    }
 
     return (
         <Card>
@@ -64,19 +70,28 @@ const TableView = () => {
                     <MenuItem value={20}>Twenty</MenuItem>
                     <MenuItem value={30}>Thirty</MenuItem>
                 </Select>
-
-                <div className='table-div'>
+            </FormControl>
+            
+            <div className='table-div'>
                 <DataGrid
                     rows={rows}
                     columns={columns}
-                    pageSizeOptions={pgSize}
                     checkboxSelection
+                    onRowSelectionModelChange={(newRowSelectionModel) => {
+                        setRowSelectionModel(newRowSelectionModel);
+                        console.log(newRowSelectionModel);
+                    }}
+                    rowSelectionModel={rowSelectionModel}
                 />
-                </div>
+            </div>
 
-                <p>Options: add entry, update entry, delete entry (todo)</p>
+            <Button
+                className='delete-button'
+                onClick={deleteRows}
+            >
+                Delete selected columns
+            </Button>
 
-            </FormControl>
         </Card>
     )
 }
