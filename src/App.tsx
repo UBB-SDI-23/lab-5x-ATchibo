@@ -1,17 +1,27 @@
 import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
-
 import Header from './components/Header';
-import Teste from './components/Teste';
-import MainSection from './components/MainSection';
+
+import HomePage from './pages/HomePage';
+import NoPage from './pages/NoPage';
+import StatisticsPage from './pages/StatisticsPage';
+import TableManagementPage from './pages/TableManagementPage';
 
 function App() {
 
   return (
     <div className="App">
-        <Header/>
-        <MainSection/>
-        <Teste/>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Header />}>
+              <Route index element={<HomePage />} />
+              <Route path="/manage-tables" element={<TableManagementPage />} />
+              <Route path="/statistics" element={<StatisticsPage />} />
+              <Route path="*" element={<NoPage />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
     </div>
   );
 }

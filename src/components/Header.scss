@@ -4,15 +4,25 @@
     height: $header-height;
     background-color: $main-red;
 
+    // display: flex;
+}
+
+#title-div {
     display: flex;
+
+    height: $header-height;
+    
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: $margin-lg;
 }
 
 .header-icon {
     color: white;
     align-self: flex-start;   
+
     margin-top: auto;
     margin-bottom: auto;
-    margin-left: $margin-lg;
 }
 
 .header-title {

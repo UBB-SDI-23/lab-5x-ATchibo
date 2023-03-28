@@ -1,16 +1,19 @@
-import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Values from '../Values';
 
 import './MainMenu.scss';
 
 import MenuItem from './MenuItem';
 
 const MainMenu = () => {
-    const [btnText, setBtnText] = useState<string>("Go");
+    const navigate = useNavigate();
 
-    const goToPage = () => {
-        if (btnText === "Go")
-            setBtnText("dute dica");
-        else setBtnText("Go");
+    const goToManageTable = () => {
+        navigate(Values.manageTablesUrl);
+    }
+
+    const goToStatistics = () => {
+        navigate(Values.statisticsUrl);
     }
 
     return (
@@ -18,14 +21,14 @@ const MainMenu = () => {
             <MenuItem 
                 title='Manage your database' 
                 description='Add, remove or update the entries from your database'
-                btnText={btnText}
-                btnClick={goToPage}
+                btnText={"Go"}
+                btnClick={goToManageTable}
             />
             <MenuItem
                 title='View statistics'
                 description='Check out some statistics about the data currently stored in your database'
                 btnText='Go'
-                btnClick={goToPage}
+                btnClick={goToStatistics}
             />
         </div>
     )
