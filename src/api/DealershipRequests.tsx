@@ -1,8 +1,7 @@
 import axios, { AxiosResponse } from "axios";
+import Values from "../Values";
 
-const BACKEND_BASE_URL = "http://localhost:8080";
-const BASE_URL: string = BACKEND_BASE_URL + "/dealerships";
-
+const BASE_URL: string = Values.baseBackendUrl + "/dealerships";
 
 const api = axios.create({
     baseURL: BASE_URL

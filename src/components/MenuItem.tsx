@@ -1,4 +1,5 @@
 import { Button } from '@mui/material';
+import Card from './Card';
 import './MenuItem.scss';
 
 type MenuItemProps = {
@@ -11,7 +12,7 @@ type MenuItemProps = {
 const MenuItem = ({title, description, btnText, btnClick}: MenuItemProps) => {
 
     return (
-        <div className='menu-item'>
+        <Card>
             <p className='title'>{title}</p>
             <p className='description'>{description}</p>
             <Button
@@ -21,7 +22,7 @@ const MenuItem = ({title, description, btnText, btnClick}: MenuItemProps) => {
             >
                 {btnText}
             </Button>
-        </div>
+        </Card>
     );
 }
 

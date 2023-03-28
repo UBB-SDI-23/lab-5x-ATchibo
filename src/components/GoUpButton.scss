@@ -1,0 +1,23 @@
+@import '../values.scss';
+
+.go-top-btn {
+    width: $round-button !important; 
+    height: $round-button !important;
+    background-color: $main-red !important;
+    border-radius: $circle-border-radius !important;
+
+    position: fixed !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    z-index: 1 !important;
+    margin-right: $floating-button-margin-h !important;
+    margin-bottom: $floating-button-margin-v !important;
+
+    &:hover {
+        background-color: $secondary-red !important;
+    }
+}
+
+#arrow-icon {
+    color: white !important;
+}

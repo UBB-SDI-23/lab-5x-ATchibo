@@ -1,39 +1,5 @@
 @import '../values.scss';
 
-.menu-item {
-    width: $question-card-small-w;
-    max-width: $question-card-w;
-
-    border: 0px;
-    border-radius: $border-radius;
-
-    box-shadow: $box-shadow-h-offset-sm 
-                $box-shadow-v-offset-sm 
-                $box-shadow-blur-sm 
-                $box-shadow-spread-sm 
-                $button-shadow-color, 
-
-                0-$box-shadow-h-offset-md 
-                0-$box-shadow-v-offset-md 
-                $box-shadow-blur-sm 
-                $box-shadow-spread-sm 
-                $main-red;
-
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: $margin-lg;
-    margin-bottom: $margin-lg;
-    padding: $padding-md $padding-lg;
-
-    transition: all $transition-duration ease-in-out;
-
-    background-color: white;
-
-    display: block;
-
-    text-align: start;
-}
-
 .title {
     font-size: 2em;
     margin-top: 0;

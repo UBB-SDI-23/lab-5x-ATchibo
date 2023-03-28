@@ -7,6 +7,7 @@ import HomePage from './pages/HomePage';
 import NoPage from './pages/NoPage';
 import StatisticsPage from './pages/StatisticsPage';
 import TableManagementPage from './pages/TableManagementPage';
+import Values from './Values';
 
 function App() {
 
@@ -14,10 +15,10 @@ function App() {
     <div className="App">
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Header />}>
+            <Route path={Values.homePageUrl} element={<Header />}>
               <Route index element={<HomePage />} />
-              <Route path="/manage-tables" element={<TableManagementPage />} />
-              <Route path="/statistics" element={<StatisticsPage />} />
+              <Route path={Values.manageTablesUrl} element={<TableManagementPage />} />
+              <Route path={Values.statisticsUrl} element={<StatisticsPage />} />
               <Route path="*" element={<NoPage />} />
             </Route>
           </Routes>
