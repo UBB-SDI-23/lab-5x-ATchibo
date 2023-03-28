@@ -1,13 +1,13 @@
 // Colors 
-$main-red: #b51f1fff;
-$secondary-red: rgb(122, 33, 33);
+$main-color: #0f7d4d;
+$secondary-color: #0c5937;
 $button-shadow-color: rgba(0, 0, 0, 0.25);
 
-$translucent-main-red: rgba($main-red, 0.5);
-$translucent-secondary-red: rgba($secondary-red, 0.5);
+$translucent-main-color: rgba($main-color, 0.5);
+$translucent-secondary-color: rgba($secondary-color, 0.5);
 
 $body-color: rgb(255, 244, 244);
-$body-color-gradient: linear-gradient(150deg, $main-red, $body-color, $body-color, $body-color);
+$body-color-gradient: linear-gradient(150deg, $main-color, $body-color, $body-color, $body-color);
 
 // Dimensions
 $max-w: 100vw;  $max-w-percent: 100%;

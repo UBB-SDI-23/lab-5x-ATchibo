@@ -3,7 +3,7 @@
 .go-top-btn {
     width: $round-button !important; 
     height: $round-button !important;
-    background-color: $main-red !important;
+    background-color: $main-color !important;
     border-radius: $circle-border-radius !important;
 
     position: fixed !important;
@@ -14,7 +14,7 @@
     margin-bottom: $floating-button-margin-v !important;
 
     &:hover {
-        background-color: $secondary-red !important;
+        background-color: $secondary-color !important;
     }
 }
 

@@ -6,6 +6,10 @@ class Values {
     static manageTablesUrl = "/manage-tables";
     static statisticsUrl = "/statistics";
 
+    // Colors
+    static mainColor = "#0f7d4d";
+    static secondaryColor = "#0c5937";
+
     // Backend
     // Dealerships
     static dealershipsBaseUrl = "/dealerships";

@@ -1,1 +1,14 @@
 @import '../values.scss';
+
+.table-data-menu-div {
+    max-width: 95%;
+}
+
+.add-table-view-btn {
+    width: $question-card-w;
+
+    margin: $margin-md !important;
+
+    background-color: rgb(241, 232, 232) !important;
+    color: rgb(65, 65, 65) !important;
+}
