@@ -19,16 +19,17 @@ class DealershipRequests {
     }
 
     
-    async deleteDealerships(ids: any): Promise<void> {
+    async deleteDealerships(ids: any): Promise<any> {
+        let res;
+
         for (let i = 0; i < ids.length; i++) {
-            // console.log(ids[i]);
-            // console.log(typeof ids[i]);
-            // console.log(Values.dealershipsDeleteUrl.toString())
-            // console.log(Values.dealershipsDeleteUrl + ids[i].toString());
-            // await api.delete(Values.dealershipsDeleteUrl + ids[i].toString());
-            await api.delete("/" + ids[i].toString());
+            res = await api.delete(Values.dealershipsDeleteUrl + ids[i].toString())
+                .catch((err: any) => {
+                    console.log(err);
+                });
         }
-        // await api.delete("/252");
+
+        return res;
     }
 }
 

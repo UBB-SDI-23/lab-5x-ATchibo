@@ -15,7 +15,7 @@ class Values {
     // Dealerships
     static dealershipsBaseUrl = "/dealerships";
     static dealershipsAllUrl = "";
-    static dealershipsDeleteUrl: "/";
+    static dealershipsDeleteUrl = "/";
 }
 
 export default Values;
