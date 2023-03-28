@@ -2,20 +2,20 @@
 
 .card {
     width: $question-card-small-w;
-    max-width: $question-card-w;
+    max-width: 85%;
 
     border: 0px;
     border-radius: $border-radius;
 
     box-shadow: $box-shadow-h-offset-sm 
                 $box-shadow-v-offset-sm 
-                $box-shadow-blur-sm 
+                $box-shadow-blur-nil 
                 $box-shadow-spread-sm 
                 $button-shadow-color, 
 
                 0-$box-shadow-h-offset-md 
                 0-$box-shadow-v-offset-md 
-                $box-shadow-blur-sm 
+                $box-shadow-blur-nil
                 $box-shadow-spread-sm 
                 $main-color;
 
