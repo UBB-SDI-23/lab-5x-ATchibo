@@ -10,7 +10,7 @@ const api = axios.create({
 class DealershipRequests {
 
     async getDealerships(): Promise<AxiosResponse<any, any>> {
-        return await api.get('');
+        return await api.get(Values.dealershipsAllUrl);
     }
 
     async getDealershipsJson(): Promise<JSON[]> {
@@ -18,10 +18,7 @@ class DealershipRequests {
         return ans.data["_embedded"]["dealershipDTOList"];
     }
 
-    // async getDealerships(): JSON[] {
-    //     const ans = await api.get('');
-    //     return ans.data["_embedded"]["dealershipDTOList"];
-    // }
+    
 }
 
 let d = new DealershipRequests();

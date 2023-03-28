@@ -74,6 +74,8 @@ const TableView = () => {
                 />
                 </div>
 
+                <p>Options: add entry, update entry, delete entry (todo)</p>
+
             </FormControl>
         </Card>
     )
