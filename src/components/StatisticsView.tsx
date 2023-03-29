@@ -74,6 +74,7 @@ const StatisticsView = () => {
         }
 
         fetchDealershipsByAvgCarPrice();
+        showAlertSuccess();
     }, [tableInfo]);
 
 

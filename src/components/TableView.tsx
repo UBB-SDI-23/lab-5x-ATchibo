@@ -36,9 +36,12 @@ const TableView = () => {
     const handleChange = (event: SelectChangeEvent) => {
         setTableNameIndex(event.target.value as string);
         setTableInfo(tableInfoList[event.target.value as unknown as number]);
+        console.log(tableInfo);
     };
 
-    const [menuItems, setMenuItems] = useState<any>([]);
+    const menuItems = tableNames.map((name, index) => {
+        return <MenuItem key={index} value={index}>{name}</MenuItem>
+    })
 
     // table
     const columns: GridColDef[] = [
@@ -53,9 +56,6 @@ const TableView = () => {
     const [rows, setRows] = useState<JSON[]>([]);
 
     useEffect(() => {
-        setMenuItems(tableNames.map((name, index) => {
-            return <MenuItem key={index} value={index}>{name}</MenuItem>
-        }));
 
         const fetchDealerships = async () => {
             try {
