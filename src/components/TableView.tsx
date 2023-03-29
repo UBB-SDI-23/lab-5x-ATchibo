@@ -9,6 +9,24 @@ import DealershipInfo from '../domain/DealershipInfo';
 
 const TableView = () => {
 
+    const [alertSuccess, setAlertSuccess] = useState<boolean>(false);
+    const [alertError, setAlertError] = useState<boolean>(false);
+    const [alertErrorText, setAlertErrorText] = useState<string>("");
+
+    const showAlertSuccess = () => {
+        setAlertSuccess(true);
+        setTimeout(() => {
+            setAlertSuccess(false);
+        }, 3000);
+    }
+
+    const showAlertError = () => {
+        setAlertError(true);    
+        setTimeout(() => {
+            setAlertError(false);
+        }, 3000);
+    }
+
     const tableNames = ["Dealerships", "Cars", "Customers", "Employees", "Orders"];
     const [tableNameIndex, setTableNameIndex] = useState('');
 
@@ -48,9 +66,13 @@ const TableView = () => {
                     console.log(err.response.data.message);
                     console.log(err.response.status);
                     console.log(err.response.headers);
+                    setAlertErrorText(err.response.data.message + " " + err.response.status + " " + err.response.headers);
                 } else {
                     console.log("Error: " + err.message);
+                    setAlertErrorText(err.message);
                 }
+
+                showAlertError();
             }
         }
 
@@ -60,25 +82,18 @@ const TableView = () => {
 
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
 
-    const [alertSuccess, setAlertSuccess] = useState<boolean>(false);
-    const [alertError, setAlertError] = useState<boolean>(false);
-    const [alertErrorText, setAlertErrorText] = useState<string>("");
-
     const deleteRows = () => {
         console.log("delete rows");
 
         const fetchDelete = async () => {
             await DealershipRequests.deleteDealerships(rowSelectionModel)
             .then((res: any) => {
-                console.log(res);
-                setAlertSuccess(true);
-                setTimeout(() => {
-                    setAlertSuccess(false);
-                }, 3000);
-
+                // console.log(res);
                 setRows(rows.filter((row: any) => {
                     return !rowSelectionModel.includes(row["id"]);
                 }));
+
+                showAlertSuccess();
             })
             .catch((err: any) => {
                 if (err.response) {
@@ -92,10 +107,7 @@ const TableView = () => {
                     setAlertErrorText(err.message);
                 }
 
-                setAlertError(true);
-                setTimeout(() => {
-                    setAlertError(false);
-                }, 3000);
+                showAlertError();
             });
         }
 
@@ -110,7 +122,7 @@ const TableView = () => {
                     labelId="select-label"
                     className="table-select"
                     value={tableNameIndex}
-                    label="Select table"
+                    label="select-label"
                     onChange={handleChange}
                 >
                     {menuItems}

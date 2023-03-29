@@ -1,3 +1,4 @@
+import DealershipRequests from "../api/DealershipRequests";
 
 
 class DealershipInfo {
@@ -30,6 +31,25 @@ class DealershipInfo {
             }
         }
     }`);
+
+    static dealershipStatisticsStructure = JSON.parse(`{
+        "columns": {
+            "id": {
+                "colName": "ID",
+                "type": "number"
+            }, 
+            "name": {
+                "colName": "Name",
+                "type": "string"
+            }, 
+            "averageCarPrice": {
+                "colName": "Average Car Price",
+                "type": "number"
+            }
+        }
+    }`);
+
+    static statisticsFetch = DealershipRequests.getDealershipsByAvgCarPriceJSON();
 } 
 
 export default DealershipInfo;
