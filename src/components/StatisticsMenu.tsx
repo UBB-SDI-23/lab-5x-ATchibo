@@ -1,10 +1,8 @@
 import { Button } from '@mui/material';
 import { useState } from 'react';
 import './StatisticsMenu.scss';
-import TableView from './TableView';
 
 import AddIcon from '@mui/icons-material/Add';
-import DealershipInfo from '../domain/DealershipInfo';
 import StatisticsView from './StatisticsView';
 
 const TableDataMenu = () => {
