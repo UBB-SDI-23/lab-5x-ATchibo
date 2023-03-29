@@ -18,7 +18,11 @@ const StatisticsView = () => {
         // setTableInfo(tableInfoList[event.target.value as unknown as number]);
     };
 
-    const [menuItems, setMenuItems] = useState<any>([]);
+    const [menuItems, setMenuItems] = useState<any>(
+        tableNames.map((name, index) => {
+            return <MenuItem key={index} value={index}>{name}</MenuItem>
+        })
+    );
 
     // table
     const columns: GridColDef[] = [
@@ -29,9 +33,9 @@ const StatisticsView = () => {
     
     const [rows, setRows] = useState<JSON[]>([]);
 
-    setMenuItems(tableNames.map((name, index) => {
-        return <MenuItem key={index} value={index}>{name}</MenuItem>
-    }));
+    // setMenuItems(tableNames.map((name, index) => {
+    //     return <MenuItem key={index} value={index}>{name}</MenuItem>
+    // }));
 
     useEffect(() => {
         const fetchDealershipsByAvgCarPrice = async () => {
@@ -48,6 +52,8 @@ const StatisticsView = () => {
                 }
             }
         }
+
+        setMenuItems([]);
 
         fetchDealershipsByAvgCarPrice();
     }, []);
