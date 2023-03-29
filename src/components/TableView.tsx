@@ -5,15 +5,22 @@ import './TableView.scss';
 
 import { DataGrid, GridColDef, GridRowSelectionModel } from '@mui/x-data-grid';
 import DealershipRequests from '../api/DealershipRequests';
+import DealershipInfo from '../domain/DealershipInfo';
 
 const TableView = () => {
 
-    // dropdown
-    const [age, setAge] = useState('');
+    const tableNames = ["Dealerships", "Cars", "Customers", "Employees", "Orders"];
+    const [tableNameIndex, setTableNameIndex] = useState('');
+
+    const tableInfoList = [DealershipInfo.dealershipStructure, DealershipInfo.dealershipStructure, DealershipInfo.dealershipStructure, DealershipInfo.dealershipStructure, DealershipInfo.dealershipStructure];
+    const [tableInfo, setTableInfo] = useState<any>(null);
 
     const handleChange = (event: SelectChangeEvent) => {
-      setAge(event.target.value as string);
+        setTableNameIndex(event.target.value as string);
+        setTableInfo(tableInfoList[event.target.value as unknown as number]);
     };
+
+    const [menuItems, setMenuItems] = useState<any>([]);
 
     // table
     const columns: GridColDef[] = [
@@ -28,6 +35,10 @@ const TableView = () => {
     const [rows, setRows] = useState<JSON[]>([]);
 
     useEffect(() => {
+        setMenuItems(tableNames.map((name, index) => {
+            return <MenuItem key={index} value={index}>{name}</MenuItem>
+        }));
+
         const fetchDealerships = async () => {
             try {
                 setRows(await DealershipRequests.getDealershipsJson());
@@ -98,13 +109,11 @@ const TableView = () => {
                 <Select
                     labelId="select-label"
                     className="table-select"
-                    value={age}
-                    label="Age"
+                    value={tableNameIndex}
+                    label="Select table"
                     onChange={handleChange}
                 >
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
+                    {menuItems}
                 </Select>
             </FormControl>
             

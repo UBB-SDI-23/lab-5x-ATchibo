@@ -1,10 +1,11 @@
+import StatisticsMenu from '../components/StatisticsMenu';
 import './StatisticsPage.scss';
 
 const StatisticsPage = () => {
 
     return (
         <div>
-            sp
+            <StatisticsMenu/>
         </div>
     )
 }

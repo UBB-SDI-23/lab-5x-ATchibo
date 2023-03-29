@@ -16,6 +16,7 @@ class Values {
     static dealershipsBaseUrl = "/dealerships";
     static dealershipsAllUrl = "";
     static dealershipsDeleteUrl = "/";
+    static dealershipsByAvgCarPriceUrl = "/sort-by-avg-car-price";
 }
 
 export default Values;

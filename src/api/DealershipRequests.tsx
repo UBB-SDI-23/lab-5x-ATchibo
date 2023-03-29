@@ -18,6 +18,16 @@ class DealershipRequests {
         return ans.data["_embedded"]["dealershipDTOList"];
     }
 
+
+    async getDealershipsByAvgCarPrice(): Promise<AxiosResponse<any, any>> {
+        return await api.get(Values.dealershipsByAvgCarPriceUrl);
+    }
+
+    async getDealershipsByAvgCarPriceJSON(): Promise<JSON[]> {
+        const ans = await this.getDealershipsByAvgCarPrice();
+        return ans.data;
+    }
+
     
     async deleteDealerships(ids: any): Promise<any> {
         let res;
