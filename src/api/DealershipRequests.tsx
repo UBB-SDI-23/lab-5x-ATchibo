@@ -31,9 +31,7 @@ class DealershipRequests {
 
 
     async updateDealerships(dealerships: Dealership[]): Promise<any> {
-        dealerships.forEach(async dealership => {
-            await api.put(Values.dealershipsUpdateUrl + dealership.getId().toString(), dealership);
-        });
+        return await api.put(Values.dealershipsUpdateUrl, dealerships);
     }
 
     

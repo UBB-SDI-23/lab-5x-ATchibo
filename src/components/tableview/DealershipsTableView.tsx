@@ -16,6 +16,7 @@ const DealershipsTableView = () => {
     const [currentDealerships, setCurrentDealerships] = useState<Dealership[]>([]);
     const [selectedRowsFields, setSelectedRowsFields] = useState<JSX.Element[]>([]);
 
+    const [dbQueryButtonsDisabled, setDbQueryButtonsDisabled] = useState<boolean>(false);
 
     const EntityEditContainer = ({dealership}: EditContainerProps) => {
 
@@ -53,6 +54,14 @@ const DealershipsTableView = () => {
         )
     }
 
+    useEffect(() => {
+        setSelectedRowsFields(currentDealerships.map((dealership: Dealership) => {
+            return (
+                <EntityEditContainer key={dealership.getId()} dealership={dealership}/>
+            );
+        }));
+    }, [currentDealerships]);
+
     const showUpdateRowsContainers = () => {
         console.log("update rows");
 
@@ -75,14 +84,13 @@ const DealershipsTableView = () => {
         }));
     }
 
-    useEffect(() => {
-        setSelectedRowsFields(currentDealerships.map((dealership: Dealership) => {
-            return (
-                <EntityEditContainer key={dealership.getId()} dealership={dealership}/>
-            );
-        }));
-    }, [currentDealerships]);
+    const showAddRowsContainers = () => {
+        console.log("add rows");
 
+        setDbQueryButtonsDisabled(true);
+
+        setCurrentDealerships([new Dealership()]);
+    }
 
     const [alertSuccess, setAlertSuccess] = useState<boolean>(false);
     const [alertError, setAlertError] = useState<boolean>(false);
@@ -110,109 +118,82 @@ const DealershipsTableView = () => {
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
 
 
-    const getAllRows = () => {
-        console.log("get all rows");
-
-        selectedRowsFields.forEach((field: JSX.Element) => {
-            console.log(field);
-        });
-    }
-
     useEffect(() => {
-
-        const fetchDealerships = async () => {
-            try {
-                setRows(await DealershipRequests.getDealershipsJson());
-            } catch (err: any) {
-                if (err.response) {
-                    console.log("Error fetching dealerships");
-                    console.log(err.response.data.message);
-                    console.log(err.response.status);
-                    console.log(err.response.headers);
-                    setAlertErrorText(err.response.data.message + " " + err.response.status + " " + err.response.headers);
-                } else {
-                    console.log("Error: " + err.message);
-                    setAlertErrorText(err.message);
-                }
-
-                showAlertError();
-            }
-        }
-
         fetchDealerships();
     }, []);
 
-    const deleteRows = () => {
-        console.log("delete rows");
+    const getAllRows = () => {
+        console.log("get all rows");
 
-        const fetchDelete = async () => {
-            await DealershipRequests.deleteDealerships(rowSelectionModel)
-            .then((res: any) => {
-                setRows(rows.filter((row: any) => {
-                    return !rowSelectionModel.includes(row["id"]);
-                }));
-
-                showAlertSuccess();
-            })
-            .catch((err: any) => {
-                if (err.response) {
-                    console.log("Error fetching dealerships");
-                    console.log(err.response.data.message);
-                    console.log(err.response.status);
-                    console.log(err.response.headers);
-                    setAlertErrorText(err.response.data.message + " " + err.response.status + " " + err.response.headers);
-                } else {
-                    console.log("Error: " + err.message);
-                    setAlertErrorText(err.message);
-                }
-
-                showAlertError();
-            });
-        }
-
-        fetchDelete();
+        fetchDealerships();
     }
 
     const updateRows = () => {
         console.log("update rows");
 
-        const fetchUpdate = async () => {
-            await DealershipRequests.updateDealerships(currentDealerships)
-            .then((res: any) => {
-                setRows(rows.map((row: any) => {
-                    return row;
-                }));
-
-                showAlertSuccess();
-                setCurrentDealerships([]);
-                setDbQueryButtonsDisabled(false);
-            })
-            .catch((err: any) => {
-                if (err.response) {
-                    console.log("Error fetching dealerships");
-                    console.log(err.response.data.message);
-                    console.log(err.response.status);
-                    console.log(err.response.headers);
-                    setAlertErrorText(err.response.data.message + " " + err.response.status + " " + err.response.headers);
-                } else {
-                    console.log("Error: " + err.message);
-                    setAlertErrorText(err.message);
-                }
-
-                showAlertError();
-            });
-        }
-
         fetchUpdate();
     }
 
-    const [dbQueryButtonsDisabled, setDbQueryButtonsDisabled] = useState<boolean>(false);
+    const deleteRows = () => {
+        console.log("delete rows");
+
+        fetchDelete();
+    }
 
     const cancelUpdateRows = () => {
         console.log("cancel update rows");
 
         setCurrentDealerships([]);
         setDbQueryButtonsDisabled(false);
+    }
+
+    const fetchDealerships = async () => {
+        try {
+            setRows(await DealershipRequests.getDealershipsJson());
+        } catch (err: any) {
+            displayError(err);
+        }
+    }
+
+    const fetchUpdate = async () => {
+        await DealershipRequests.updateDealerships(currentDealerships)
+        .then((res: any) => {
+            showAlertSuccess();
+            setCurrentDealerships([]);
+            setDbQueryButtonsDisabled(false);
+        })
+        .catch((err: any) => {
+            displayError(err);
+        });
+    }
+
+    const fetchDelete = async () => {
+        await DealershipRequests.deleteDealerships(rowSelectionModel)
+        .then((res: any) => {
+            setRows(rows.filter((row: any) => {
+                return !rowSelectionModel.includes(row["id"]);
+            }));
+
+            showAlertSuccess();
+        })
+        .catch((err: any) => {
+            displayError(err);
+        });
+    }
+
+    const displayError = (err: any) => {
+        if (err.response) {
+            console.log("Error fetching dealerships");
+            console.log(err.response.data.message);
+            console.log(err.response.status);
+            console.log(err.response.headers);
+            setAlertErrorText(err.response.data.message + " " + err.response.status + " " + err.response.headers);
+        } else {
+            console.log("Error: " + err.message);
+            setAlertErrorText(err.message);
+        }
+
+        showAlertError();
     }
 
     return (
@@ -254,7 +235,7 @@ const DealershipsTableView = () => {
                 </Button>
 
                 <Button
-                    onClick={deleteRows}
+                    onClick={showAddRowsContainers}
                     disabled={dbQueryButtonsDisabled}
                 >
                     Add new rows
