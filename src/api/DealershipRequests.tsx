@@ -1,5 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 import Values from "../Values";
+import Dealership from "../domain/Dealership";
 
 const BASE_URL: string = Values.baseBackendUrl + Values.dealershipsBaseUrl;
 
@@ -26,6 +27,13 @@ class DealershipRequests {
     async getDealershipsByAvgCarPriceJSON(): Promise<JSON[]> {
         const ans = await this.getDealershipsByAvgCarPrice();
         return ans.data;
+    }
+
+
+    async updateDealerships(dealerships: Dealership[]): Promise<any> {
+        dealerships.forEach(async dealership => {
+            await api.put(Values.dealershipsUpdateUrl + dealership.getId().toString(), dealership);
+        });
     }
 
     
