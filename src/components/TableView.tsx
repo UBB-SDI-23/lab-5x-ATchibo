@@ -1,11 +1,8 @@
-import { Alert, Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, Snackbar } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import { useState } from 'react';
 import Card from './Card';
 import './TableView.scss';
 
-import { DataGrid, GridColDef, GridRowSelectionModel } from '@mui/x-data-grid';
-import DealershipRequests from '../api/DealershipRequests';
-import DealershipInfo from '../domain/DealershipInfo';
 import DealershipsTableView from './tableview/DealershipsTableView';
 
 const TableView = () => {

@@ -1,5 +1,4 @@
 import { GridColDef } from "@mui/x-data-grid";
-import DealershipRequests from "../api/DealershipRequests";
 
 
 class DealershipInfo {
