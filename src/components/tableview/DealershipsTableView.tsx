@@ -1,4 +1,4 @@
-import { SelectChangeEvent, MenuItem, Button, Snackbar, Alert, FormControl, Input, TextField } from '@mui/material';
+import { Button, Snackbar, Alert, TextField } from '@mui/material';
 import { GridColDef, GridRowSelectionModel, DataGrid, GridRowId } from '@mui/x-data-grid';
 import { useState, useEffect } from 'react';
 import DealershipRequests from '../../api/DealershipRequests';
@@ -110,16 +110,16 @@ const DealershipsTableView = () => {
         }, 3000);
     }
 
-    const tableInfo = DealershipInfo.dealershipStructure;
+    // const tableInfo = DealershipInfo.dealershipStructure;
     const columns: GridColDef[] = DealershipInfo.columns;
     
     const [rows, setRows] = useState<JSON[]>([]);
 
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
 
-
     useEffect(() => {
-        fetchDealerships();
+        fetchDealerships(); 
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const getAllRows = () => {
