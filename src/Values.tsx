@@ -11,7 +11,8 @@ class Values {
 
     // Backend
     // static baseBackendUrl = "http://localhost:8080";
-    static baseBackendUrl = "https://ec2-13-51-144-35.eu-north-1.compute.amazonaws.com";
+    // static baseBackendUrl = "https://ec2-13-51-144-35.eu-north-1.compute.amazonaws.com";
+    static baseBackendUrl = "/api";
     
     // Dealerships
     static dealershipsBaseUrl = "/dealerships";
