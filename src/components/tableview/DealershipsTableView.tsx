@@ -4,16 +4,16 @@ import { useState, useEffect } from 'react';
 import DealershipRequests from '../../api/DealershipRequests';
 import DealershipInfo from '../../domain/DealershipInfo';
 import './DealershipsTableView.scss';
-import Dealership from '../../domain/Dealership';
+import DealershipDTO from '../../domain/DealershipDTO';
 
 
 interface EditContainerProps {
-    dealership: Dealership
+    dealership: DealershipDTO
 }
 
 const DealershipsTableView = () => {
 
-    const [currentDealerships, setCurrentDealerships] = useState<Dealership[]>([]);
+    const [currentDealerships, setCurrentDealerships] = useState<DealershipDTO[]>([]);
     const [selectedRowsFields, setSelectedRowsFields] = useState<JSX.Element[]>([]);
 
     const [dbQueryButtonsDisabled, setDbQueryButtonsDisabled] = useState<boolean>(false);
@@ -55,7 +55,7 @@ const DealershipsTableView = () => {
     }
 
     useEffect(() => {
-        setSelectedRowsFields(currentDealerships.map((dealership: Dealership) => {
+        setSelectedRowsFields(currentDealerships.map((dealership: DealershipDTO) => {
             return (
                 <EntityEditContainer key={dealership.getId()} dealership={dealership}/>
             );
@@ -76,11 +76,11 @@ const DealershipsTableView = () => {
             for (let i = 0; i < rows.length; i++) {
                 // @ts-ignore
                 if (rows[i]["id"] === row) {
-                    return new Dealership(rows[i]);
+                    return new DealershipDTO(rows[i]);
                 }
             }
 
-            return new Dealership();
+            return new DealershipDTO();
         }));
     }
 
@@ -89,7 +89,7 @@ const DealershipsTableView = () => {
 
         setDbQueryButtonsDisabled(true);
 
-        setCurrentDealerships([new Dealership()]);
+        setCurrentDealerships([new DealershipDTO()]);
     }
 
     const [alertSuccess, setAlertSuccess] = useState<boolean>(false);
@@ -156,6 +156,8 @@ const DealershipsTableView = () => {
     }
 
     const fetchUpdate = async () => {
+        // console.log(currentDealerships);
+
         await DealershipRequests.updateDealerships(currentDealerships)
         .then((res: any) => {
             showAlertSuccess();

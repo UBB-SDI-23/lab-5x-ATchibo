@@ -10,6 +10,7 @@ import NoPage from './pages/NoPage';
 import StatisticsPage from './pages/StatisticsPage';
 import TableManagementPage from './pages/TableManagementPage';
 import Values from './Values';
+import DealershipDetailsPage from './pages/DealershipDetailsPage';
 
 function App() {
 
@@ -38,7 +39,8 @@ function App() {
           <Routes>
             <Route path={Values.homePageUrl} element={<Header />}>
               <Route index element={<HomePage />} />
-              <Route path={Values.manageTablesUrl} element={<TableManagementPage />} />
+              <Route path={Values.manageTablesUrl} element={<TableManagementPage />}></Route>
+              <Route path={Values.manageTablesUrl + "/dealerships/:dId"} element={<DealershipDetailsPage />}/>
               <Route path={Values.statisticsUrl} element={<StatisticsPage />} />
               <Route path="*" element={<NoPage />} />
             </Route>

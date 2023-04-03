@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 import Values from "../Values";
-import Dealership from "../domain/Dealership";
+import DealershipDTO from "../domain/DealershipDTO";
 
 const BASE_URL: string = Values.baseBackendUrl + Values.dealershipsBaseUrl;
 
@@ -19,6 +19,15 @@ class DealershipRequests {
         return ans.data["_embedded"]["dealershipDTOList"];
     }
 
+    async getDealership(id: number): Promise<AxiosResponse<any, any>> {
+        return await api.get(Values.dealershipsByIdUrl + id.toString());
+    }
+
+    async getDealershipJson(id: number): Promise<JSON> {
+        const ans = await this.getDealership(id);
+        return ans.data;
+    }
+
 
     async getDealershipsByAvgCarPrice(): Promise<AxiosResponse<any, any>> {
         return await api.get(Values.dealershipsByAvgCarPriceUrl);
@@ -30,7 +39,7 @@ class DealershipRequests {
     }
 
 
-    async updateDealerships(dealerships: Dealership[]): Promise<any> {
+    async updateDealerships(dealerships: DealershipDTO[]): Promise<any> {
         return await api.put(Values.dealershipsUpdateUrl, dealerships);
     }
 
