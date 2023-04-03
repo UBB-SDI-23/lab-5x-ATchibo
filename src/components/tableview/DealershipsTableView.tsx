@@ -1,10 +1,12 @@
-import { Button, Snackbar, Alert, TextField } from '@mui/material';
+import { Button, Snackbar, Alert, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import { GridColDef, GridRowSelectionModel, DataGrid, GridRowId } from '@mui/x-data-grid';
 import { useState, useEffect } from 'react';
 import DealershipRequests from '../../api/DealershipRequests';
 import DealershipInfo from '../../domain/DealershipInfo';
 import './DealershipsTableView.scss';
 import DealershipDTO from '../../domain/DealershipDTO';
+import { useNavigate } from 'react-router-dom';
+import Values from '../../Values';
 
 
 interface EditContainerProps {
@@ -198,6 +200,15 @@ const DealershipsTableView = () => {
         showAlertError();
     }
 
+    const navigate = useNavigate();
+
+    const viewDealershipDetails = () => {
+        console.log("view dealership details");
+        navigate(Values.manageTablesUrl + '/dealerships/' + rowSelectionModel[0]);
+    }
+
+    const [modalDeleteOpen, setModalDeleteOpen] = useState<boolean>(false);
+
     return (
         <div>
             <div className='table-div'>
@@ -223,17 +234,10 @@ const DealershipsTableView = () => {
                 </Button>
 
                 <Button
-                    onClick={deleteRows}
-                    disabled={dbQueryButtonsDisabled}
+                    onClick={viewDealershipDetails}
+                    disabled={rowSelectionModel.length !== 1}
                 >
-                    Delete selected columns
-                </Button>
-
-                <Button
-                    onClick={showUpdateRowsContainers}
-                    disabled={dbQueryButtonsDisabled}
-                >
-                    Update selected rows
+                    View more details
                 </Button>
 
                 <Button
@@ -241,6 +245,20 @@ const DealershipsTableView = () => {
                     disabled={dbQueryButtonsDisabled}
                 >
                     Add new rows
+                </Button>
+
+                <Button
+                    onClick={showUpdateRowsContainers}
+                    disabled={dbQueryButtonsDisabled  || rowSelectionModel.length === 0}
+                >
+                    Update selected rows
+                </Button>
+
+                <Button
+                    onClick={() => setModalDeleteOpen(true)}
+                    disabled={dbQueryButtonsDisabled || rowSelectionModel.length === 0}
+                >
+                    Delete selected columns
                 </Button>
             </div>
 
@@ -264,6 +282,26 @@ const DealershipsTableView = () => {
                     </div>        
                 </>
             }
+
+            <Dialog
+                open={modalDeleteOpen}
+                onClose={() => setModalDeleteOpen(false)}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">
+                {"Are you sure you want to delete " + rowSelectionModel.length + " rows?"}
+                </DialogTitle>
+                <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                    This action cannot be undone.
+                </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                <Button onClick={() => setModalDeleteOpen(false)} autoFocus>Cancel</Button>
+                <Button onClick={() => {deleteRows(); setModalDeleteOpen(false);}}>Proceed</Button>
+                </DialogActions>
+            </Dialog>
 
 
             <Snackbar open={alertSuccess}>

@@ -23,7 +23,9 @@ const DealershipDetailsPage = () => {
         }
 
         fetchDealership();
-    }, []);
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dId]);
 
 
     const displayError = (err: any) => {
@@ -97,7 +99,6 @@ const DealershipDetailsPage = () => {
                 <p>ID: {contractsJson.id}</p>
                 <p>Contract Date: {contractsJson.contractDate}</p>
                 <p>Contract Duration (years): {contractsJson.contractYearsDuration}</p>
-                {/* <p>Supplier: {JSON.stringify(contractsJson.supplier) || "None"}</p> */}
                 <p>Supplier:</p>
                 {
                     contractsJson.supplier ?
