@@ -74,6 +74,7 @@ const DealershipsTableView = () => {
         if (paginationModel.pageSize > rows.length) {
             fetchDealerships(paginationModel.page, paginationModel.pageSize);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [paginationModel]);
 
     const showUpdateRowsContainers = () => {
