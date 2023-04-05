@@ -20,6 +20,12 @@ const DealershipsTableView = () => {
 
     const [dbQueryButtonsDisabled, setDbQueryButtonsDisabled] = useState<boolean>(false);
 
+    const [paginationModel, setPaginationModel] = useState({
+        pageSize: 25,
+        page: 0,
+    });
+
+
     const EntityEditContainer = ({dealership}: EditContainerProps) => {
 
         return (
@@ -63,6 +69,12 @@ const DealershipsTableView = () => {
             );
         }));
     }, [currentDealerships]);
+
+    useEffect(() => {
+        if (paginationModel.pageSize > rows.length) {
+            fetchDealerships(paginationModel.page, paginationModel.pageSize);
+        }
+    }, [paginationModel]);
 
     const showUpdateRowsContainers = () => {
         console.log("update rows");
@@ -120,14 +132,21 @@ const DealershipsTableView = () => {
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
 
     useEffect(() => {
-        fetchDealerships(); 
+        fetchDealerships(paginationModel.page, paginationModel.pageSize); 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const getAllRows = () => {
         console.log("get all rows");
 
-        fetchDealerships();
+        fetchDealerships(paginationModel.page, paginationModel.pageSize);
+    }
+
+    const loadMoreRows = () => {
+        console.log("load more rows");
+
+        const nrPages = Math.ceil(rows.length / paginationModel.pageSize);
+        addDealershipsPage(nrPages, paginationModel.pageSize);
     }
 
     const updateRows = () => {
@@ -149,10 +168,20 @@ const DealershipsTableView = () => {
         setDbQueryButtonsDisabled(false);
     }
 
-    const fetchDealerships = async () => {
+    const fetchDealerships = async (page: number, size: number) => {
         try {
-            setRows(await DealershipRequests.getDealershipsJson());
+            setRows(await DealershipRequests.getDealershipsJson(page, size));
             showAlertSuccess(); 
+        } catch (err: any) {
+            displayError(err);
+        }
+    }
+
+    const addDealershipsPage = async (page: number, size: number) => {
+        try {
+            const newRows = await DealershipRequests.getDealershipsJson(page, size);
+            setRows(rows.concat(newRows));
+            showAlertSuccess();
         } catch (err: any) {
             displayError(err);
         }
@@ -217,6 +246,8 @@ const DealershipsTableView = () => {
                     rows={rows}
                     columns={columns}
                     checkboxSelection
+                    paginationModel={paginationModel}
+                    onPaginationModelChange={setPaginationModel}
                     onRowSelectionModelChange={(newRowSelectionModel) => {
                         console.log("newRowSelectionModel: " + newRowSelectionModel);
                         console.log("newRowSelectionModel index: " + newRowSelectionModel);
@@ -232,6 +263,12 @@ const DealershipsTableView = () => {
                     onClick={getAllRows}
                 >
                     Refresh table
+                </Button>
+
+                <Button
+                    onClick={loadMoreRows}
+                >
+                    Load more rows
                 </Button>
 
                 <Button
