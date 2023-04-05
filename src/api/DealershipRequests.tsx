@@ -10,13 +10,13 @@ const api = axios.create({
 
 class DealershipRequests {
 
-    async getDealerships(): Promise<AxiosResponse<any, any>> {
-        return await api.get(Values.dealershipsAllUrl);
+    async getDealerships(page: number = 0, size: number = 25): Promise<AxiosResponse<any, any>> {
+        return await api.get(Values.dealershipsAllUrl + '?page=' + page.toString() + '&size=' + size.toString());
     }
 
-    async getDealershipsJson(): Promise<JSON[]> {
-        const ans = await this.getDealerships();
-        return ans.data["_embedded"]["dealershipDTOList"];
+    async getDealershipsJson(page: number = 0, size: number = 25): Promise<JSON[]> {
+        const ans = await this.getDealerships(page, size);
+        return ans.data;
     }
 
     async getDealership(id: number): Promise<AxiosResponse<any, any>> {
