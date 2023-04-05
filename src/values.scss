@@ -19,11 +19,12 @@ $button-w: 100px;
 $button-h: 30px;
 $round-button: 50px;
 
-$question-card-small-w: 90vw;
+$question-card-big-w: 90vw;
+$question-card-big-h: 85vh;
 $question-card-w: 800px;
 $question-card-h: 350px;
 
-$question-card-wide-component-w: $question-card-small-w - 4;
+$question-card-wide-component-w: $question-card-big-w - 4;
 
 $input-h: 150px;
 $input-w: 300px;

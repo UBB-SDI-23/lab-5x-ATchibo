@@ -8,11 +8,10 @@ import DealershipInfo from '../domain/DealershipInfo';
 
 const TableDataMenu = () => {
 
-    const [tableViews, setTableViews] = useState<any>([]);
+    const [tableViews, setTableViews] = useState<any>([<TableView key={1}/>]);
 
     const addTableView = () => {
-        const key = Math.random()*100000;
-        setTableViews([...tableViews, <TableView key={key}/>]);
+        setTableViews([...tableViews, <TableView key={tableViews.length+1}/>]);
     }
 
     console.log(DealershipInfo);

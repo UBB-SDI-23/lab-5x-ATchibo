@@ -3,7 +3,7 @@ import './Card.scss';
 const Card = (props: any) => {
 
     return (
-        <div className='card'>
+        <div className={props.size || 'md'}>
             {props.children}
         </div>
     )

@@ -152,6 +152,7 @@ const DealershipsTableView = () => {
     const fetchDealerships = async () => {
         try {
             setRows(await DealershipRequests.getDealershipsJson());
+            showAlertSuccess(); 
         } catch (err: any) {
             displayError(err);
         }

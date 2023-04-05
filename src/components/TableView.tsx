@@ -21,7 +21,7 @@ const TableView = () => {
     };
 
     return (
-        <Card>
+        <Card size='xl'>
             <FormControl variant='standard' fullWidth>
                 <InputLabel id="select-label">Select table</InputLabel>
                 <Select

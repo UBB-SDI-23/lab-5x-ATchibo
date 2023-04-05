@@ -1,7 +1,7 @@
 @import '../values.scss';
 
-.card {
-    width: $question-card-w;
+.md {
+    width: $question-card-w;    
     max-width: 85%;
 
     border: 0px;
@@ -32,4 +32,10 @@
     display: block;
 
     text-align: start;
+}
+
+.xl {
+    @extend .md;
+    width: $question-card-big-w;
+    // max-height: $question-card-big-h;
 }
