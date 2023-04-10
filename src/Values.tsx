@@ -12,6 +12,7 @@ class Values {
     // Backend
     // static baseBackendUrl = "http://localhost:8080";
     static baseBackendUrl = "/api";
+    // static baseBackendUrl = "http://13.51.144.35";
     
     // Dealerships
     static dealershipsBaseUrl = "/dealerships";
