@@ -1,10 +1,9 @@
 import { Button } from '@mui/material';
 import { useState } from 'react';
 import './TableDataMenu.scss';
-import TableView from './TableView';
+import TableView from './tableview/TableView';
 
 import AddIcon from '@mui/icons-material/Add';
-import DealershipInfo from '../domain/DealershipInfo';
 
 const TableDataMenu = () => {
 
@@ -13,8 +12,6 @@ const TableDataMenu = () => {
     const addTableView = () => {
         setTableViews([...tableViews, <TableView key={tableViews.length+1}/>]);
     }
-
-    console.log(DealershipInfo);
 
     return (
         <div className='table-data-menu-div'>

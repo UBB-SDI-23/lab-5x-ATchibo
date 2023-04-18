@@ -29,15 +29,23 @@ class DealershipRequests {
     }
 
 
-    async getDealershipsByAvgCarPrice(): Promise<AxiosResponse<any, any>> {
-        return await api.get(Values.dealershipsByAvgCarPriceUrl);
+    // async getDealershipsByAvgCarPrice(): Promise<AxiosResponse<any, any>> {
+    //     return await api.get(Values.dealershipsByAvgCarPriceUrl);
+    // }
+
+    // async getDealershipsByAvgCarPriceJSON(): Promise<JSON[]> {
+    //     const ans = await this.getDealershipsByAvgCarPrice();
+    //     return ans.data;
+    // }
+
+    async getDealershipsByAvgCarPrice(page: number = 0, size: number = 25): Promise<AxiosResponse<any, any>> {
+        return await api.get(Values.dealershipsByAvgCarPriceUrl + '?page=' + page.toString() + '&size=' + size.toString());
     }
 
-    async getDealershipsByAvgCarPriceJSON(): Promise<JSON[]> {
-        const ans = await this.getDealershipsByAvgCarPrice();
+    async getDealershipsByAvgCarPriceJSON(page: number = 0, size: number = 25): Promise<JSON[]> {
+        const ans = await this.getDealershipsByAvgCarPrice(page, size);
         return ans.data;
     }
-
 
     async updateDealerships(dealerships: DealershipDTO[]): Promise<any> {
         return await api.put(Values.dealershipsUpdateUrl, dealerships);

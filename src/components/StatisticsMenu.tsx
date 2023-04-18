@@ -7,7 +7,7 @@ import StatisticsView from './StatisticsView';
 
 const TableDataMenu = () => {
 
-    const [tableViews, setTableViews] = useState<any>([]);
+    const [tableViews, setTableViews] = useState<any>([<StatisticsView key={0}/>]);
 
     const addTableView = () => {
         const key = Math.random()*100000;

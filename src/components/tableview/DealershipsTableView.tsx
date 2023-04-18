@@ -7,6 +7,7 @@ import './DealershipsTableView.scss';
 import DealershipDTO from '../../domain/DealershipDTO';
 import { useNavigate } from 'react-router-dom';
 import Values from '../../Values';
+import { PaginationManager } from '../../helpers/PaginationManager';
 
 
 interface EditContainerProps {
@@ -25,42 +26,11 @@ const DealershipsTableView = () => {
         page: 0,
     });
 
+    const [paginationManager, setPaginationManager] = useState<PaginationManager>(new PaginationManager(paginationModel.pageSize, paginationModel.page));
 
-    const EntityEditContainer = ({dealership}: EditContainerProps) => {
-
-        return (
-            <div className='entity-edit-container-div'>
-                {/* <FormControl> */}
-                    <TextField className='edit-container-text-field' label='ID' variant='standard' defaultValue={dealership.getId() || "Not available"} disabled={true} />
-                    <TextField className='edit-container-text-field' id='name' label='Name' variant='standard' defaultValue={dealership.getName()} 
-                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                            dealership.setName(event.target.value);
-                        }}
-                    />
-                    <TextField className='edit-container-text-field' id='address' label='Address' variant='standard' defaultValue={dealership.getAddress()} 
-                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                            dealership.setAddress(event.target.value);
-                        }}
-                    />
-                    <TextField className='edit-container-text-field' id='phone' label='Phone' variant='standard' defaultValue={dealership.getPhone()} 
-                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                            dealership.setPhone(event.target.value);
-                        }}
-                    />
-                    <TextField className='edit-container-text-field' id='email' label='Email' variant='standard' defaultValue={dealership.getEmail()} 
-                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                            dealership.setEmail(event.target.value);
-                        }}
-                    />
-                    <TextField className='edit-container-text-field' id='website' label='Website' variant='standard' defaultValue={dealership.getWebsite()} 
-                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                            dealership.setWebsite(event.target.value);
-                        }}
-                    />
-                {/* </FormControl> */}
-            </div>
-        )
-    }
+    const columns: GridColDef[] = DealershipInfo.columns;
+    const [rows, setRows] = useState<JSON[]>([]);
+    const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
 
     useEffect(() => {
         setSelectedRowsFields(currentDealerships.map((dealership: DealershipDTO) => {
@@ -71,14 +41,19 @@ const DealershipsTableView = () => {
     }, [currentDealerships]);
 
     useEffect(() => {
-        if (paginationModel.pageSize > rows.length) {
-            fetchDealerships(paginationModel.page, paginationModel.pageSize);
-        }
+        paginationManager.setPageSize(paginationModel.pageSize);
+        paginationManager.setCurrentPage(paginationModel.page);
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [paginationModel]);
 
+    useEffect(() => {
+        paginationManager.setTotalElements(rows.length);
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [rows]);
+
     const showUpdateRowsContainers = () => {
-        console.log("update rows");
 
         if (rowSelectionModel.length === 0) {
             return;
@@ -100,8 +75,6 @@ const DealershipsTableView = () => {
     }
 
     const showAddRowsContainers = () => {
-        console.log("add rows");
-
         setDbQueryButtonsDisabled(true);
 
         setCurrentDealerships([new DealershipDTO()]);
@@ -125,46 +98,30 @@ const DealershipsTableView = () => {
         }, 3000);
     }
 
-    // const tableInfo = DealershipInfo.dealershipStructure;
-    const columns: GridColDef[] = DealershipInfo.columns;
-    
-    const [rows, setRows] = useState<JSON[]>([]);
-
-    const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
-
     useEffect(() => {
-        fetchDealerships(paginationModel.page, paginationModel.pageSize); 
+        setPaginationManager(new PaginationManager(paginationModel.pageSize, paginationModel.page));
+        fetchDealerships(paginationManager.getTotalPages(), paginationManager.getPageSize()); 
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const getAllRows = () => {
-        console.log("get all rows");
-
-        fetchDealerships(paginationModel.page, paginationModel.pageSize);
+        fetchDealerships(0, paginationManager.getTotalElements()); 
     }
 
     const loadMoreRows = () => {
-        console.log("load more rows");
-
-        const nrPages = Math.ceil(rows.length / paginationModel.pageSize);
-        addDealershipsPage(nrPages, paginationModel.pageSize);
+        addDealershipsPage(paginationManager.getTotalPages(), paginationManager.getPageSize());
     }
 
     const updateRows = () => {
-        console.log("update rows");
-
         fetchUpdate();
     }
 
     const deleteRows = () => {
-        console.log("delete rows");
-
         fetchDelete();
     }
 
     const cancelUpdateRows = () => {
-        console.log("cancel update rows");
-
         setCurrentDealerships([]);
         setDbQueryButtonsDisabled(false);
     }
@@ -189,8 +146,6 @@ const DealershipsTableView = () => {
     }
 
     const fetchUpdate = async () => {
-        // console.log(currentDealerships);
-
         await DealershipRequests.updateDealerships(currentDealerships)
         .then((res: any) => {
             showAlertSuccess();
@@ -234,11 +189,47 @@ const DealershipsTableView = () => {
     const navigate = useNavigate();
 
     const viewDealershipDetails = () => {
-        console.log("view dealership details");
         navigate(Values.manageTablesUrl + '/dealerships/' + rowSelectionModel[0]);
     }
 
     const [modalDeleteOpen, setModalDeleteOpen] = useState<boolean>(false);
+
+
+    const EntityEditContainer = ({dealership}: EditContainerProps) => {
+
+        return (
+            <div className='entity-edit-container-div'>
+                {/* <FormControl> */}
+                    <TextField className='edit-container-text-field' label='ID' variant='standard' defaultValue={dealership.getId() || "Not available"} disabled={true} />
+                    <TextField className='edit-container-text-field' id='name' label='Name' variant='standard' defaultValue={dealership.getName()} 
+                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                            dealership.setName(event.target.value);
+                        }}
+                    />
+                    <TextField className='edit-container-text-field' id='address' label='Address' variant='standard' defaultValue={dealership.getAddress()} 
+                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                            dealership.setAddress(event.target.value);
+                        }}
+                    />
+                    <TextField className='edit-container-text-field' id='phone' label='Phone' variant='standard' defaultValue={dealership.getPhone()} 
+                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                            dealership.setPhone(event.target.value);
+                        }}
+                    />
+                    <TextField className='edit-container-text-field' id='email' label='Email' variant='standard' defaultValue={dealership.getEmail()} 
+                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                            dealership.setEmail(event.target.value);
+                        }}
+                    />
+                    <TextField className='edit-container-text-field' id='website' label='Website' variant='standard' defaultValue={dealership.getWebsite()} 
+                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                            dealership.setWebsite(event.target.value);
+                        }}
+                    />
+                {/* </FormControl> */}
+            </div>
+        )
+    }
 
     return (
         <div>
@@ -250,9 +241,6 @@ const DealershipsTableView = () => {
                     paginationModel={paginationModel}
                     onPaginationModelChange={setPaginationModel}
                     onRowSelectionModelChange={(newRowSelectionModel) => {
-                        console.log("newRowSelectionModel: " + newRowSelectionModel);
-                        console.log("newRowSelectionModel index: " + newRowSelectionModel);
-
                         setRowSelectionModel(newRowSelectionModel);
                     }}
                     rowSelectionModel={rowSelectionModel}

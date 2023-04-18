@@ -57,6 +57,12 @@ class DealershipInfo {
         { field: 'email', headerName: 'Email', width: 230 },
         { field: 'website', headerName: 'Website', width: 230 }
     ];
+
+    static statisticsColumns: GridColDef[] = [
+        { field: 'id', headerName: 'ID', width: 100 },
+        { field: 'name', headerName: 'Dealership Name', width: 430 },
+        { field: 'averageCarPrice', headerName: 'Average Car Price', width: 230}
+    ];
 } 
 
 export default DealershipInfo;
