@@ -1,4 +1,4 @@
-import { Button, Snackbar, Alert, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import { Button, Snackbar, Alert, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl } from '@mui/material';
 import { GridColDef, GridRowSelectionModel, DataGrid, GridRowId } from '@mui/x-data-grid';
 import { useState, useEffect } from 'react';
 import DealershipRequests from '../../api/DealershipRequests';
@@ -100,13 +100,19 @@ const DealershipsTableView = () => {
 
     useEffect(() => {
         setPaginationManager(new PaginationManager(paginationModel.pageSize, paginationModel.page));
-        fetchDealerships(paginationManager.getTotalPages(), paginationManager.getPageSize()); 
+        fetchDealerships(paginationManager.getCurrentPage(), paginationManager.getPageSize()); 
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    const [totalFieldErrors, setTotalFieldErrors] = useState<number>(0);
+
+    const checkUpdatedDealerships = () => {
+        return totalFieldErrors <= 0;
+    }
+
     const getAllRows = () => {
-        fetchDealerships(0, paginationManager.getTotalElements()); 
+        fetchDealerships(0, paginationManager.getTotalElements() || paginationManager.getPageSize()); 
     }
 
     const loadMoreRows = () => {
@@ -114,7 +120,13 @@ const DealershipsTableView = () => {
     }
 
     const updateRows = () => {
-        fetchUpdate();
+        console.log("Total field errors: " + totalFieldErrors);
+        if (checkUpdatedDealerships()) {
+            fetchUpdate();
+        } else {
+            setAlertErrorText("Please fix all errors before proceeding");
+            showAlertError();
+        }
     }
 
     const deleteRows = () => {
@@ -151,6 +163,7 @@ const DealershipsTableView = () => {
             showAlertSuccess();
             setCurrentDealerships([]);
             setDbQueryButtonsDisabled(false);
+            getAllRows();
         })
         .catch((err: any) => {
             displayError(err);
@@ -195,38 +208,131 @@ const DealershipsTableView = () => {
     const [modalDeleteOpen, setModalDeleteOpen] = useState<boolean>(false);
 
 
+    useEffect(() => {
+        console.log("Total field errors: " + totalFieldErrors);
+    }, [totalFieldErrors]);
+
     const EntityEditContainer = ({dealership}: EditContainerProps) => {
+
+        const validEmail = (email: string) => {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(String(email).toLowerCase());
+        }
+
+
+        const [nameNotOk, setNameNotOk] = useState<boolean>(dealership.getName().length === 0);
+        const [addressNotOk, setAddressNotOk] = useState<boolean>(dealership.getAddress().length === 0);
+        const [phoneNotOk, setPhoneNotOk] = useState<boolean>(dealership.getPhone().length === 0);
+        const [emailNotOk, setEmailNotOk] = useState<boolean>(validEmail(dealership.getEmail()) === false);
 
         return (
             <div className='entity-edit-container-div'>
-                {/* <FormControl> */}
                     <TextField className='edit-container-text-field' label='ID' variant='standard' defaultValue={dealership.getId() || "Not available"} disabled={true} />
-                    <TextField className='edit-container-text-field' id='name' label='Name' variant='standard' defaultValue={dealership.getName()} 
+                    
+                    <TextField className='edit-container-text-field' 
+                        error={nameNotOk} 
+                        helperText={nameNotOk ? "Name must not be left blank" : ""}
+                        id='name' 
+                        label='Name' 
+                        variant='standard' 
+                        defaultValue={dealership.getName()} 
                         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                             dealership.setName(event.target.value);
+
+                            if (event.target.value.length === 0) {
+                                if (nameNotOk === false)
+                                    setTotalFieldErrors(totalFieldErrors + 1);
+
+                                setNameNotOk(true);
+                            } else {
+                                console.log(totalFieldErrors)
+                                if (nameNotOk === true)
+                                    setTotalFieldErrors(totalFieldErrors - 1);
+
+                                setNameNotOk(false);
+
+                            }                            
                         }}
                     />
-                    <TextField className='edit-container-text-field' id='address' label='Address' variant='standard' defaultValue={dealership.getAddress()} 
+
+                    <TextField className='edit-container-text-field' 
+                        error={addressNotOk}
+                        helperText={addressNotOk ? "Address must not be left blank" : ""}
+                        id='address' 
+                        label='Address' 
+                        variant='standard' 
+                        defaultValue={dealership.getAddress()} 
                         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                             dealership.setAddress(event.target.value);
+
+                            if (event.target.value.length === 0) {
+                                if (addressNotOk === false)
+                                    setTotalFieldErrors(totalFieldErrors + 1);
+
+                                setAddressNotOk(true);
+                            } else {
+                                if (addressNotOk === true)
+                                    setTotalFieldErrors(totalFieldErrors - 1);
+
+                                setAddressNotOk(false);
+                            }
                         }}
                     />
-                    <TextField className='edit-container-text-field' id='phone' label='Phone' variant='standard' defaultValue={dealership.getPhone()} 
+
+                    <TextField className='edit-container-text-field' 
+                        error={phoneNotOk}
+                        helperText={phoneNotOk ? "Phone must not be left blank" : ""}
+                        id='phone' 
+                        label='Phone' 
+                        variant='standard' 
+                        defaultValue={dealership.getPhone()} 
                         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                             dealership.setPhone(event.target.value);
+
+                            if (event.target.value.length === 0) {
+                                if (phoneNotOk === false)
+                                    setTotalFieldErrors(totalFieldErrors + 1);
+
+                                setPhoneNotOk(true);
+                            } else {
+                                if (phoneNotOk === true)
+                                    setTotalFieldErrors(totalFieldErrors - 1);
+
+                                setPhoneNotOk(false);
+                            }
                         }}
                     />
-                    <TextField className='edit-container-text-field' id='email' label='Email' variant='standard' defaultValue={dealership.getEmail()} 
+
+                    <TextField className='edit-container-text-field' 
+                        error={emailNotOk}
+                        helperText={emailNotOk ? "Email must be valid" : ""}
+                        id='email' 
+                        label='Email' 
+                        variant='standard' 
+                        defaultValue={dealership.getEmail()} 
                         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                             dealership.setEmail(event.target.value);
+
+                            if (validEmail(event.target.value) === false) {
+                                if (emailNotOk === false)
+                                    setTotalFieldErrors(totalFieldErrors + 1);
+                                
+                                setEmailNotOk(true);
+
+                            } else {
+                                if (emailNotOk === true)
+                                    setTotalFieldErrors(totalFieldErrors - 1);
+
+                                setEmailNotOk(false);
+                            }
                         }}
                     />
+
                     <TextField className='edit-container-text-field' id='website' label='Website' variant='standard' defaultValue={dealership.getWebsite()} 
                         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                             dealership.setWebsite(event.target.value);
                         }}
                     />
-                {/* </FormControl> */}
             </div>
         )
     }

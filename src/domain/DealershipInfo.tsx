@@ -1,4 +1,5 @@
 import { GridColDef } from "@mui/x-data-grid";
+import DealershipDTO from "./DealershipDTO";
 
 
 class DealershipInfo {
@@ -55,7 +56,8 @@ class DealershipInfo {
         { field: 'address', headerName: 'Address', width: 230},
         { field: 'phone', headerName: 'Phone', width: 150 },
         { field: 'email', headerName: 'Email', width: 230 },
-        { field: 'website', headerName: 'Website', width: 230 }
+        { field: 'website', headerName: 'Website', width: 230 },
+        { field: 'nrOfCars', headerName: 'Nr of Cars', width: 150}
     ];
 
     static statisticsColumns: GridColDef[] = [
@@ -63,6 +65,10 @@ class DealershipInfo {
         { field: 'name', headerName: 'Dealership Name', width: 430 },
         { field: 'averageCarPrice', headerName: 'Average Car Price', width: 230}
     ];
+
+    static isValid = (d: DealershipDTO) => {
+        return d.getName() !== "" && d.getAddress() !== "" && d.getPhone() !== "" && d.getEmail() !== "" && d.getWebsite() !== "";
+    }
 } 
 
 export default DealershipInfo;

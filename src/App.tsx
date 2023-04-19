@@ -28,6 +28,24 @@ function App() {
         dark: '#ba000d',
         contrastText: '#fff',
       },
+      success: {
+        light: '#81c784',
+        main: '#4caf50',
+        dark: '#388e3c',
+        contrastText: '#fff',
+      },
+      warning: {
+        light: '#ffb74d',
+        main: '#ff9800',
+        dark: '#f57c00',
+        contrastText: '#fff',
+      },
+      error: {
+        light: '#e57373',
+        main: '#f44336',
+        dark: '#c62828',
+        contrastText: '#fff',
+      },
     },
   });
   
