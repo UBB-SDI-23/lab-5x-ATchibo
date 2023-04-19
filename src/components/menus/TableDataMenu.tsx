@@ -1,17 +1,16 @@
 import { Button } from '@mui/material';
 import { useState } from 'react';
-import './StatisticsMenu.scss';
+import './TableDataMenu.scss';
+import TableView from '../tableview/TableView';
 
 import AddIcon from '@mui/icons-material/Add';
-import StatisticsView from './StatisticsView';
 
 const TableDataMenu = () => {
 
-    const [tableViews, setTableViews] = useState<any>([<StatisticsView key={0}/>]);
+    const [tableViews, setTableViews] = useState<any>([<TableView key={1}/>]);
 
     const addTableView = () => {
-        const key = Math.random()*100000;
-        setTableViews([...tableViews, <StatisticsView key={key}/>]);
+        setTableViews([...tableViews, <TableView key={tableViews.length+1}/>]);
     }
 
     return (
@@ -24,7 +23,7 @@ const TableDataMenu = () => {
                 startIcon={<AddIcon/>}
                 onClick={addTableView}
             >
-                Add statistics view
+                Add table view
             </Button>
         </div>
     )

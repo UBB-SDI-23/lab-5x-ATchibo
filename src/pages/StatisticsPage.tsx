@@ -1,4 +1,4 @@
-import StatisticsMenu from '../components/StatisticsMenu';
+import StatisticsMenu from '../components/menus/StatisticsMenu';
 import './StatisticsPage.scss';
 
 const StatisticsPage = () => {

@@ -1,4 +1,4 @@
-import TableDataMenu from '../components/TableDataMenu';
+import TableDataMenu from '../components/menus/TableDataMenu';
 import './TableManagementPage.scss';
 import GoUpButton from '../components/GoUpButton';
 

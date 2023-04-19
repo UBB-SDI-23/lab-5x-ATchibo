@@ -1,8 +1,8 @@
 import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import { useState } from 'react';
-import Card from './Card';
+import Card from '../Card';
 import './StatisticsView.scss';
-import DlrByAvgCarPriceView from './statisticsview/DlrByAvgCarPriceView';
+import DlrByAvgCarPriceView from './DlrByAvgCarPriceView';
 
 const StatisticsView = () => {
 

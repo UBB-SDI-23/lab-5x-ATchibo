@@ -1,4 +1,4 @@
-import MainMenu from '../components/MainMenu';
+import MainMenu from '../components/menus/MainMenu';
 import './HomePage.scss';
 
 const HomePage = () => {

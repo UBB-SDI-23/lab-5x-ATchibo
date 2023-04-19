@@ -1,5 +1,5 @@
 import { Button } from '@mui/material';
-import Card from './Card';
+import Card from '../Card';
 import './MenuItem.scss';
 
 type MenuItemProps = {

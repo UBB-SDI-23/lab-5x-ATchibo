@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import Values from '../Values';
+import Values from '../../Values';
 
 import './MainMenu.scss';
 
