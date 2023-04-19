@@ -66,8 +66,29 @@ class DealershipInfo {
         { field: 'averageCarPrice', headerName: 'Average Car Price', width: 230}
     ];
 
+    static isNameValid = (name: string) => {
+        return name !== "";
+    }
+
+    static isAddressValid = (address: string) => {
+        return address !== "";
+    }
+
+    static isPhoneValid = (phone: string) => {
+        return phone !== "";
+    }
+
+    static isEmailValid = (email: string) => {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(String(email).toLowerCase());
+    }
+
+    static isWebsiteValid = (website: string) => {
+        return true;
+    }
+
     static isValid = (d: DealershipDTO) => {
-        return d.getName() !== "" && d.getAddress() !== "" && d.getPhone() !== "" && d.getEmail() !== "" && d.getWebsite() !== "";
+        return this.isNameValid(d.getName()) && this.isAddressValid(d.getAddress()) && this.isPhoneValid(d.getPhone()) && this.isEmailValid(d.getEmail()) && this.isWebsiteValid(d.getWebsite());
     }
 } 
 

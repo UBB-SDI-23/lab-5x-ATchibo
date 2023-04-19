@@ -1,4 +1,5 @@
-import { Button, Snackbar, Alert, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl } from '@mui/material';
+/* eslint-disable react-hooks/exhaustive-deps */
+import { Button, Snackbar, Alert, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import { GridColDef, GridRowSelectionModel, DataGrid, GridRowId } from '@mui/x-data-grid';
 import { useState, useEffect } from 'react';
 import DealershipRequests from '../../api/DealershipRequests';
@@ -105,10 +106,14 @@ const DealershipsTableView = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const [totalFieldErrors, setTotalFieldErrors] = useState<number>(0);
-
     const checkUpdatedDealerships = () => {
-        return totalFieldErrors <= 0;
+        for (let i = 0; i < currentDealerships.length; i++) {
+            if (!DealershipInfo.isValid(currentDealerships[i])) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     const getAllRows = () => {
@@ -120,7 +125,6 @@ const DealershipsTableView = () => {
     }
 
     const updateRows = () => {
-        console.log("Total field errors: " + totalFieldErrors);
         if (checkUpdatedDealerships()) {
             fetchUpdate();
         } else {
@@ -207,23 +211,12 @@ const DealershipsTableView = () => {
 
     const [modalDeleteOpen, setModalDeleteOpen] = useState<boolean>(false);
 
-
-    useEffect(() => {
-        console.log("Total field errors: " + totalFieldErrors);
-    }, [totalFieldErrors]);
-
     const EntityEditContainer = ({dealership}: EditContainerProps) => {
 
-        const validEmail = (email: string) => {
-            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return re.test(String(email).toLowerCase());
-        }
-
-
-        const [nameNotOk, setNameNotOk] = useState<boolean>(dealership.getName().length === 0);
-        const [addressNotOk, setAddressNotOk] = useState<boolean>(dealership.getAddress().length === 0);
-        const [phoneNotOk, setPhoneNotOk] = useState<boolean>(dealership.getPhone().length === 0);
-        const [emailNotOk, setEmailNotOk] = useState<boolean>(validEmail(dealership.getEmail()) === false);
+        const [nameNotOk, setNameNotOk] = useState<boolean>(!DealershipInfo.isNameValid(dealership.getName()));
+        const [addressNotOk, setAddressNotOk] = useState<boolean>(!DealershipInfo.isAddressValid(dealership.getAddress()));
+        const [phoneNotOk, setPhoneNotOk] = useState<boolean>(!DealershipInfo.isPhoneValid(dealership.getPhone()));
+        const [emailNotOk, setEmailNotOk] = useState<boolean>(!DealershipInfo.isEmailValid(dealership.getEmail()));
 
         return (
             <div className='entity-edit-container-div'>
@@ -239,19 +232,11 @@ const DealershipsTableView = () => {
                         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                             dealership.setName(event.target.value);
 
-                            if (event.target.value.length === 0) {
-                                if (nameNotOk === false)
-                                    setTotalFieldErrors(totalFieldErrors + 1);
-
-                                setNameNotOk(true);
-                            } else {
-                                console.log(totalFieldErrors)
-                                if (nameNotOk === true)
-                                    setTotalFieldErrors(totalFieldErrors - 1);
-
+                            if (DealershipInfo.isNameValid(event.target.value)) {
                                 setNameNotOk(false);
-
-                            }                            
+                            } else {
+                                setNameNotOk(true);
+                            }
                         }}
                     />
 
@@ -265,16 +250,10 @@ const DealershipsTableView = () => {
                         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                             dealership.setAddress(event.target.value);
 
-                            if (event.target.value.length === 0) {
-                                if (addressNotOk === false)
-                                    setTotalFieldErrors(totalFieldErrors + 1);
-
-                                setAddressNotOk(true);
-                            } else {
-                                if (addressNotOk === true)
-                                    setTotalFieldErrors(totalFieldErrors - 1);
-
+                            if (DealershipInfo.isAddressValid(event.target.value)) {
                                 setAddressNotOk(false);
+                            } else {
+                                setAddressNotOk(true);
                             }
                         }}
                     />
@@ -289,16 +268,10 @@ const DealershipsTableView = () => {
                         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                             dealership.setPhone(event.target.value);
 
-                            if (event.target.value.length === 0) {
-                                if (phoneNotOk === false)
-                                    setTotalFieldErrors(totalFieldErrors + 1);
-
-                                setPhoneNotOk(true);
-                            } else {
-                                if (phoneNotOk === true)
-                                    setTotalFieldErrors(totalFieldErrors - 1);
-
+                            if (DealershipInfo.isPhoneValid(event.target.value)) {
                                 setPhoneNotOk(false);
+                            } else {
+                                setPhoneNotOk(true);
                             }
                         }}
                     />
@@ -313,17 +286,10 @@ const DealershipsTableView = () => {
                         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                             dealership.setEmail(event.target.value);
 
-                            if (validEmail(event.target.value) === false) {
-                                if (emailNotOk === false)
-                                    setTotalFieldErrors(totalFieldErrors + 1);
-                                
-                                setEmailNotOk(true);
-
-                            } else {
-                                if (emailNotOk === true)
-                                    setTotalFieldErrors(totalFieldErrors - 1);
-
+                            if (DealershipInfo.isEmailValid(event.target.value)) {
                                 setEmailNotOk(false);
+                            } else {
+                                setEmailNotOk(true);
                             }
                         }}
                     />
