@@ -5,8 +5,8 @@ import ContractDTO from "./ContractDTO";
 class ContractInfo {
     static columns: GridColDef[] = [
         { field: 'id', headerName: 'ID', width: 100 },
-        { field: 'contractDate', headerName: 'Contract Date', width: 200 },
-        { field: 'contractYearsDuration', headerName: 'Duration (years)', width: 230},
+        { field: 'contractDate', headerName: 'Contract Date', width: 260 },
+        { field: 'contractYearsDuration', headerName: 'Duration (years)', width: 130},
         { field: 'dealershipName', headerName: 'Dealership Name', width: 200},
         { field: 'supplierName', headerName: 'Supplier Name', width: 200}
     ];

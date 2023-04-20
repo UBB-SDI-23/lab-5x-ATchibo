@@ -39,10 +39,18 @@ class Values {
 
     // Contracts
     static contractsBaseUrl = "/contracts";
-    static contractsAllUrl = "";
+    static contractsAllUrl = "/";
     static contractsByIdUrl = "/";
     static contractsUpdateUrl = "";
     static contractsDeleteUrl = "/";
+
+    // Suppliers
+    static suppliersBaseUrl = "/suppliers";
+    static suppliersAllUrl = "/";
+    static suppliersByIdUrl = "/";
+    static suppliersUpdateUrl = "";
+    static suppliersDeleteUrl = "/";
+    static suppliersByNameUrl = "/autocomplete";
 }
 
 export default Values;

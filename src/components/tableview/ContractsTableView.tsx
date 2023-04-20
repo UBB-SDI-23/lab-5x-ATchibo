@@ -12,6 +12,8 @@ import ContractRequests from '../../api/ContractRequests';
 import DealershipDTO from '../../domain/DealershipDTO';
 import DealershipRequests from '../../api/DealershipRequests';
 import { debounce } from 'lodash';
+import SupplierDTO from '../../domain/Supplier/SupplierDTO';
+import SupplierRequests from '../../api/SupplierRequests';
 
 interface EditContainerProps {
     contract: ContractDTO
@@ -222,7 +224,6 @@ const ContractsTableView = () => {
         const fetchSuggestions = async (query: string) => {
             try {
                 const suggestions = await DealershipRequests.getDealershipsByName(query);
-                console.log(suggestions.data);
                 setDealershipsDTOs(await suggestions.data);
             } catch (err: any) {
                 // displayError(err);
@@ -230,7 +231,7 @@ const ContractsTableView = () => {
             }
         }
 
-        const debouncedFetchSuggestions = useCallback(debounce(fetchSuggestions, 500), []);
+        const debouncedFetchSuggestions = useCallback(debounce(fetchSuggestions, 400), []);
 
         const handleInputChange = (event: any, value: any, reason: any) => {
             if (reason === 'input') {
@@ -245,10 +246,39 @@ const ContractsTableView = () => {
         }, [debouncedFetchSuggestions]);
 
 
+        const initialSupplier = new SupplierDTO(contract.getSupplierId() || -1, contract.getSupplierName() || "", "", "", 0);
+
+        const [suppliersDTOs, setSuppliersDTOs] = useState<SupplierDTO[]>([]);
+
+        const fetchSupplierSuggestions = async (query: string) => {
+            try {
+                const suggestions = await SupplierRequests.getSuppliersByName(query);
+                setSuppliersDTOs(await suggestions.data);
+            } catch (err: any) {
+                // displayError(err);
+                console.log(err);
+            }
+        }
+
+        const debouncedFetchSupplierSuggestions = useCallback(debounce(fetchSupplierSuggestions, 400), []);
+
+        const handleSupplierInputChange = (event: any, value: any, reason: any) => {
+            if (reason === 'input') {
+                debouncedFetchSupplierSuggestions(value);
+            }
+        };
+
+        useEffect(() => {
+            return () => {
+                debouncedFetchSupplierSuggestions.cancel();
+            };
+        }, [debouncedFetchSupplierSuggestions]);
+
+
         const [isContractDateNotOk, setIsContractDateNotOk] = useState<boolean>(!ContractInfo.isContractDateValid(contract));
         const [isContractYearsDurationNotOk, setIsContractYearsDurationNotOk] = useState<boolean>(!ContractInfo.isContractYearsDurationValid(contract));
-        const [isDealershipNameNotOk, setIsDealershipNameNotOk] = useState<boolean>(!ContractInfo.isDealershipNameValid(contract));
-        const [isSupplierNameNotOk, setIsSupplierNameNotOk] = useState<boolean>(!ContractInfo.isSupplierNameValid(contract));
+        const [isDealershipNotOk, setIsDealershipNotOk] = useState<boolean>(!ContractInfo.isDealershipNameValid(contract));
+        const [isSupplierNotOk, setIsSupplierNotOk] = useState<boolean>(!ContractInfo.isSupplierNameValid(contract));
 
         return (
             <div className='entity-edit-container-div'>
@@ -256,11 +286,12 @@ const ContractsTableView = () => {
                     
                     <TextField className='edit-container-text-field' 
                         error={isContractDateNotOk}
-                        helperText={isContractDateNotOk ? "Name must be between 1 and 50 characters" : ""}
+                        helperText={isContractDateNotOk ? "Contract date must be valid" : ""}
                         id='date' 
                         label='Contract Date' 
                         variant='standard' 
-                        defaultValue={contract.getContractDate()} 
+                        type='date'
+                        defaultValue={contract.getContractDate().toISOString().substring(0, 10) || Date.now().toString()} 
                         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                             //@ts-ignore
                             contract.setContractDate(event.target.value);
@@ -275,12 +306,12 @@ const ContractsTableView = () => {
 
                     <TextField className='edit-container-text-field' 
                         error={isContractYearsDurationNotOk}
-                        helperText={isContractYearsDurationNotOk ? "Role must be between 1 and 50 characters" : ""}
+                        helperText={isContractYearsDurationNotOk ? "Value must be > 0" : ""}
                         id='duration' 
                         label='Duration (years)' 
                         variant='standard' 
                         onKeyDown={(e) => {
-                            if (!(e.key >= '0' && e.key <= '9')) {
+                            if (!(e.key >= '0' && e.key <= '9') && e.key !== 'Backspace' && e.key !== 'Delete' && e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') {
                                 e.preventDefault()
                             }
                         }}
@@ -305,13 +336,21 @@ const ContractsTableView = () => {
                             //@ts-ignore
                             return option.name;
                         }}
-                        renderInput={(params) => <TextField {...params} label='Dealership' variant='standard' />}
+                        renderInput={(params) => <TextField {...params} label='Dealership' variant='standard' error={isDealershipNotOk} 
+                                                    helperText={isDealershipNotOk ? "No valid dealership selected" : ""} />}
                         onInputChange={handleInputChange}
                         onChange={(event: any, newValue: any) => {
                             if (newValue) {
-                                console.log(newValue);
                                 contract.setDealershipId(newValue.id);
                                 contract.setDealershipName(newValue.name);
+
+                                if (ContractInfo.isDealershipNameValid(contract)) {
+                                    setIsDealershipNotOk(false);
+                                } else {
+                                    setIsDealershipNotOk(true);
+                                }
+                            } else if (newValue === null) {
+                                setIsDealershipNotOk(true);
                             }
                         }}
                     />
@@ -319,20 +358,28 @@ const ContractsTableView = () => {
 
                     <>
                     <Autocomplete className='edit-container-text-field'
-                        id='dealership'
-                        options={dealershipsDTOs}
-                        defaultValue={initialDealership}
+                        id='supplier'
+                        options={suppliersDTOs}
+                        defaultValue={initialSupplier}
                         getOptionLabel={(option) => {
                             //@ts-ignore
                             return option.name;
                         }}
-                        renderInput={(params) => <TextField {...params} label='Dealership' variant='standard' />}
-                        onInputChange={handleInputChange}
+                        renderInput={(params) => <TextField {...params} label='Supplier' variant='standard' error={isSupplierNotOk} 
+                                                    helperText={isSupplierNotOk ? "No valid supplier selected" : ""} />}
+                        onInputChange={handleSupplierInputChange}
                         onChange={(event: any, newValue: any) => {
                             if (newValue) {
-                                console.log(newValue);
-                                contract.setDealershipId(newValue.id);
-                                contract.setDealershipName(newValue.name);
+                                contract.setSupplierId(newValue.id);
+                                contract.setSupplierName(newValue.name);
+
+                                if (ContractInfo.isSupplierNameValid(contract)) {
+                                    setIsSupplierNotOk(false);
+                                } else {
+                                    setIsSupplierNotOk(true);
+                                }
+                            } else if (newValue === null) {
+                                setIsSupplierNotOk(true);
                             }
                         }}
                     />
