@@ -20,7 +20,15 @@ class Values {
     static dealershipsByIdUrl = "/";
     static dealershipsUpdateUrl = "";
     static dealershipsDeleteUrl = "/";
+    static dealershipsByNameUrl = "/autocomplete";
     static dealershipsByAvgCarPriceUrl = "/sort-by-avg-car-price";
+
+    // Cars
+    static carsBaseUrl = "/cars";
+    static carsAllUrl = "";
+    static carsByIdUrl = "/";
+    static carsUpdateUrl = "";
+    static carsDeleteUrl = "/";
 }
 
 export default Values;

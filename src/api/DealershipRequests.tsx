@@ -28,16 +28,10 @@ class DealershipRequests {
         return ans.data;
     }
 
-
-    // async getDealershipsByAvgCarPrice(): Promise<AxiosResponse<any, any>> {
-    //     return await api.get(Values.dealershipsByAvgCarPriceUrl);
-    // }
-
-    // async getDealershipsByAvgCarPriceJSON(): Promise<JSON[]> {
-    //     const ans = await this.getDealershipsByAvgCarPrice();
-    //     return ans.data;
-    // }
-
+    async getDealershipsByName(name: string) {
+        return await api.get<DealershipDTO[]>(Values.dealershipsByNameUrl + '?name=' + name);
+    }
+    
     async getDealershipsByAvgCarPrice(page: number = 0, size: number = 25): Promise<AxiosResponse<any, any>> {
         return await api.get(Values.dealershipsByAvgCarPriceUrl + '?page=' + page.toString() + '&size=' + size.toString());
     }
