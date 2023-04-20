@@ -5,10 +5,11 @@ import './TableView.scss';
 
 import DealershipsTableView from './DealershipsTableView';
 import CarsTableView from './CarsTableView';
+import EmployeesTableView from './EmployeesTableView';
 
 const TableView = () => {
 
-    const tableNames = ["Dealerships", "Cars", "Customers", "Employees", "Orders"];
+    const tableNames = ["Dealerships", "Cars", "Employees", "Contracts", "Suppliers"];
     const [tableName, setTableName] = useState('');
     const [tableNameIndex, setTableNameIndex] = useState('');
 
@@ -43,6 +44,10 @@ const TableView = () => {
             {
                 tableName === "Cars" &&
                 <CarsTableView />
+            }
+            {
+                tableName === "Employees" &&
+                <EmployeesTableView />
             }
             
 

@@ -29,6 +29,13 @@ class Values {
     static carsByIdUrl = "/";
     static carsUpdateUrl = "";
     static carsDeleteUrl = "/";
+
+    // Employees
+    static employeesBaseUrl = "/employees";
+    static employeesAllUrl = "";
+    static employeesByIdUrl = "/";
+    static employeesUpdateUrl = "";
+    static employeesDeleteUrl = "/";
 }
 
 export default Values;

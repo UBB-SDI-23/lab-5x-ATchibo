@@ -1,6 +1,6 @@
 // import { IsEmail, IsNotEmpty, Min } from 'class-validator';
 
-export class EmployeeDTO {
+class EmployeeDTO {
     private id: number;
     private name: string;
     private role: string;
@@ -125,3 +125,5 @@ export class EmployeeDTO {
         this.dealershipName = dealershipName;
     }
 }
+
+export default EmployeeDTO;

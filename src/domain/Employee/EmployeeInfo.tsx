@@ -1,5 +1,5 @@
 import { GridColDef } from "@mui/x-data-grid";
-import { EmployeeDTO } from "./EmployeeDTO";
+import EmployeeDTO from "./EmployeeDTO";
 
 
 class EmployeeInfo {

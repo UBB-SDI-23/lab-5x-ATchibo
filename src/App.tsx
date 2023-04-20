@@ -12,6 +12,7 @@ import TableManagementPage from './pages/TableManagementPage';
 import Values from './Values';
 import DealershipDetailsPage from './pages/DealershipDetailsPage';
 import CarDetailsPage from './pages/CarDetailsPage';
+import EmployeeDetailsPage from './pages/EmployeeDetailsPage';
 
 function App() {
 
@@ -61,6 +62,7 @@ function App() {
               <Route path={Values.manageTablesUrl} element={<TableManagementPage />}></Route>
               <Route path={Values.manageTablesUrl + "/dealerships/:dId"} element={<DealershipDetailsPage />}/>
               <Route path={Values.manageTablesUrl + "/cars/:cId"} element={<CarDetailsPage />}/>
+              <Route path={Values.manageTablesUrl + "/employees/:eId"} element={<EmployeeDetailsPage />}/>
               <Route path={Values.statisticsUrl} element={<StatisticsPage />} />
               <Route path="*" element={<NoPage />} />
             </Route>
