@@ -36,6 +36,13 @@ class Values {
     static employeesByIdUrl = "/";
     static employeesUpdateUrl = "";
     static employeesDeleteUrl = "/";
+
+    // Contracts
+    static contractsBaseUrl = "/contracts";
+    static contractsAllUrl = "";
+    static contractsByIdUrl = "/";
+    static contractsUpdateUrl = "";
+    static contractsDeleteUrl = "/";
 }
 
 export default Values;

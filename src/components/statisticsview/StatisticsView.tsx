@@ -3,6 +3,7 @@ import { useState } from 'react';
 import Card from '../Card';
 import './StatisticsView.scss';
 import DlrByAvgCarPriceView from './DlrByAvgCarPriceView';
+import SupplByNrOfCtrView from './SupplByNrOfCtrView';
 
 const StatisticsView = () => {
 
@@ -38,7 +39,10 @@ const StatisticsView = () => {
                 tableName === "View dealerships by average cars price" &&
                 <DlrByAvgCarPriceView />
             }
-            
+            {
+                tableName === "View suppliers by number of contracts" &&
+                <SupplByNrOfCtrView />
+            }            
 
         </Card>
     )

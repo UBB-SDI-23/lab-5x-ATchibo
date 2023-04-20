@@ -6,6 +6,7 @@ import './TableView.scss';
 import DealershipsTableView from './DealershipsTableView';
 import CarsTableView from './CarsTableView';
 import EmployeesTableView from './EmployeesTableView';
+import ContractsTableView from './ContractsTableView';
 
 const TableView = () => {
 
@@ -48,6 +49,10 @@ const TableView = () => {
             {
                 tableName === "Employees" &&
                 <EmployeesTableView />
+            }
+            {
+                tableName === "Contracts" &&
+                <ContractsTableView />
             }
             
 
