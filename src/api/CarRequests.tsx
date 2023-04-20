@@ -24,7 +24,7 @@ class CarRequests {
     }
 
     async getCarJson(id: number): Promise<JSON> {
-        const ans = await this.getCars(id);
+        const ans = await this.getCar(id);
         return ans.data;
     }
 
