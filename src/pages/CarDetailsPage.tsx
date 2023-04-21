@@ -74,6 +74,7 @@ const CarDetailsPage = () => {
                 <p>Year: {carsJson.year}</p>
                 <p>Color: {carsJson.color}</p>
                 <p>Price: {carsJson.price}</p>
+                <p>Description: {carsJson.description}</p>
                 <p>Dealership ID: {carsJson.dealership.id}</p>
                 <p>Dealership Name: {carsJson.dealership.name}</p>
                 <br/>
