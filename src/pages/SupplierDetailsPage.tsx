@@ -2,10 +2,10 @@ import { useParams } from 'react-router-dom';
 import './DealershipDetailsPage.scss';
 import Card from '../components/Card';
 import { useEffect, useState } from 'react';
-import DealershipRequests from '../api/DealershipRequests';
+import SupplierRequests from '../api/SupplierRequests';
 import { Snackbar, Alert } from '@mui/material';
 
-const DealershipDetailsPage = () => {
+const SupplierDetailsPage = () => {
 
     const { dId } = useParams();
 
@@ -13,16 +13,16 @@ const DealershipDetailsPage = () => {
     const [entityInfo, setEntityInfo] = useState<any>();
 
     useEffect(() => {
-        const fetchDealership = async () => {
+        const fetchSupplier = async () => {
             try {
-                setEntityInfo(await DealershipRequests.getDealershipJson(dId as unknown as number));
+                setEntityInfo(await SupplierRequests.getSupplierJson(dId as unknown as number));
                 showAlertSuccess();
             } catch (err: any) {
                 displayError(err);
             }
         }
 
-        fetchDealership();
+        fetchSupplier();
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dId]);
@@ -61,37 +61,6 @@ const DealershipDetailsPage = () => {
         }, 3000);
     }
 
-
-    const CarsCard = (carsJson: any) => {
-        
-        return (
-            <div style={{marginLeft: "100px"}}>
-                <p>ID: {carsJson.id}</p>
-                <p>Brand: {carsJson.brand}</p>
-                <p>Model: {carsJson.model}</p>
-                <p>Year: {carsJson.year}</p>
-                <p>Color: {carsJson.color}</p>
-                <p>Price: {carsJson.price}</p>
-                <br/>
-            </div>
-        )
-    }
-
-    const EmployeesCard = (employeesJson: any) => {
-
-        return (
-            <div style={{marginLeft: "100px"}}>
-                <p>ID: {employeesJson.id}</p>
-                <p>Name: {employeesJson.name}</p>
-                <p>Position: {employeesJson.role}</p>
-                <p>Email: {employeesJson.email}</p>
-                <p>Phone: {employeesJson.phone}</p>
-                <p>Salary: {employeesJson.salary}</p>
-                <br/>
-            </div>
-        )
-    }
-
     const ContractsCard = (contractsJson: any) => {
 
         return (
@@ -99,14 +68,16 @@ const DealershipDetailsPage = () => {
                 <p>ID: {contractsJson.id}</p>
                 <p>Contract Date: {contractsJson.contractDate}</p>
                 <p>Contract Duration (years): {contractsJson.contractYearsDuration}</p>
-                <p>Supplier:</p>
+                <p>Dealership:</p>
                 {
-                    contractsJson.supplier ?
+                    contractsJson.dealership ?
                     <div style={{marginLeft: "100px"}}>
-                        <p>ID: {contractsJson.supplier.id}</p>
-                        <p>Name: {contractsJson.supplier.name}</p>
-                        <p>Email: {contractsJson.supplier.email}</p>
-                        <p>Phone: {contractsJson.supplier.phone}</p>
+                        <p>ID: {contractsJson.dealership.id}</p>
+                        <p>Name: {contractsJson.dealership.name}</p>
+                        <p>Address: {contractsJson.dealership.address}</p>
+                        <p>Dealership Phone: {contractsJson.dealership.phone}</p>
+                        <p>Dealership Email: {contractsJson.dealership.email}</p>
+                        <p>Dealership Website: {contractsJson.dealership.website}</p>
                     </div>
                     : <p>None</p>
                 }
@@ -119,27 +90,17 @@ const DealershipDetailsPage = () => {
     return (
         <Card>
             <div className="dealership-details-page-div">
-                <h1>Dealership Details Page for {dId} </h1>
-                {/* <p>{JSON.stringify(entityInfo)}</p> */}
-
-                <p>ID: {entityInfo?.id}</p>
-                <p>Name: {entityInfo?.name}</p>
-                <p>Address: {entityInfo?.address}</p>
-                <p>Dealership Phone: {entityInfo?.phone}</p>
-                <p>Dealership Email: {entityInfo?.email}</p>
-                <p>Dealership Website: {entityInfo?.website}</p>
-                <p>Cars:</p>
+                <h1>Supplier Details Page for {dId} </h1>
+                
                 {
-                    entityInfo?.cars.map((car: any) => {
-                        return CarsCard(car);
-                    })
-                }
-
-                <p>Employees:</p>
-                {
-                    entityInfo?.employees.map((employee: any) => {
-                        return EmployeesCard(employee);
-                    })
+                    entityInfo ? 
+                    <div>
+                        <p>ID: {entityInfo.id}</p>
+                        <p>Name: {entityInfo.name}</p>
+                        <p>Email: {entityInfo.email}</p>
+                        <p>Phone: {entityInfo.phone}</p>
+                    </div>
+                    : <p>None</p>
                 }
 
                 <p>Contracts:</p>
@@ -168,4 +129,4 @@ const DealershipDetailsPage = () => {
     );
 }
 
-export default DealershipDetailsPage;
+export default SupplierDetailsPage;
