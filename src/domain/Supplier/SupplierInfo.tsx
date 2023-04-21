@@ -11,6 +11,12 @@ class SupplierInfo {
         { field: 'nrContracts', headerName: 'Number of contracts', width: 200}
     ];
 
+    static statisticsColumns: GridColDef[] = [
+        { field: 'id', headerName: 'ID', width: 100 },
+        { field: 'name', headerName: 'Dealership Name', width: 430 },
+        { field: 'nrShippings', headerName: 'Number of contracts', width: 230}
+    ];
+
     static isNameValid = (s: SupplierDTO) => {
         return s.getName() !== "";
     }

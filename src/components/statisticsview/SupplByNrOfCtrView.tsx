@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
 import './DlrByAvgCarPriceView.scss';
-import DealershipRequests from '../../api/DealershipRequests';
+import SupplierRequests from '../../api/SupplierRequests';
 import { DataGrid, GridColDef, GridRowSelectionModel } from '@mui/x-data-grid';
 import { Button, Snackbar, Alert } from '@mui/material';
-import DealershipInfo from '../../domain/DealershipInfo';
+import SupplierInfo from '../../domain/Supplier/SupplierInfo';
 
 const SupplByNrOfCtrView = () => {
 
     const [rows, setRows] = useState<JSON[]>([]);
-    const columns: GridColDef[] = DealershipInfo.statisticsColumns;
+    const columns: GridColDef[] = SupplierInfo.statisticsColumns;
 
     const [paginationModel, setPaginationModel] = useState({
         pageSize: 25,
@@ -26,7 +26,7 @@ const SupplByNrOfCtrView = () => {
 
     const fetchData = async (page: number, size: number) => {
         try {
-            setRows(await DealershipRequests.getDealershipsByAvgCarPriceJSON(page, size));
+            setRows(await SupplierRequests.getSuppliersByNrContractsJSON(page, size));
             showAlertSuccess(); 
         } catch (err: any) {
             displayError(err);
@@ -36,7 +36,7 @@ const SupplByNrOfCtrView = () => {
 
     const addDataPage = async (page: number, size: number) => {
         try {
-            const newRows = await DealershipRequests.getDealershipsByAvgCarPriceJSON(page, size);
+            const newRows = await SupplierRequests.getSuppliersByNrContractsJSON(page, size);
             setRows(rows.concat(newRows));
             showAlertSuccess();
         } catch (err: any) {
@@ -104,9 +104,6 @@ const SupplByNrOfCtrView = () => {
                     paginationModel={paginationModel}
                     onPaginationModelChange={setPaginationModel}
                     onRowSelectionModelChange={(newRowSelectionModel) => {
-                        console.log("newRowSelectionModel: " + newRowSelectionModel);
-                        console.log("newRowSelectionModel index: " + newRowSelectionModel);
-
                         setRowSelectionModel(newRowSelectionModel);
                     }}
                     rowSelectionModel={rowSelectionModel}

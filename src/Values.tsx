@@ -51,6 +51,7 @@ class Values {
     static suppliersUpdateUrl = "";
     static suppliersDeleteUrl = "/";
     static suppliersByNameUrl = "/autocomplete";
+    static suppliersByNrContractsUrl = "/by-nr-contracts";
 }
 
 export default Values;

@@ -33,14 +33,14 @@ class SupplierRequests {
         return await api.get<SupplierDTO[]>(Values.suppliersByNameUrl + '?name=' + name);
     }
     
-    // async getSuppliersByAvgCarPrice(page: number = 0, size: number = 25): Promise<AxiosResponse<any, any>> {
-    //     return await api.get(Values.suppliersByAvgCarPriceUrl + '?page=' + page.toString() + '&size=' + size.toString());
-    // }
+    async getSuppliersByNrContracts(page: number = 0, size: number = 25): Promise<AxiosResponse<any, any>> {
+        return await api.get(Values.suppliersByNrContractsUrl + '?page=' + page.toString() + '&size=' + size.toString());
+    }
 
-    // async getSuppliersByAvgCarPriceJSON(page: number = 0, size: number = 25): Promise<JSON[]> {
-    //     const ans = await this.getSuppliersByAvgCarPrice(page, size);
-    //     return ans.data;
-    // }
+    async getSuppliersByNrContractsJSON(page: number = 0, size: number = 25): Promise<JSON[]> {
+        const ans = await this.getSuppliersByNrContracts(page, size);
+        return ans.data;
+    }
 
     async updateSuppliers(suppliers: SupplierDTO[]): Promise<any> {
         return await api.put(Values.suppliersUpdateUrl, suppliers);
