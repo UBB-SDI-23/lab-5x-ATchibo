@@ -13,6 +13,7 @@ import Values from './Values';
 import DealershipDetailsPage from './pages/DealershipDetailsPage';
 import CarDetailsPage from './pages/CarDetailsPage';
 import EmployeeDetailsPage from './pages/EmployeeDetailsPage';
+import ContractDetailsPage from './pages/ContractDetailsPage';
 
 function App() {
 
@@ -63,6 +64,7 @@ function App() {
               <Route path={Values.manageTablesUrl + "/dealerships/:dId"} element={<DealershipDetailsPage />}/>
               <Route path={Values.manageTablesUrl + "/cars/:cId"} element={<CarDetailsPage />}/>
               <Route path={Values.manageTablesUrl + "/employees/:eId"} element={<EmployeeDetailsPage />}/>
+              <Route path={Values.manageTablesUrl + "/contracts/:cId"} element={<ContractDetailsPage />}/>
               <Route path={Values.statisticsUrl} element={<StatisticsPage />} />
               <Route path="*" element={<NoPage />} />
             </Route>
