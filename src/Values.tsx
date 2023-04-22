@@ -12,7 +12,8 @@ class Values {
     // Backend
     // static baseBackendUrl = "http://localhost:8080/api";
     // static baseBackendUrl = "/api";
-    static baseBackendUrl = "http://13.49.175.190/api";
+    // static baseBackendUrl = "http://13.49.175.190/api";
+    static baseBackendUrl = "https://exquisite-fox.chickenkiller.com/api";
     
     // Dealerships
     static dealershipsBaseUrl = "/dealerships";
