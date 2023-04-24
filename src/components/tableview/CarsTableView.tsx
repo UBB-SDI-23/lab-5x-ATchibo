@@ -30,6 +30,8 @@ const CarsTableView = () => {
     //     page: 0,
     // });
 
+    const [loading, setLoading] = useState<boolean>(false);
+
     const [page, setPage] = useState<number>(1);
 
     const [paginationManager, setPaginationManager] = useState<PaginationManager>(new PaginationManager(25, 0));
@@ -93,6 +95,7 @@ const CarsTableView = () => {
     const [alertErrorText, setAlertErrorText] = useState<string>("");
 
     const showAlertSuccess = () => {
+        setLoading(false);
         setAlertSuccess(true);
         setTimeout(() => {
             setAlertSuccess(false);
@@ -100,6 +103,7 @@ const CarsTableView = () => {
     }
 
     const showAlertError = () => {
+        setLoading(false);
         setAlertError(true);    
         setTimeout(() => {
             setAlertError(false);
@@ -155,6 +159,7 @@ const CarsTableView = () => {
 
     const fetchCars = async (page: number, size: number) => {
         try {
+            setLoading(true);
             setRows(await CarRequests.getCarsJson(page, size));
             showAlertSuccess(); 
         } catch (err: any) {
@@ -164,6 +169,7 @@ const CarsTableView = () => {
 
     const fetchCarsMinPrice = async (page: number, size: number, price: number) => {
         try {
+            setLoading(true);
             setRows(await CarRequests.getCarsWithPriceAboveJson(page, size, price));
             showAlertSuccess(); 
         } catch (err: any) {
@@ -182,6 +188,7 @@ const CarsTableView = () => {
     // }
 
     const changePage = (event: React.ChangeEvent<unknown>, value: number) => {
+        setLoading(true);
         setPage(value);
         paginationManager.setCurrentPage(value-1);
         fetchCarsMinPrice(paginationManager.getCurrentPage(), paginationManager.getPageSize(), minCarPrice);
@@ -189,6 +196,7 @@ const CarsTableView = () => {
 
 
     const fetchUpdate = async () => {
+        setLoading(true);
         await CarRequests.updateCars(currentCars)
         .then((res: any) => {
             showAlertSuccess();
@@ -202,6 +210,7 @@ const CarsTableView = () => {
     }
 
     const fetchDelete = async () => {
+        setLoading(true);
         await CarRequests.deleteCars(rowSelectionModel)
         .then((res: any) => {
             setRows(rows.filter((row: any) => {
@@ -393,6 +402,8 @@ const CarsTableView = () => {
                 count={40002}
                 page={page}
                 onChange={changePage}
+                boundaryCount={5}
+                siblingCount={5}
             />
 
             <div className='table-div'>
@@ -496,6 +507,12 @@ const CarsTableView = () => {
                 <Alert severity="error">
                     Error: {alertErrorText}
                 </Alert>
+            </Snackbar>
+
+            <Snackbar open={loading}>
+                <Alert severity="info">
+                    Loading...
+                </Alert>   
             </Snackbar>
         </div>
     )

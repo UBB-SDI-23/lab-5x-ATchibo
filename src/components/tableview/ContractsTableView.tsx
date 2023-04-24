@@ -37,6 +37,8 @@ const ContractsTableView = () => {
     const [rows, setRows] = useState<JSON[]>([]);
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
 
+    const [loading, setLoading] = useState<boolean>(false);
+
     useEffect(() => {
         setSelectedRowsFields(currentContracts.map((contract: ContractDTO) => {
             return (
@@ -90,6 +92,7 @@ const ContractsTableView = () => {
     const [alertErrorText, setAlertErrorText] = useState<string>("");
 
     const showAlertSuccess = () => {
+        setLoading(false);
         setAlertSuccess(true);
         setTimeout(() => {
             setAlertSuccess(false);
@@ -97,6 +100,7 @@ const ContractsTableView = () => {
     }
 
     const showAlertError = () => {
+        setLoading(false);
         setAlertError(true);    
         setTimeout(() => {
             setAlertError(false);
@@ -148,6 +152,7 @@ const ContractsTableView = () => {
 
     const fetchContracts = async (page: number, size: number) => {
         try {
+            setLoading(true);
             setRows(await ContractRequests.getContractsJson(page, size));
             showAlertSuccess(); 
         } catch (err: any) {
@@ -157,6 +162,7 @@ const ContractsTableView = () => {
 
     const addContractsPage = async (page: number, size: number) => {
         try {
+            setLoading(true);
             const newRows = await ContractRequests.getContractsJson(page, size);
             setRows(rows.concat(newRows));
             showAlertSuccess();
@@ -166,6 +172,7 @@ const ContractsTableView = () => {
     }
 
     const fetchUpdate = async () => {
+        setLoading(true);
         await ContractRequests.updateContracts(currentContracts)
         .then((res: any) => {
             showAlertSuccess();
@@ -179,6 +186,7 @@ const ContractsTableView = () => {
     }
 
     const fetchDelete = async () => {
+        setLoading(true);
         await ContractRequests.deleteContracts(rowSelectionModel)
         .then((res: any) => {
             setRows(rows.filter((row: any) => {
@@ -498,6 +506,12 @@ const ContractsTableView = () => {
                 <Alert severity="error">
                     Error: {alertErrorText}
                 </Alert>
+            </Snackbar>
+
+            <Snackbar open={loading}>
+                <Alert severity="info">
+                    Loading...
+                </Alert>   
             </Snackbar>
         </div>
     )

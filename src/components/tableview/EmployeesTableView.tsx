@@ -35,6 +35,8 @@ const EmployeesTableView = () => {
     const [rows, setRows] = useState<JSON[]>([]);
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
 
+    const [loading, setLoading] = useState<boolean>(false);
+
     useEffect(() => {
         setSelectedRowsFields(currentEmployees.map((employee: EmployeeDTO) => {
             return (
@@ -88,6 +90,7 @@ const EmployeesTableView = () => {
     const [alertErrorText, setAlertErrorText] = useState<string>("");
 
     const showAlertSuccess = () => {
+        setLoading(false);
         setAlertSuccess(true);
         setTimeout(() => {
             setAlertSuccess(false);
@@ -95,12 +98,12 @@ const EmployeesTableView = () => {
     }
 
     const showAlertError = () => {
+        setLoading(false);
         setAlertError(true);    
         setTimeout(() => {
             setAlertError(false);
         }, 3000);
     }
-
     useEffect(() => {
         setPaginationManager(new PaginationManager(paginationModel.pageSize, paginationModel.page));
         fetchEmployees(paginationManager.getCurrentPage(), paginationManager.getPageSize()); 
@@ -146,6 +149,7 @@ const EmployeesTableView = () => {
 
     const fetchEmployees = async (page: number, size: number) => {
         try {
+            setLoading(true);
             setRows(await EmployeeRequests.getEmployeesJson(page, size));
             showAlertSuccess(); 
         } catch (err: any) {
@@ -155,6 +159,7 @@ const EmployeesTableView = () => {
 
     const addEmployeesPage = async (page: number, size: number) => {
         try {
+            setLoading(true);
             const newRows = await EmployeeRequests.getEmployeesJson(page, size);
             setRows(rows.concat(newRows));
             showAlertSuccess();
@@ -164,6 +169,7 @@ const EmployeesTableView = () => {
     }
 
     const fetchUpdate = async () => {
+        setLoading(true);
         await EmployeeRequests.updateEmployees(currentEmployees)
         .then((res: any) => {
             showAlertSuccess();
@@ -177,6 +183,7 @@ const EmployeesTableView = () => {
     }
 
     const fetchDelete = async () => {
+        setLoading(true);
         await EmployeeRequests.deleteEmployees(rowSelectionModel)
         .then((res: any) => {
             setRows(rows.filter((row: any) => {
@@ -486,6 +493,12 @@ const EmployeesTableView = () => {
                 <Alert severity="error">
                     Error: {alertErrorText}
                 </Alert>
+            </Snackbar>
+
+            <Snackbar open={loading}>
+                <Alert severity="info">
+                    Loading...
+                </Alert>   
             </Snackbar>
         </div>
     )

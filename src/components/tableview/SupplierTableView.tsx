@@ -33,6 +33,8 @@ const SuppliersTableView = () => {
     const [rows, setRows] = useState<JSON[]>([]);
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
 
+    const [loading, setLoading] = useState<boolean>(false);
+
     useEffect(() => {
         setSelectedRowsFields(currentSuppliers.map((supplier: SupplierDTO) => {
             return (
@@ -86,6 +88,7 @@ const SuppliersTableView = () => {
     const [alertErrorText, setAlertErrorText] = useState<string>("");
 
     const showAlertSuccess = () => {
+        setLoading(false);
         setAlertSuccess(true);
         setTimeout(() => {
             setAlertSuccess(false);
@@ -93,6 +96,7 @@ const SuppliersTableView = () => {
     }
 
     const showAlertError = () => {
+        setLoading(false);
         setAlertError(true);    
         setTimeout(() => {
             setAlertError(false);
@@ -144,6 +148,7 @@ const SuppliersTableView = () => {
 
     const fetchSuppliers = async (page: number, size: number) => {
         try {
+            setLoading(true);
             setRows(await SupplierRequests.getSuppliersJson(page, size));
             showAlertSuccess(); 
         } catch (err: any) {
@@ -153,6 +158,7 @@ const SuppliersTableView = () => {
 
     const addSuppliersPage = async (page: number, size: number) => {
         try {
+            setLoading(true);
             const newRows = await SupplierRequests.getSuppliersJson(page, size);
             setRows(rows.concat(newRows));
             showAlertSuccess();
@@ -162,6 +168,7 @@ const SuppliersTableView = () => {
     }
 
     const fetchUpdate = async () => {
+        setLoading(true);
         await SupplierRequests.updateSuppliers(currentSuppliers)
         .then((res: any) => {
             showAlertSuccess();
@@ -175,6 +182,7 @@ const SuppliersTableView = () => {
     }
 
     const fetchDelete = async () => {
+        setLoading(true);
         await SupplierRequests.deleteSuppliers(rowSelectionModel)
         .then((res: any) => {
             setRows(rows.filter((row: any) => {
@@ -388,6 +396,12 @@ const SuppliersTableView = () => {
                 <Alert severity="error">
                     Error: {alertErrorText}
                 </Alert>
+            </Snackbar>
+
+            <Snackbar open={loading}>
+                <Alert severity="info">
+                    Loading...
+                </Alert>   
             </Snackbar>
         </div>
     )

@@ -10,6 +10,8 @@ const SupplByNrOfCtrView = () => {
     const [rows, setRows] = useState<JSON[]>([]);
     const columns: GridColDef[] = SupplierInfo.statisticsColumns;
 
+    const [loading, setLoading] = useState<boolean>(false);
+
     const [paginationModel, setPaginationModel] = useState({
         pageSize: 25,
         page: 0,
@@ -26,6 +28,7 @@ const SupplByNrOfCtrView = () => {
 
     const fetchData = async (page: number, size: number) => {
         try {
+            setLoading(true);
             setRows(await SupplierRequests.getSuppliersByNrContractsJSON(page, size));
             showAlertSuccess(); 
         } catch (err: any) {
@@ -36,6 +39,7 @@ const SupplByNrOfCtrView = () => {
 
     const addDataPage = async (page: number, size: number) => {
         try {
+            setLoading(true);
             const newRows = await SupplierRequests.getSuppliersByNrContractsJSON(page, size);
             setRows(rows.concat(newRows));
             showAlertSuccess();
@@ -51,6 +55,7 @@ const SupplByNrOfCtrView = () => {
     const [alertErrorText, setAlertErrorText] = useState<string>("");
 
     const showAlertSuccess = () => {
+        setLoading(false);
         setAlertSuccess(true);
         setTimeout(() => {
             setAlertSuccess(false);
@@ -58,6 +63,7 @@ const SupplByNrOfCtrView = () => {
     }
 
     const showAlertError = () => {
+        setLoading(false);
         setAlertError(true);    
         setTimeout(() => {
             setAlertError(false);
@@ -134,6 +140,12 @@ const SupplByNrOfCtrView = () => {
                 <Alert severity="error">
                     Error: {alertErrorText}
                 </Alert>
+            </Snackbar>
+
+            <Snackbar open={loading}>
+                <Alert severity="info">
+                    Loading...
+                </Alert>   
             </Snackbar>
         </div>
     )

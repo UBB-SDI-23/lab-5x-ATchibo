@@ -33,6 +33,8 @@ const DealershipsTableView = () => {
     const [rows, setRows] = useState<JSON[]>([]);
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
 
+    const [loading, setLoading] = useState<boolean>(false);
+
     useEffect(() => {
         setSelectedRowsFields(currentDealerships.map((dealership: DealershipDTO) => {
             return (
@@ -86,6 +88,7 @@ const DealershipsTableView = () => {
     const [alertErrorText, setAlertErrorText] = useState<string>("");
 
     const showAlertSuccess = () => {
+        setLoading(false);
         setAlertSuccess(true);
         setTimeout(() => {
             setAlertSuccess(false);
@@ -93,6 +96,7 @@ const DealershipsTableView = () => {
     }
 
     const showAlertError = () => {
+        setLoading(false);
         setAlertError(true);    
         setTimeout(() => {
             setAlertError(false);
@@ -144,6 +148,7 @@ const DealershipsTableView = () => {
 
     const fetchDealerships = async (page: number, size: number) => {
         try {
+            setLoading(true);
             setRows(await DealershipRequests.getDealershipsJson(page, size));
             showAlertSuccess(); 
         } catch (err: any) {
@@ -153,6 +158,7 @@ const DealershipsTableView = () => {
 
     const addDealershipsPage = async (page: number, size: number) => {
         try {
+            setLoading(true);
             const newRows = await DealershipRequests.getDealershipsJson(page, size);
             setRows(rows.concat(newRows));
             showAlertSuccess();
@@ -162,6 +168,7 @@ const DealershipsTableView = () => {
     }
 
     const fetchUpdate = async () => {
+        setLoading(true);
         await DealershipRequests.updateDealerships(currentDealerships)
         .then((res: any) => {
             showAlertSuccess();
@@ -175,6 +182,7 @@ const DealershipsTableView = () => {
     }
 
     const fetchDelete = async () => {
+        setLoading(true);
         await DealershipRequests.deleteDealerships(rowSelectionModel)
         .then((res: any) => {
             setRows(rows.filter((row: any) => {
@@ -413,6 +421,12 @@ const DealershipsTableView = () => {
                 <Alert severity="error">
                     Error: {alertErrorText}
                 </Alert>
+            </Snackbar>
+
+            <Snackbar open={loading}>
+                <Alert severity="info">
+                    Loading...
+                </Alert>   
             </Snackbar>
         </div>
     )

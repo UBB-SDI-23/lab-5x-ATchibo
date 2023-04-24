@@ -10,6 +10,8 @@ const DlrByAvgCarPriceView = () => {
     const [rows, setRows] = useState<JSON[]>([]);
     const columns: GridColDef[] = DealershipInfo.statisticsColumns;
 
+    const [loading, setLoading] = useState<boolean>(false);
+
     const [paginationModel, setPaginationModel] = useState({
         pageSize: 25,
         page: 0,
@@ -26,6 +28,7 @@ const DlrByAvgCarPriceView = () => {
 
     const fetchData = async (page: number, size: number) => {
         try {
+            setLoading(true);
             setRows(await DealershipRequests.getDealershipsByAvgCarPriceJSON(page, size));
             showAlertSuccess(); 
         } catch (err: any) {
@@ -36,6 +39,7 @@ const DlrByAvgCarPriceView = () => {
 
     const addDataPage = async (page: number, size: number) => {
         try {
+            setLoading(true);
             const newRows = await DealershipRequests.getDealershipsByAvgCarPriceJSON(page, size);
             setRows(rows.concat(newRows));
             showAlertSuccess();
@@ -51,6 +55,7 @@ const DlrByAvgCarPriceView = () => {
     const [alertErrorText, setAlertErrorText] = useState<string>("");
 
     const showAlertSuccess = () => {
+        setLoading(false);
         setAlertSuccess(true);
         setTimeout(() => {
             setAlertSuccess(false);
@@ -58,6 +63,7 @@ const DlrByAvgCarPriceView = () => {
     }
 
     const showAlertError = () => {
+        setLoading(false);
         setAlertError(true);    
         setTimeout(() => {
             setAlertError(false);
@@ -137,6 +143,12 @@ const DlrByAvgCarPriceView = () => {
                 <Alert severity="error">
                     Error: {alertErrorText}
                 </Alert>
+            </Snackbar>
+
+            <Snackbar open={loading}>
+                <Alert severity="info">
+                    Loading...
+                </Alert>   
             </Snackbar>
         </div>
     )
