@@ -28,6 +28,15 @@ class CarRequests {
         return ans.data;
     }
 
+    async getCarsWithPriceAbove(page: number = 0, size: number = 25, price: number): Promise<AxiosResponse<any, any>> {
+        return await api.get(Values.carsWithPriceAboveUrl + '/' + price.toString() + '?page=' + page.toString() + '&size=' + size.toString());
+    }
+
+    async getCarsWithPriceAboveJson(page: number = 0, size: number = 25, price: number = 0): Promise<JSON[]> {
+        const ans = await this.getCarsWithPriceAbove(page, size, price);
+        return ans.data;
+    }
+
     async updateCars(cars: CarDTO[]): Promise<any> {
         console.log(cars);
         return await api.put(Values.carsUpdateUrl, cars);

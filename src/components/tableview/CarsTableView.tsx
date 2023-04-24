@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Button, Snackbar, Alert, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Autocomplete } from '@mui/material';
-import { GridColDef, GridRowSelectionModel, DataGrid, GridRowId } from '@mui/x-data-grid';
+import { Button, Snackbar, Alert, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Autocomplete, Pagination } from '@mui/material';
+import { GridColDef, GridRowSelectionModel, GridRowId } from '@mui/x-data-grid';
 import { useState, useEffect, useCallback } from 'react';
 import './CarsTableView.scss';
 import { useNavigate } from 'react-router-dom';
@@ -12,6 +12,7 @@ import CarRequests from '../../api/CarRequests';
 import DealershipDTO from '../../domain/DealershipDTO';
 import DealershipRequests from '../../api/DealershipRequests';
 import { debounce } from 'lodash';
+import { DataGridPro } from '@mui/x-data-grid-pro';
 
 interface EditContainerProps {
     car: CarDTO
@@ -24,16 +25,20 @@ const CarsTableView = () => {
 
     const [dbQueryButtonsDisabled, setDbQueryButtonsDisabled] = useState<boolean>(false);
 
-    const [paginationModel, setPaginationModel] = useState({
-        pageSize: 25,
-        page: 0,
-    });
+    // const [paginationModel, setPaginationModel] = useState({
+    //     pageSize: 25,
+    //     page: 0,
+    // });
 
-    const [paginationManager, setPaginationManager] = useState<PaginationManager>(new PaginationManager(paginationModel.pageSize, paginationModel.page));
+    const [page, setPage] = useState<number>(1);
+
+    const [paginationManager, setPaginationManager] = useState<PaginationManager>(new PaginationManager(25, 0));
 
     const columns: GridColDef[] = CarInfo.columns;
     const [rows, setRows] = useState<JSON[]>([]);
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
+
+    const [minCarPrice, setMinCarPrice] = useState<number>(0);
 
     useEffect(() => {
         setSelectedRowsFields(currentCars.map((car: CarDTO) => {
@@ -43,12 +48,12 @@ const CarsTableView = () => {
         }));
     }, [currentCars]);
 
-    useEffect(() => {
-        paginationManager.setPageSize(paginationModel.pageSize);
-        paginationManager.setCurrentPage(paginationModel.page);
+    // useEffect(() => {
+    //     paginationManager.setPageSize(paginationModel.pageSize);
+    //     paginationManager.setCurrentPage(paginationModel.page);
 
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [paginationModel]);
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [paginationModel]);
 
     useEffect(() => {
         paginationManager.setTotalElements(rows.length);
@@ -102,7 +107,7 @@ const CarsTableView = () => {
     }
 
     useEffect(() => {
-        setPaginationManager(new PaginationManager(paginationModel.pageSize, paginationModel.page));
+        setPaginationManager(new PaginationManager(25, 0));
         fetchCars(paginationManager.getCurrentPage(), paginationManager.getPageSize()); 
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -122,9 +127,9 @@ const CarsTableView = () => {
         fetchCars(0, paginationManager.getTotalElements() || paginationManager.getPageSize()); 
     }
 
-    const loadMoreRows = () => {
-        addCarsPage(paginationManager.getTotalPages(), paginationManager.getPageSize());
-    }
+    // const loadMoreRows = () => {
+    //     addCarsPage(paginationManager.getTotalPages(), paginationManager.getPageSize());
+    // }
 
     const updateRows = () => {
         if (checkUpdatedCars()) {
@@ -144,6 +149,10 @@ const CarsTableView = () => {
         setDbQueryButtonsDisabled(false);
     }
 
+    const filterCarsByPrice = () => {
+        fetchCarsMinPrice(0, paginationManager.getTotalElements() || paginationManager.getPageSize(), minCarPrice); 
+    }
+
     const fetchCars = async (page: number, size: number) => {
         try {
             setRows(await CarRequests.getCarsJson(page, size));
@@ -153,15 +162,31 @@ const CarsTableView = () => {
         }
     }
 
-    const addCarsPage = async (page: number, size: number) => {
+    const fetchCarsMinPrice = async (page: number, size: number, price: number) => {
         try {
-            const newRows = await CarRequests.getCarsJson(page, size);
-            setRows(rows.concat(newRows));
-            showAlertSuccess();
+            setRows(await CarRequests.getCarsWithPriceAboveJson(page, size, price));
+            showAlertSuccess(); 
         } catch (err: any) {
             displayError(err);
         }
     }
+
+    // const addCarsPage = async (page: number, size: number) => {
+    //     try {
+    //         const newRows = await CarRequests.getCarsJson(page, size);
+    //         setRows(rows.concat(newRows));
+    //         showAlertSuccess();
+    //     } catch (err: any) {
+    //         displayError(err);
+    //     }
+    // }
+
+    const changePage = (event: React.ChangeEvent<unknown>, value: number) => {
+        setPage(value);
+        paginationManager.setCurrentPage(value-1);
+        fetchCarsMinPrice(paginationManager.getCurrentPage(), paginationManager.getPageSize(), minCarPrice);
+    }
+
 
     const fetchUpdate = async () => {
         await CarRequests.updateCars(currentCars)
@@ -298,7 +323,7 @@ const CarsTableView = () => {
                         label='Price' 
                         variant='standard' 
                         onKeyDown={(e) => {
-                            if (!(e.key >= '0' && e.key <= '9')) {
+                            if (!(e.key >= '0' && e.key <= '9') && e.key !== 'Backspace' && e.key !== 'Delete' && e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') {
                                 e.preventDefault()
                             }
                         }}
@@ -340,13 +365,42 @@ const CarsTableView = () => {
 
     return (
         <div>
+            <div style={{display: "flex", margin: "10px 0px"}}>
+                <TextField
+                    id='price' 
+                    label='Minimum Price' 
+                    variant='standard' 
+                    onKeyDown={(e) => {
+                        if (!(e.key >= '0' && e.key <= '9') && e.key !== 'Backspace' && e.key !== 'Delete' && e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') {
+                            e.preventDefault()
+                        }
+                    }}
+                    defaultValue={minCarPrice} 
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                        setMinCarPrice(parseInt(event.target.value || "0"));
+                    }}
+                    style={{margin: "0px 10px"}}
+                />
+
+                <Button
+                    onClick={filterCarsByPrice}
+                >
+                    Filter
+                </Button>
+            </div>
+
+            <Pagination
+                count={40002}
+                page={page}
+                onChange={changePage}
+            />
+
             <div className='table-div'>
-                <DataGrid
+                <DataGridPro
                     rows={rows}
                     columns={columns}
+                    pagination={false}
                     checkboxSelection
-                    paginationModel={paginationModel}
-                    onPaginationModelChange={setPaginationModel}
                     onRowSelectionModelChange={(newRowSelectionModel) => {
                         setRowSelectionModel(newRowSelectionModel);
                     }}
@@ -359,12 +413,6 @@ const CarsTableView = () => {
                     onClick={getAllRows}
                 >
                     Refresh table
-                </Button>
-
-                <Button
-                    onClick={loadMoreRows}
-                >
-                    Load more rows
                 </Button>
 
                 <Button
