@@ -3,7 +3,7 @@ import { ThemeProvider } from '@mui/system';
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
-import Header from './components/Header';
+import Header from './components/headers/Header';
 
 import HomePage from './pages/HomePage';
 import NoPage from './pages/NoPage';
@@ -15,6 +15,7 @@ import CarDetailsPage from './pages/CarDetailsPage';
 import EmployeeDetailsPage from './pages/EmployeeDetailsPage';
 import ContractDetailsPage from './pages/ContractDetailsPage';
 import SupplierDetailsPage from './pages/SupplierDetailsPage';
+import LoginPage from './pages/LoginPage';
 
 function App() {
 
@@ -59,6 +60,7 @@ function App() {
         <ThemeProvider theme={theme}>
         <BrowserRouter>
           <Routes>
+            <Route path={Values.loginPageUrl} element={<LoginPage />} />
             <Route path={Values.homePageUrl} element={<Header />}>
               <Route index element={<HomePage />} />
               <Route path={Values.manageTablesUrl} element={<TableManagementPage />}></Route>

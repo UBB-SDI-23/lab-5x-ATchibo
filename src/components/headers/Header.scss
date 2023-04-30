@@ -1,16 +1,14 @@
-@import '../values.scss';
+@import '../../values.scss';
 
 .header {
-    height: $header-height;
+    min-height: $header-height;
     background-color: $main-color;
-
-    // display: flex;
 }
 
 #title-div {
     display: flex;
 
-    height: $header-height;
+    min-height: $header-height;
     
     margin-top: auto;
     margin-bottom: auto;

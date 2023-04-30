@@ -38,6 +38,7 @@ class DealershipRequests {
 
     async getDealershipsByAvgCarPriceJSON(page: number = 0, size: number = 25): Promise<JSON[]> {
         const ans = await this.getDealershipsByAvgCarPrice(page, size);
+        console.log(ans);
         return ans.data;
     }
 

@@ -1,0 +1,25 @@
+@import '../../values.scss';
+
+#main-div {
+    display: flexbox;
+
+    margin-top: 3*$margin-lg;
+    margin-right: auto;
+    margin-left: auto;
+
+    width: $login-menu-w;
+    max-width: $login-menu-max-w;
+
+    align-items: center;
+}
+
+#form-div {
+    margin-right: auto;
+    margin-left: auto;
+}
+
+#link-div {
+    // display: flexbox;
+
+    margin-top: $margin-md;
+}

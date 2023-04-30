@@ -4,6 +4,7 @@ class Values {
     static homePageUrl = "/";
     static manageTablesUrl = "/manage-tables";
     static statisticsUrl = "/statistics";
+    static loginPageUrl = "/login";
 
     // Colors
     static mainColor = "#0f7d4d";
@@ -52,6 +53,9 @@ class Values {
     static suppliersDeleteUrl = "/";
     static suppliersByNameUrl = "/autocomplete";
     static suppliersByNrContractsUrl = "/by-nr-contracts";
+
+    // Login
+    static loginUrl = "/login";
 }
 
 export default Values;

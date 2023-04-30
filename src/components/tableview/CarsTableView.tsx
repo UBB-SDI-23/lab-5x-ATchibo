@@ -402,8 +402,8 @@ const CarsTableView = () => {
                 count={40002}
                 page={page}
                 onChange={changePage}
-                boundaryCount={5}
-                siblingCount={5}
+                boundaryCount={4}
+                siblingCount={2}
             />
 
             <div className='table-div'>

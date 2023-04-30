@@ -2,7 +2,7 @@ import './Header.scss'
 
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import { Link, Outlet } from 'react-router-dom';
-import Values from '../Values';
+import Values from '../../Values';
 
 const Header = () => {
 
