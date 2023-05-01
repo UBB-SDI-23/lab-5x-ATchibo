@@ -1,10 +1,13 @@
 
 class Values {
     // Pages
+    static siteUrl = "http://localhost:3000"; 
+    // static siteUrl = "https://tchibo-cafeluta.netlify.com";
     static homePageUrl = "/";
     static manageTablesUrl = "/manage-tables";
     static statisticsUrl = "/statistics";
     static loginPageUrl = "/login";
+    static registerPageUrl = "/register";
 
     // Colors
     static mainColor = "#0f7d4d";
@@ -56,6 +59,8 @@ class Values {
 
     // Login
     static loginUrl = "/login";
+    static registerUrl = "/register";
+    static activateAccountUrl = "/register/confirm";
 }
 
 export default Values;

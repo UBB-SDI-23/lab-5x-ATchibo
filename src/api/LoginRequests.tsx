@@ -9,9 +9,17 @@ class LoginRequests {
         return await request(
             "POST",
             Values.loginUrl,
-            {login: username, password: hashedPassword}
+            {username: username, password: hashedPassword}
         )
     }
+
+    // async logout(): Promise<any> {
+    //     return await request(
+    //         "POST",
+    //         Values.logoutUrl,
+    //         {}
+    //     )
+    // }
 }
 
 let d = new LoginRequests();

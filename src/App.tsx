@@ -16,6 +16,8 @@ import EmployeeDetailsPage from './pages/EmployeeDetailsPage';
 import ContractDetailsPage from './pages/ContractDetailsPage';
 import SupplierDetailsPage from './pages/SupplierDetailsPage';
 import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
+import AccountConfirmationPage from './pages/AccountConfirmationPage';
 
 function App() {
 
@@ -61,6 +63,8 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path={Values.loginPageUrl} element={<LoginPage />} />
+            <Route path={Values.registerPageUrl} element={<RegisterPage />} />
+            <Route path={Values.activateAccountUrl + "/:token"} element={<AccountConfirmationPage />} />
             <Route path={Values.homePageUrl} element={<Header />}>
               <Route index element={<HomePage />} />
               <Route path={Values.manageTablesUrl} element={<TableManagementPage />}></Route>

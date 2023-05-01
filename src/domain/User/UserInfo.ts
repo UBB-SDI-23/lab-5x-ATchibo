@@ -1,6 +1,10 @@
 
 class UserInfo {
 
+    static isUsernameValid(username: string): boolean {
+        return username.length >= 2 && username.length <= 20;
+    }
+
     static isEmailValid(email: string): boolean {
         const emailRegex = /\S+@\S+\.\S+/;
         return emailRegex.test(email);

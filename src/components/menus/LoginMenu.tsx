@@ -10,29 +10,34 @@ import Values from "../../Values";
 
 const LoginMenu = () => {
 
-    const [email, setEmail] = useState("");
+    const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
   
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [authToken, setAuthToken] = useState("");
+    // const [authToken, setAuthToken] = useState("");
 
     const navigate = useNavigate();
 
     const handleSubmit = async (event: any) => {
         event.preventDefault();
 
-        if (!UserInfo.isEmailValid(email) || !UserInfo.isPasswordValid(password)) {
-            alert("Invalid email or password");
+        if (!UserInfo.isUsernameValid(username) || !UserInfo.isPasswordValid(password)) {
+            alert("Invalid username or password");
             return;
         }
 
-        await LoginRequests.login(email, password)
+        await LoginRequests.login(username, password)
             .then((response) => {
-                setAuthToken(response.data.token);
+                // setAuthToken(response.data.token);
+                window.localStorage.setItem("auth_token", response.data.token);
                 navigate(Values.homePageUrl);
             })
-            .catch((error) => {
-                alert("Login failed: " + error.response.data.message);
+            .catch((err: any) => {
+                if (err.response) {
+                    alert("Login failed: " + err.response.data.message + " " + err.response.status);
+                } else {
+                    alert("Error: " + err.message);
+                }
             }
         );
     };
@@ -49,13 +54,13 @@ const LoginMenu = () => {
                     margin="normal"
                     required
                     fullWidth
-                    id="email"
-                    label="Email Address"
-                    name="email"
-                    autoComplete="email"
+                    id="username"
+                    label="Username"
+                    name="username"
+                    autoComplete="username"
                     autoFocus
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
                 />
                 <TextField
                     variant="outlined"
@@ -90,8 +95,8 @@ const LoginMenu = () => {
                 </Link>
                 </p>
                 <p>
-                <Link to="#">
-                    {"Don't have an account? Sign Up"}
+                <Link to={Values.registerPageUrl}>
+                    "Don't have an account? Sign Up"
                 </Link>
                 </p>
             </div>
