@@ -1,15 +1,23 @@
 
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Card from '../components/Card';
-import { UserContext } from '../helpers/UserContext';
 import './UserInfoPage.scss';
 import UserRequests from '../api/UserRequests';
+import { useParams } from 'react-router-dom';
+import UserDTO from '../domain/User/UserDTO';
 
 const UserInfoPage = () => {
 
-    const { user } = useContext(UserContext);
+    const { uId } = useParams();
 
-    const username = user?.getUsername() || "User";
+    const [user, setUser] = useState<UserDTO>(new UserDTO());
+
+    const [userRole, setUserRole] = useState("Loading...");
+    const [username, setUsername] = useState("Loading...");
+    const [email, setEmail] = useState("Loading...");
+    const [firstName, setFirstName] = useState("Loading...");
+    const [lastName, setLastName] = useState("Loading...");
+    const [location, setLocation] = useState("Loading...");
 
     const [nrDealerships, setNrDealerships] = useState("Loading...");
     const [nrCars, setNrCars] = useState("Loading...");
@@ -36,21 +44,53 @@ const UserInfoPage = () => {
         );
     }
 
+    const getUser = async () => {
+        await UserRequests.getUserJson(uId as unknown as string)
+            .then((response: any) => {
+                setUser(new UserDTO(response));
+            })
+            .catch((err: any) => {
+                if (err.response) {
+                    alert("Error: " + err.response.detail + " " + err.response.status);
+                } else {
+                    alert("Error: " + err.message);
+                }
+            }
+        );
+    }
+
     useEffect(() => {
-        getNrEntitiesAdded();
+        getUser();
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    useEffect(() => {
+        if (user) {
+            console.log(user);
+
+            setUserRole(user.getRole().split('_')[1]);
+            setUsername(user.getUsername());
+            setEmail(user.getEmail());
+            setFirstName(user.getFirstName());
+            setLastName(user.getLastName());
+            setLocation(user.getLocation());
+
+            getNrEntitiesAdded();
+        }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [user]);
 
     return (
         <Card id="card">
             <>
                 <h1>{username}'s Profile</h1>
-                <p>First name: <b>{user.getFirstName()}</b></p>
-                <p>Last name: <b>{user.getLastName()}</b></p>
-                <p>Email: <b>{user.getEmail()}</b></p>
-                <p>Role: <b>{user.getRole().split("_")[1]}</b></p>
-                <p>Location: <b>{user.getLocation()}</b></p>
+                <p>First name: <b>{firstName}</b></p>
+                <p>Last name: <b>{lastName}</b></p>
+                <p>Email: <b>{email}</b></p>
+                <p>Role: <b>{userRole}</b></p>
+                <p>Location: <b>{location}</b></p>
                 <br/>
                 <p>Entities added:</p>
                 <p>Dealerships: <b>{nrDealerships}</b></p>

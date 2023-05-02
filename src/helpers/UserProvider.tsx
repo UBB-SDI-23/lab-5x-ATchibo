@@ -8,7 +8,7 @@ interface IUserProviderProps {
 }
 
 export const UserProvider: React.FC<IUserProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<UserDTO>(LocalStorageManager.getUser() || new UserDTO());
+  const [user, setUser] = useState<UserDTO>(new UserDTO(LocalStorageManager.getUser()) || new UserDTO());
 
   useEffect(() => {
       LocalStorageManager.setUser(user);

@@ -8,6 +8,6 @@ interface IUserContext {
 }
 
 export const UserContext = React.createContext<IUserContext>({
-  user: LocalStorageManager.getUser() || new UserDTO(),
+  user: new UserDTO(LocalStorageManager.getUser()) || new UserDTO(),
   setUser: () => {},
 });

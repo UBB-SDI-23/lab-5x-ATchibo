@@ -60,6 +60,7 @@ class Values {
 
     // Users
     static usersBaseUrl = "/users";
+    static usersByUsernameUrl = "/username";
     static usersCountNrDealershipsUrl = "/nr-dealerships";
     static usersCountNrEntitiesAddedUrl = "/nr-entities-added";
 

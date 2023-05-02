@@ -81,10 +81,10 @@ const LoginMenu = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                 />
-                <FormControlLabel
+                {/* <FormControlLabel
                     control={<Checkbox value="remember" color="primary" />}
                     label="Remember me"
-                />
+                /> */}
                 <Button
                     type="submit"
                     fullWidth
@@ -95,6 +95,12 @@ const LoginMenu = () => {
                 </form>
             </div>
             <div id="link-div">
+                <p>OR</p>
+                <Button
+                    fullWidth
+                >
+                    Sign in as Guest
+                </Button>
                 <p>
                 <Link to="#">
                     Forgot password?

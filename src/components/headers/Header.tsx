@@ -7,10 +7,11 @@ import { useContext, useState } from 'react';
 import { UserContext } from '../../helpers/UserContext';
 import { Button, Menu, MenuItem } from '@mui/material';
 import LocalStorageManager from '../../helpers/LocalStorageManager';
+import UserDTO from '../../domain/User/UserDTO';
 
 const Header = () => {
 
-    const { user } = useContext(UserContext);
+    const { user } = useContext(UserContext) || new UserDTO(LocalStorageManager.getUser()) || new UserDTO();
 
     const navigate = useNavigate();
 

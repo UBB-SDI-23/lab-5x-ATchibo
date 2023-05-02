@@ -20,7 +20,7 @@ class UserDTO {
         location?: string, 
         token?: string) {
 
-            if (typeof json === "object") {
+            if (json !== null && typeof json === "object") {
                 const jsonUserDto = json;
                 this.id = jsonUserDto.id;
                 this.firstName = jsonUserDto.firstName;
