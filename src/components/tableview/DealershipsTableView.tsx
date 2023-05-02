@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Button, Snackbar, Alert, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
-import { GridColDef, GridRowSelectionModel, DataGrid, GridRowId } from '@mui/x-data-grid';
+import { GridColDef, GridRowSelectionModel, GridRowId } from '@mui/x-data-grid';
 import { useState, useEffect } from 'react';
 import DealershipRequests from '../../api/DealershipRequests';
 import DealershipInfo from '../../domain/DealershipInfo';

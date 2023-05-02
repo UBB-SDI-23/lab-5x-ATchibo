@@ -1,7 +1,7 @@
 import { AxiosResponse } from "axios";
 import Values from "../Values";
 import DealershipDTO from "../domain/DealershipDTO";
-import { getApi, request } from "../helpers/AxiosHelper";
+import { getApi } from "../helpers/AxiosHelper";
 
 const BASE_URL: string = Values.baseBackendUrl + Values.dealershipsBaseUrl;
 
@@ -11,11 +11,6 @@ class DealershipRequests {
 
     async getDealerships(page: number = 0, size: number = 25): Promise<AxiosResponse<any, any>> {
         return await getApi(BASE_URL).get(Values.dealershipsAllUrl + '?page=' + page.toString() + '&size=' + size.toString());
-        // return await request(
-        //     "GET",
-        //     Values.dealershipsAllUrl + '?page=' + page.toString() + '&size=' + size.toString(),
-        //     {}
-        // );
     }
 
     async getDealershipsJson(page: number = 0, size: number = 25): Promise<JSON[]> {
