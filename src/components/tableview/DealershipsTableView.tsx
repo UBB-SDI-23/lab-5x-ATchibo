@@ -9,6 +9,7 @@ import DealershipDTO from '../../domain/DealershipDTO';
 import { useNavigate } from 'react-router-dom';
 import Values from '../../Values';
 import { PaginationManager } from '../../helpers/PaginationManager';
+import { DataGridPro } from '@mui/x-data-grid-pro';
 
 
 interface EditContainerProps {
@@ -314,9 +315,10 @@ const DealershipsTableView = () => {
     return (
         <div>
             <div className='table-div'>
-                <DataGrid
+                <DataGridPro
                     rows={rows}
                     columns={columns}
+                    pagination={true}
                     checkboxSelection
                     paginationModel={paginationModel}
                     onPaginationModelChange={setPaginationModel}

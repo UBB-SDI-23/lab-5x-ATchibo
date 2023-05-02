@@ -1,20 +1,22 @@
 import { Typography, TextField, FormControlLabel, Checkbox, Button } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import './LoginMenu.scss';
 import UserInfo from "../../domain/User/UserInfo";
 import LoginRequests from "../../api/LoginRequests";
 import Values from "../../Values";
+import LocalStorageManager from "../../helpers/LocalStorageManager";
+import { UserContext } from "../../helpers/UserContext";
+import UserDTO from "../../domain/User/UserDTO";
 
 const LoginMenu = () => {
 
+    const { setUser } = useContext(UserContext);
+
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-  
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    // const [authToken, setAuthToken] = useState("");
 
     const navigate = useNavigate();
 
@@ -28,8 +30,8 @@ const LoginMenu = () => {
 
         await LoginRequests.login(username, password)
             .then((response) => {
-                // setAuthToken(response.data.token);
-                window.localStorage.setItem("auth_token", response.data.token);
+                setUser(new UserDTO(response.data));
+                LocalStorageManager.setAuthToken(response.data.token);
                 navigate(Values.homePageUrl);
             })
             .catch((err: any) => {
@@ -41,6 +43,10 @@ const LoginMenu = () => {
             }
         );
     };
+
+    useEffect(() => {
+        LocalStorageManager.removeAuthToken();
+    }, []);
 
     return (
         <div id="main-div">

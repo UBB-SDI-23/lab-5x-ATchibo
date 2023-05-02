@@ -8,6 +8,7 @@ class Values {
     static statisticsUrl = "/statistics";
     static loginPageUrl = "/login";
     static registerPageUrl = "/register";
+    static usersPageUrl = "/users";
 
     // Colors
     static mainColor = "#0f7d4d";
@@ -56,6 +57,11 @@ class Values {
     static suppliersDeleteUrl = "/";
     static suppliersByNameUrl = "/autocomplete";
     static suppliersByNrContractsUrl = "/by-nr-contracts";
+
+    // Users
+    static usersBaseUrl = "/users";
+    static usersCountNrDealershipsUrl = "/nr-dealerships";
+    static usersCountNrEntitiesAddedUrl = "/nr-entities-added";
 
     // Login
     static loginUrl = "/login";

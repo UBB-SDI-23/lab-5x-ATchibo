@@ -1,5 +1,7 @@
 import { GridColDef } from "@mui/x-data-grid";
 import DealershipDTO from "./DealershipDTO";
+import Values from "../Values";
+import { Link } from "react-router-dom";
 
 
 class DealershipInfo {
@@ -57,7 +59,14 @@ class DealershipInfo {
         { field: 'phone', headerName: 'Phone', width: 150 },
         { field: 'email', headerName: 'Email', width: 230 },
         { field: 'website', headerName: 'Website', width: 230 },
-        { field: 'nrOfCars', headerName: 'Nr of Cars', width: 150}
+        { field: 'nrOfCars', headerName: 'Nr of Cars', width: 100},
+        { field: 'authorUsername', headerName: 'Author Username', width: 230,
+            renderCell: (params: any) => {
+                return (
+                    <Link to={Values.usersPageUrl + "/" + params.row.authorUsername}>{params.value}</Link>
+                )
+            }
+        },
     ];
 
     static statisticsColumns: GridColDef[] = [

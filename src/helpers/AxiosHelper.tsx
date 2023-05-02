@@ -1,15 +1,16 @@
 import axios from "axios";
 import Values from "../Values";
+import LocalStorageManager from "./LocalStorageManager";
 
 axios.defaults.baseURL = Values.baseBackendUrl;
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
 export const getAuthToken = () => {
-    return window.localStorage.getItem("auth_token");
+    return LocalStorageManager.getAuthToken();
 };
 
 export const setAuthToken = (token: string) => {
-    window.localStorage.setItem("auth_token", token);
+    LocalStorageManager.setAuthToken(token);
 };
 
 export const request = (method: string, url: string, data: any) => {
@@ -25,5 +26,19 @@ export const request = (method: string, url: string, data: any) => {
         headers: headers,
         url: url,
         data: data,
+    });
+}
+
+export const getApi = (BASE_URL: string) => {
+    let headers = {};
+    if (getAuthToken() !== null && getAuthToken() !== "null") {
+        headers = {
+            Authorization: `Bearer ${getAuthToken()}`,
+        };
+    }
+ 
+    return axios.create({
+        baseURL: BASE_URL,
+        headers: headers
     });
 }

@@ -18,6 +18,7 @@ import SupplierDetailsPage from './pages/SupplierDetailsPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import AccountConfirmationPage from './pages/AccountConfirmationPage';
+import UserInfoPage from './pages/UserInfoPage';
 
 function App() {
 
@@ -74,6 +75,7 @@ function App() {
               <Route path={Values.manageTablesUrl + "/contracts/:cId"} element={<ContractDetailsPage />}/>
               <Route path={Values.manageTablesUrl + "/suppliers/:dId"} element={<SupplierDetailsPage />}/>
               <Route path={Values.statisticsUrl} element={<StatisticsPage />} />
+              <Route path={Values.usersPageUrl + "/:uId"} element={<UserInfoPage />} />
               <Route path="*" element={<NoPage />} />
             </Route>
           </Routes>

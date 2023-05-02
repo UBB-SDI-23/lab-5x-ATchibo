@@ -1,6 +1,7 @@
 @import '../../values.scss';
 
 .header {
+    display: flex;
     min-height: $header-height;
     background-color: $main-color;
 }
@@ -9,10 +10,24 @@
     display: flex;
 
     min-height: $header-height;
+    width: fit-content;
     
     margin-top: auto;
     margin-bottom: auto;
     margin-left: $margin-lg;
+}
+
+#user-menu-div {
+    display: flex;
+    align-self: flex-end;
+
+    min-height: $header-height;
+    width: fit-content;
+    
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: auto;
+    margin-right: $margin-lg;
 }
 
 .header-icon {

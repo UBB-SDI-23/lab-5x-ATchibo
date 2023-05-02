@@ -12,7 +12,7 @@ const RegisterMenu = () => {
     const roles = ["Admin", "Employee", "Customer"];
     
     const menuItems = roles.map((role, index) => {
-        return <MenuItem key={index} value={role}>{role}</MenuItem>
+        return <MenuItem key={index} value={"ROLE_" + role.toUpperCase()}>{role}</MenuItem>
     });
 
     const navigate = useNavigate();
