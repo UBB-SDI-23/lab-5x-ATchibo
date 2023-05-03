@@ -5,8 +5,6 @@ class UserRequests {
 
     async getUser(username: string): Promise<any> {
 
-        console.log("username: " + username);
-
         return await request(
             "GET",
             Values.usersBaseUrl + Values.usersByUsernameUrl + "/"  + username,
@@ -16,9 +14,6 @@ class UserRequests {
 
     async getUserJson(username: string): Promise<JSON> {
         const ans = await this.getUser(username);
-
-        console.log(ans);
-
         return ans.data;
     }
 

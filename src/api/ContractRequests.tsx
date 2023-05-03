@@ -1,17 +1,14 @@
-import axios, { AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
 import Values from "../Values";
 import ContractDTO from "../domain/Contract/ContractDTO";
+import { getApi } from "../helpers/AxiosHelper";
 
 const BASE_URL: string = Values.baseBackendUrl + Values.contractsBaseUrl;
-
-const api = axios.create({
-    baseURL: BASE_URL
-})
 
 class ContractRequests {
 
     async getContracts(page: number = 0, size: number = 25): Promise<AxiosResponse<any, any>> {
-        return await api.get(Values.contractsAllUrl + '?page=' + page.toString() + '&size=' + size.toString());
+        return await getApi(BASE_URL).get(Values.contractsAllUrl + '?page=' + page.toString() + '&size=' + size.toString());
     }
 
     async getContractsJson(page: number = 0, size: number = 25): Promise<JSON[]> {
@@ -20,7 +17,7 @@ class ContractRequests {
     }
 
     async getContract(id: number): Promise<AxiosResponse<any, any>> {
-        return await api.get(Values.contractsByIdUrl + id.toString());
+        return await getApi(BASE_URL).get(Values.contractsByIdUrl + id.toString());
     }
 
     async getContractJson(id: number): Promise<JSON> {
@@ -30,14 +27,14 @@ class ContractRequests {
 
     async updateContracts(contracts: ContractDTO[]): Promise<any> {
         console.log(contracts);
-        return await api.put(Values.contractsUpdateUrl, contracts);
+        return await getApi(BASE_URL).put(Values.contractsUpdateUrl, contracts);
     }
 
     async deleteContracts(ids: any): Promise<any> {
         let res;
 
         for (let i = 0; i < ids.length; i++) {
-            res = await api.delete(Values.contractsDeleteUrl + ids[i].toString())
+            res = await getApi(BASE_URL).delete(Values.contractsDeleteUrl + ids[i].toString())
                 .catch((err: any) => {
                     console.log(err);
                 });

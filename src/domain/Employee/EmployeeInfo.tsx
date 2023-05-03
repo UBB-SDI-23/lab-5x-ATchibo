@@ -1,5 +1,7 @@
 import { GridColDef } from "@mui/x-data-grid";
 import EmployeeDTO from "./EmployeeDTO";
+import { Link } from "react-router-dom";
+import Values from "../../Values";
 
 
 class EmployeeInfo {
@@ -10,7 +12,14 @@ class EmployeeInfo {
         { field: 'email', headerName: 'Email', width: 150 },
         { field: 'phone', headerName: 'Phone', width: 130 },
         { field: 'salary', headerName: 'Salary', width: 130 },
-        { field: 'dealershipName', headerName: 'Dealership Name', width: 200}
+        { field: 'dealershipName', headerName: 'Dealership Name', width: 200},
+        { field: 'authorUsername', headerName: 'Author Username', width: 230,
+        renderCell: (params: any) => {
+            return (
+                <Link to={Values.usersPageUrl + "/" + params.row.authorUsername}>{params.value}</Link>
+            )
+        }
+    },
     ];
 
     static isNameValid = (c: EmployeeDTO) => {

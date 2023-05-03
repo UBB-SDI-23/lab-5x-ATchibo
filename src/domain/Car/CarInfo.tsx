@@ -1,6 +1,7 @@
 import { GridColDef } from "@mui/x-data-grid";
 import CarDTO from "./CarDTO";
 import { Link } from "react-router-dom";
+import Values from "../../Values";
 
 
 class CarInfo {
@@ -12,13 +13,14 @@ class CarInfo {
         { field: 'color', headerName: 'Color', width: 130 },
         { field: 'price', headerName: 'Price', width: 130 },
         { field: 'description', headerName: 'Description', width: 230},
-        { field: 'dealershipName', headerName: 'Dealership Name', width: 200,
-            renderCell: (params: any) => {
-                return (
-                    <Link to={"/dealerships/" + params.row.dealershipId}>{params.value}</Link>
-                )
-            }
+        { field: 'dealershipName', headerName: 'Dealership Name', width: 200},
+        { field: 'authorUsername', headerName: 'Author Username', width: 230,
+        renderCell: (params: any) => {
+            return (
+                <Link to={Values.usersPageUrl + "/" + params.row.authorUsername}>{params.value}</Link>
+            )
         }
+    },
     ];
 
     static isValid = (c: CarDTO) => {

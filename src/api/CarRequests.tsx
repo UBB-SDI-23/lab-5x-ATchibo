@@ -1,17 +1,14 @@
-import axios, { AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
 import Values from "../Values";
 import CarDTO from "../domain/Car/CarDTO";
+import { getApi } from "../helpers/AxiosHelper";
 
 const BASE_URL: string = Values.baseBackendUrl + Values.carsBaseUrl;
-
-const api = axios.create({
-    baseURL: BASE_URL
-})
 
 class CarRequests {
 
     async getCars(page: number = 0, size: number = 25): Promise<AxiosResponse<any, any>> {
-        return await api.get(Values.carsAllUrl + '?page=' + page.toString() + '&size=' + size.toString());
+        return await getApi(BASE_URL).get(Values.carsAllUrl + '?page=' + page.toString() + '&size=' + size.toString());
     }
 
     async getCarsJson(page: number = 0, size: number = 25): Promise<JSON[]> {
@@ -20,7 +17,7 @@ class CarRequests {
     }
 
     async getCar(id: number): Promise<AxiosResponse<any, any>> {
-        return await api.get(Values.carsByIdUrl + id.toString());
+        return await getApi(BASE_URL).get(Values.carsByIdUrl + id.toString());
     }
 
     async getCarJson(id: number): Promise<JSON> {
@@ -29,7 +26,7 @@ class CarRequests {
     }
 
     async getCarsWithPriceAbove(page: number = 0, size: number = 25, price: number): Promise<AxiosResponse<any, any>> {
-        return await api.get(Values.carsWithPriceAboveUrl + '/' + price.toString() + '?page=' + page.toString() + '&size=' + size.toString());
+        return await getApi(BASE_URL).get(Values.carsWithPriceAboveUrl + '/' + price.toString() + '?page=' + page.toString() + '&size=' + size.toString());
     }
 
     async getCarsWithPriceAboveJson(page: number = 0, size: number = 25, price: number = 0): Promise<JSON[]> {
@@ -39,14 +36,14 @@ class CarRequests {
 
     async updateCars(cars: CarDTO[]): Promise<any> {
         console.log(cars);
-        return await api.put(Values.carsUpdateUrl, cars);
+        return await getApi(BASE_URL).put(Values.carsUpdateUrl, cars);
     }
 
     async deleteCars(ids: any): Promise<any> {
         let res;
 
         for (let i = 0; i < ids.length; i++) {
-            res = await api.delete(Values.carsDeleteUrl + ids[i].toString())
+            res = await getApi(BASE_URL).delete(Values.carsDeleteUrl + ids[i].toString())
                 .catch((err: any) => {
                     console.log(err);
                 });

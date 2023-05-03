@@ -10,7 +10,7 @@ const UserInfoPage = () => {
 
     const { uId } = useParams();
 
-    const [user, setUser] = useState<UserDTO>(new UserDTO());
+    const [user, setUser] = useState<UserDTO>();
 
     const [userRole, setUserRole] = useState("Loading...");
     const [username, setUsername] = useState("Loading...");
@@ -26,6 +26,8 @@ const UserInfoPage = () => {
     const [nrSuppliers, setNrSuppliers] = useState("Loading...");
 
     const getNrEntitiesAdded = async () => {
+        if (!user) return;
+        
         await UserRequests.getUserNrEntitiesAdded(user.getId())
             .then((response) => {
                 setNrDealerships(response.data.dealerships);
