@@ -1,35 +1,26 @@
-import { Route, Navigate, Routes } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import LocalStorageManager from './LocalStorageManager';
+import React from 'react';
 
-type ProtectedRouteProps = {
-  element: any;
-};
+interface ProtectedRouteProps {
+    children: React.ReactNode;
+}
 
-// const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
-//   element: Element,
-// }) => {
-//   const isAuthenticated = LocalStorageManager.getAuthToken() !== null;
+const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
 
-//   return isAuthenticated ? (
-//     <Routes><Route index element={Element} /></Routes>
-//   ) : (
-//     <Navigate to="/login" />
-//   );
-// };
-
-const ProtectedRoute = (props: any) => {
     const isAuthenticated = LocalStorageManager.getAuthToken() !== null;
 
-    if (isAuthenticated)  
+    if (!isAuthenticated) {
         return (
-            <>
-                {props.children}
-            </>
+            <Navigate to="/login"/>
         );
-    else
-        return (
-            <Navigate to="/login" />
-        );
-};
+    }
+
+    return (
+        <React.Fragment>
+            {children}
+        </React.Fragment>
+    );
+}
 
 export default ProtectedRoute;

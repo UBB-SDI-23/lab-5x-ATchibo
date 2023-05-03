@@ -67,17 +67,17 @@ function App() {
             <Route path={Values.loginPageUrl} element={<LoginPage />} />
             <Route path={Values.registerPageUrl} element={<RegisterPage />} />
             <Route path={Values.activateAccountUrl + "/:token"} element={<AccountConfirmationPage />} />
-            <Route path={Values.homePageUrl} element={<ProtectedRoute element={<Header />}/>} >
-              <Route index element={<ProtectedRoute element={<HomePage />}/>}/>
-              <Route path={Values.manageTablesUrl} element={<ProtectedRoute element={<TableManagementPage />}/>}></Route>
-              <Route path={Values.manageTablesUrl + "/dealerships/:dId"} element={<ProtectedRoute element={<DealershipDetailsPage />}/>}/>
-              <Route path={Values.manageTablesUrl + "/cars/:cId"} element={<ProtectedRoute element={<CarDetailsPage />}/>}/>
-              <Route path={Values.manageTablesUrl + "/employees/:eId"} element={<ProtectedRoute element={<EmployeeDetailsPage />}/>}/>
-              <Route path={Values.manageTablesUrl + "/contracts/:cId"} element={<ProtectedRoute element={<ContractDetailsPage />}/>}/>
-              <Route path={Values.manageTablesUrl + "/suppliers/:dId"} element={<ProtectedRoute element={<SupplierDetailsPage />}/>}/>
-              <Route path={Values.statisticsUrl} element={<ProtectedRoute element={<StatisticsPage />}/>}/>
-              <Route path={Values.usersPageUrl + "/:uId"} element={<ProtectedRoute element={<UserInfoPage />}/>}/>
-              <Route path="*" element={<NoPage />} />
+            <Route path={Values.homePageUrl} element={<ProtectedRoute><Header/></ProtectedRoute>} >
+              <Route index element={<ProtectedRoute><HomePage/></ProtectedRoute>}/>
+              <Route path={Values.manageTablesUrl} element={<ProtectedRoute><TableManagementPage/></ProtectedRoute>}></Route>
+              <Route path={Values.manageTablesUrl + "/dealerships/:dId"} element={<ProtectedRoute><DealershipDetailsPage/></ProtectedRoute>}/>
+              <Route path={Values.manageTablesUrl + "/cars/:cId"} element={<ProtectedRoute><CarDetailsPage/></ProtectedRoute>}/>
+              <Route path={Values.manageTablesUrl + "/employees/:eId"} element={<ProtectedRoute><EmployeeDetailsPage/></ProtectedRoute>}/>
+              <Route path={Values.manageTablesUrl + "/contracts/:cId"} element={<ProtectedRoute><ContractDetailsPage/></ProtectedRoute>}/>
+              <Route path={Values.manageTablesUrl + "/suppliers/:dId"} element={<ProtectedRoute><SupplierDetailsPage/></ProtectedRoute>}/>
+              <Route path={Values.statisticsUrl} element={<ProtectedRoute><StatisticsPage/></ProtectedRoute>}/>
+              <Route path={Values.usersPageUrl + "/:uId"} element={<ProtectedRoute><UserInfoPage/></ProtectedRoute>}/>
+              <Route path="*" element={<ProtectedRoute><NoPage/></ProtectedRoute>} />
             </Route>
           </Routes>
         </BrowserRouter>
