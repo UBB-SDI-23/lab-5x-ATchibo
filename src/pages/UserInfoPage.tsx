@@ -27,7 +27,7 @@ const UserInfoPage = () => {
 
     const getNrEntitiesAdded = async () => {
         if (!user) return;
-        
+
         await UserRequests.getUserNrEntitiesAdded(user.getId())
             .then((response) => {
                 setNrDealerships(response.data.dealerships);

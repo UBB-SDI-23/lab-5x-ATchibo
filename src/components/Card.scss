@@ -2,7 +2,7 @@
 
 .md {
     width: $question-card-w;    
-    max-width: 90%;
+    max-width: $question-card-max-w;
 
     border: 0px;
     border-radius: $border-radius;
@@ -37,5 +37,4 @@
 .xl {
     @extend .md;
     width: $question-card-big-w;
-    // max-height: $question-card-big-h;
 }

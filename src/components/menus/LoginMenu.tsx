@@ -1,4 +1,4 @@
-import { Typography, TextField, FormControlLabel, Checkbox, Button } from "@mui/material";
+import { Typography, TextField, Button } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 
 import { useContext, useEffect, useState } from "react";
@@ -43,6 +43,12 @@ const LoginMenu = () => {
             }
         );
     };
+
+    const continueAsGuest = () => {
+        setUser(new UserDTO());
+        LocalStorageManager.setAuthToken("");
+        navigate(Values.homePageUrl);
+    }
 
     useEffect(() => {
         LocalStorageManager.removeAuthToken();
@@ -98,8 +104,9 @@ const LoginMenu = () => {
                 <p>OR</p>
                 <Button
                     fullWidth
+                    onClick={continueAsGuest}
                 >
-                    Sign in as Guest
+                    Continue as Guest
                 </Button>
                 <p>
                 <Link to="#">
@@ -108,7 +115,7 @@ const LoginMenu = () => {
                 </p>
                 <p>
                 <Link to={Values.registerPageUrl}>
-                    "Don't have an account? Sign Up"
+                    Don't have an account? Sign Up
                 </Link>
                 </p>
             </div>

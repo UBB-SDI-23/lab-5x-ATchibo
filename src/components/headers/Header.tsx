@@ -11,7 +11,7 @@ import UserDTO from '../../domain/User/UserDTO';
 
 const Header = () => {
 
-    const { user } = useContext(UserContext) || new UserDTO(LocalStorageManager.getUser()) || new UserDTO();
+    const { user } = useContext(UserContext) || new UserDTO();
 
     const navigate = useNavigate();
 
@@ -70,8 +70,7 @@ const Header = () => {
                         }}
                     >
                         <MenuItem onClick={goToProfile}>Profile</MenuItem>
-                        <MenuItem onClick={handleClose}>My account</MenuItem>
-                        <MenuItem onClick={logout}>Logout</MenuItem>
+                        <MenuItem onClick={logout}>{user?.getRole() === "ROLE_GUEST" ? "Log in" : "Logout"}</MenuItem>
                     </Menu>
                 </div>
             </div>

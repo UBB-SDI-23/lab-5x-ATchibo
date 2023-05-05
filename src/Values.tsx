@@ -9,6 +9,7 @@ class Values {
     static loginPageUrl = "/login";
     static registerPageUrl = "/register";
     static usersPageUrl = "/users";
+    static manageUsersPageUrl = "/manage-users";
 
     // Colors
     static mainColor = "#0f7d4d";
@@ -63,6 +64,7 @@ class Values {
     static usersByUsernameUrl = "/username";
     static usersCountNrDealershipsUrl = "/nr-dealerships";
     static usersCountNrEntitiesAddedUrl = "/nr-entities-added";
+    static usersCurrentUrl = "/current";
 
     // Login
     static loginUrl = "/login";

@@ -35,8 +35,8 @@ class UserDTO {
                 this.firstName = firstName || "";
                 this.lastName = lastName || "";
                 this.email = email || "";
-                this.username = username || "";
-                this.role = role || "";
+                this.username = username || "Guest";
+                this.role = role || "ROLE_GUEST";
                 this.location = location || "";
                 this.token = token || "";
             }

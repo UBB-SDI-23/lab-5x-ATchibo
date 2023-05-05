@@ -13,7 +13,7 @@ $body-color-gradient: linear-gradient(150deg, $main-color, $body-color, $body-co
 $max-w: 100vw;  $max-w-percent: 100%;
 $max-h: 100vh;  $max-h-percent: 100%;
 $almost-max-w: 90vw;
-$almost-max-h:90vh;
+$almost-max-h: 90vh;
 
 $button-w: 100px;
 $button-h: 30px;
@@ -23,6 +23,7 @@ $question-card-big-w: 95vw;
 $question-card-big-h: 85vh;
 $question-card-w: 800px;
 $question-card-h: 350px;
+$question-card-max-w: 85%;
 
 $question-card-wide-component-w: $question-card-big-w - 4;
 

@@ -20,6 +20,7 @@ import RegisterPage from './pages/RegisterPage';
 import AccountConfirmationPage from './pages/AccountConfirmationPage';
 import UserInfoPage from './pages/UserInfoPage';
 import ProtectedRoute from './helpers/ProtectedRoute';
+import ManageUsersPage from './pages/ManageUsersPage';
 
 function App() {
 
@@ -76,6 +77,7 @@ function App() {
               <Route path={Values.manageTablesUrl + "/contracts/:cId"} element={<ProtectedRoute><ContractDetailsPage/></ProtectedRoute>}/>
               <Route path={Values.manageTablesUrl + "/suppliers/:dId"} element={<ProtectedRoute><SupplierDetailsPage/></ProtectedRoute>}/>
               <Route path={Values.statisticsUrl} element={<ProtectedRoute><StatisticsPage/></ProtectedRoute>}/>
+              <Route path={Values.manageUsersPageUrl} element={<ProtectedRoute><ManageUsersPage/></ProtectedRoute>}/>
               <Route path={Values.usersPageUrl + "/:uId"} element={<ProtectedRoute><UserInfoPage/></ProtectedRoute>}/>
               <Route path="*" element={<ProtectedRoute><NoPage/></ProtectedRoute>} />
             </Route>

@@ -34,10 +34,7 @@ class EmployeeRequests {
         let res;
 
         for (let i = 0; i < ids.length; i++) {
-            res = await getApi(BASE_URL).delete(Values.employeesDeleteUrl + ids[i].toString())
-                .catch((err: any) => {
-                    console.log(err);
-                });
+            res = await getApi(BASE_URL).delete(Values.employeesDeleteUrl + ids[i].toString());
         }
 
         return res;

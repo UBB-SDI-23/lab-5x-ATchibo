@@ -49,7 +49,7 @@ class DealershipRequests {
         for (let i = 0; i < ids.length; i++) {
             res = await getApi(BASE_URL).delete(Values.dealershipsDeleteUrl + ids[i].toString())
                 .catch((err: any) => {
-                    console.log(err);
+                    throw err;
                 });
         }
 
