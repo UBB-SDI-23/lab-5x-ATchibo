@@ -6,7 +6,7 @@ export class PaginationManager {
     private totalPages: number;
     private totalElements: number;
 
-    constructor(pageSize: number, currentPage: number, totalPages: number = 0, totalElements: number = 0) {
+    constructor(pageSize: number = 25, currentPage: number = 0, totalPages: number = 0, totalElements: number = 0) {
         this.pageSize = pageSize;
         this.currentPage = currentPage;
         this.totalPages = totalPages;

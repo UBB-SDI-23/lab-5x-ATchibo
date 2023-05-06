@@ -1,5 +1,12 @@
+import { GridColDef } from "@mui/x-data-grid";
 
 class UserInfo {
+
+    static columns: GridColDef[] = [
+        { field: 'id', headerName: 'ID', width: 100 },
+        { field: 'username', headerName: 'Username', width: 200 },
+        { field: 'role', headerName: 'Role', width: 120},
+    ];
 
     static isFirstNameValid(firstName: string): boolean {
         return firstName.length >= 2 && firstName.length <= 30;

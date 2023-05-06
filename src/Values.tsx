@@ -65,6 +65,7 @@ class Values {
     static usersCountNrDealershipsUrl = "/nr-dealerships";
     static usersCountNrEntitiesAddedUrl = "/nr-entities-added";
     static usersCurrentUrl = "/current";
+    static usersAllUrl = "";
 
     // Login
     static loginUrl = "/login";

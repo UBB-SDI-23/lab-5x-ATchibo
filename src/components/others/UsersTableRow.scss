@@ -1,0 +1,18 @@
+@import '../../values.scss';
+
+
+.users-table-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+  
+    &:nth-child(odd) {
+        background-color: #f2f2f2;
+    }
+  
+    td {
+        padding: $padding-lg;
+    }
+}
+  

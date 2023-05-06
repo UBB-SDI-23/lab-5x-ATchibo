@@ -3,6 +3,20 @@ import { request } from "../helpers/AxiosHelper";
 
 class UserRequests {
 
+    async getAllUsers(page: number = 0, size: number = 0): Promise<any> {
+
+        return await request(
+            "GET",
+            Values.usersBaseUrl + Values.usersAllUrl + "?page=" + page.toString() + "&size=" + size.toString(),
+            {}
+        )
+    }
+
+    async getAllUsersJson(page: number = 0, size: number = 0): Promise<JSON[]> {
+        const ans = await this.getAllUsers(page, size);
+        return ans.data;
+    }
+
     async getCurrentUser(): Promise<any> {
 
         return await request(
