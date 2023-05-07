@@ -45,8 +45,6 @@ const SupplByNrOfCtrView = () => {
         }
     }
 
-
-
     const [alertSuccess, setAlertSuccess] = useState<boolean>(false);
     const [alertError, setAlertError] = useState<boolean>(false);
     const [alertErrorText, setAlertErrorText] = useState<string>("");
