@@ -1,6 +1,7 @@
 
 class LocalStorageManager {
     static authTokenPrefix: string = "auth_token";
+    static refreshTokenPrefix: string = "refresh_token";
     static userPrefix: string = "user";
 
     static setAuthToken(auth_token: string) {
@@ -15,25 +16,22 @@ class LocalStorageManager {
         window.localStorage.removeItem(LocalStorageManager.authTokenPrefix);
     }
 
-    // static setUser(user: UserDTO) {
-    //     window.localStorage.setItem(LocalStorageManager.userPrefix, JSON.stringify(user));
-    // }
+    static setRefreshToken(refresh_token: string) {
+        console.log("refresh_token", refresh_token);
+        window.localStorage.setItem(LocalStorageManager.refreshTokenPrefix, refresh_token);
+    }
 
-    // static getUser(): UserDTO | null {
-    //     const user = window.localStorage.getItem(LocalStorageManager.userPrefix);
-    //     if (user) {
-    //         return JSON.parse(user);
-    //     }
-    //     return null;
-    // }
+    static getRefreshToken(): string | null {
+        return window.localStorage.getItem(LocalStorageManager.refreshTokenPrefix);
+    }
 
-    // static removeUser() {
-    //     window.localStorage.removeItem(LocalStorageManager.userPrefix);
-    // }
+    static removeRefreshToken() {
+        window.localStorage.removeItem(LocalStorageManager.refreshTokenPrefix);
+    }
 
     static performLogoutCleaning() {
         LocalStorageManager.removeAuthToken();
-        // LocalStorageManager.removeUser();
+        LocalStorageManager.removeRefreshToken();
     }
 }
 
