@@ -26,6 +26,8 @@ const LoginMenu = () => {
 
         await LoginRequests.login(username, password)
             .then((response) => {
+                console.log(response);
+                LocalStorageManager.setRefreshToken(response.data.refreshToken);
                 LocalStorageManager.setAuthToken(response.data.token);
                 navigate(Values.homePageUrl);
             })

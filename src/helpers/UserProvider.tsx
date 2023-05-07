@@ -24,9 +24,9 @@ export const UserProvider: React.FC<IUserProviderProps> = ({ children }) => {
       }
       )
       .catch((error) => {
-			console.log("buba mare");
+			    console.log("buba mare");
           if (error.response.status !== 404) {
-              console.log(error);
+              console.log(error.response.data);
           }
       }
     );
