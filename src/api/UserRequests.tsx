@@ -75,7 +75,7 @@ class UserRequests {
 
     async insertBulkData(): Promise<any> {
 
-        return await getApi(Values.baseBackendUrl).post(Values.usersBaseUrl + Values.usersInsertBulkDataUrl, {});
+        return await getApi(Values.baseBackendUrl).post(Values.usersInsertBulkDataUrl, {});
         // return await request(
         //     "POST",
         //     Values.usersInsertBulkDataUrl,
