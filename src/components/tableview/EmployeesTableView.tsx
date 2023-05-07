@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Button, Snackbar, Alert, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Autocomplete } from '@mui/material';
 import { GridColDef, GridRowSelectionModel, DataGrid, GridRowId } from '@mui/x-data-grid';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useContext } from 'react';
 import './EmployeesTableView.scss';
 import { useNavigate } from 'react-router-dom';
 import Values from '../../Values';
@@ -12,12 +12,19 @@ import EmployeeRequests from '../../api/EmployeeRequests';
 import DealershipDTO from '../../domain/DealershipDTO';
 import DealershipRequests from '../../api/DealershipRequests';
 import { debounce } from 'lodash';
+import { UserContext } from '../../helpers/UserContext';
 
 interface EditContainerProps {
     employee: EmployeeDTO
 }
 
 const EmployeesTableView = () => {
+
+    const { user } = useContext(UserContext);
+    
+    const [canUpdate, setCanUpdate] = useState<boolean>(user.getRole() === "ROLE_ADMIN" || user.getRole() === "ROLE_MANAGER");
+    const canAdd: boolean = user.getRole() === "ROLE_ADMIN" || user.getRole() === "ROLE_MANAGER" || user.getRole() === "ROLE_REGULAR";
+    const [canDelete, setCanDelete] = useState<boolean>(user.getRole() === "ROLE_ADMIN" || user.getRole() === "ROLE_MANAGER");
 
     const [currentEmployees, setCurrentEmployees] = useState<EmployeeDTO[]>([]);
     const [selectedRowsFields, setSelectedRowsFields] = useState<JSX.Element[]>([]);
@@ -104,6 +111,32 @@ const EmployeesTableView = () => {
             setAlertError(false);
         }, 3000);
     }
+
+    useEffect(() => {
+        for (let rowId in rowSelectionModel) {
+
+            for (let i = 0; i < rows.length; i++) {
+                // @ts-ignore
+                if (rows[i]["id"] === rowSelectionModel[rowId]) {
+                    const row = rows[i];
+
+                    // @ts-ignore
+                    if (row["authorUsername"] !== user.getUsername() && user.getRole() !== "ROLE_ADMIN" && user.getRole() !== "ROLE_MANAGER") {
+                        setCanUpdate(false);
+                        setCanDelete(false);
+                        return;
+                    }
+                }
+            }
+        }
+
+        if (rowSelectionModel.length > 0 && user.getRole() === "ROLE_REGULAR") {
+            setCanUpdate(true);
+            setCanDelete(true);
+        }
+
+    }, [rowSelectionModel]);
+
     useEffect(() => {
         setPaginationManager(new PaginationManager(paginationModel.pageSize, paginationModel.page));
         fetchEmployees(paginationManager.getCurrentPage(), paginationManager.getPageSize()); 
@@ -421,21 +454,21 @@ const EmployeesTableView = () => {
 
                 <Button
                     onClick={showAddRowsContainers}
-                    disabled={dbQueryButtonsDisabled}
+                    disabled={dbQueryButtonsDisabled || !canAdd}
                 >
                     Add new rows
                 </Button>
 
                 <Button
                     onClick={showUpdateRowsContainers}
-                    disabled={dbQueryButtonsDisabled  || rowSelectionModel.length === 0}
+                    disabled={dbQueryButtonsDisabled  || rowSelectionModel.length === 0 || !canUpdate}
                 >
                     Update selected rows
                 </Button>
 
                 <Button
                     onClick={() => setModalDeleteOpen(true)}
-                    disabled={dbQueryButtonsDisabled || rowSelectionModel.length === 0}
+                    disabled={dbQueryButtonsDisabled || rowSelectionModel.length === 0 || !canDelete}
                 >
                     Delete selected columns
                 </Button>

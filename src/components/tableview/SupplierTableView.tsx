@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Button, Snackbar, Alert, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import { GridColDef, GridRowSelectionModel, DataGrid, GridRowId } from '@mui/x-data-grid';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import SupplierRequests from '../../api/SupplierRequests';
 import SupplierInfo from '../../domain/Supplier/SupplierInfo';
 import './DealershipsTableView.scss';
@@ -9,6 +9,7 @@ import SupplierDTO from '../../domain/Supplier/SupplierDTO';
 import { useNavigate } from 'react-router-dom';
 import Values from '../../Values';
 import { PaginationManager } from '../../helpers/PaginationManager';
+import { UserContext } from '../../helpers/UserContext';
 
 
 interface EditContainerProps {
@@ -16,6 +17,12 @@ interface EditContainerProps {
 }
 
 const SuppliersTableView = () => {
+
+    const { user } = useContext(UserContext);
+    
+    const [canUpdate, setCanUpdate] = useState<boolean>(user.getRole() === "ROLE_ADMIN" || user.getRole() === "ROLE_MANAGER");
+    const canAdd: boolean = user.getRole() === "ROLE_ADMIN" || user.getRole() === "ROLE_MANAGER" || user.getRole() === "ROLE_REGULAR";
+    const [canDelete, setCanDelete] = useState<boolean>(user.getRole() === "ROLE_ADMIN" || user.getRole() === "ROLE_MANAGER");
 
     const [currentSuppliers, setCurrentSuppliers] = useState<SupplierDTO[]>([]);
     const [selectedRowsFields, setSelectedRowsFields] = useState<JSX.Element[]>([]);
@@ -102,6 +109,31 @@ const SuppliersTableView = () => {
             setAlertError(false);
         }, 3000);
     }
+
+    useEffect(() => {
+        for (let rowId in rowSelectionModel) {
+
+            for (let i = 0; i < rows.length; i++) {
+                // @ts-ignore
+                if (rows[i]["id"] === rowSelectionModel[rowId]) {
+                    const row = rows[i];
+
+                    // @ts-ignore
+                    if (row["authorUsername"] !== user.getUsername() && user.getRole() !== "ROLE_ADMIN" && user.getRole() !== "ROLE_MANAGER") {
+                        setCanUpdate(false);
+                        setCanDelete(false);
+                        return;
+                    }
+                }
+            }
+        }
+
+        if (rowSelectionModel.length > 0 && user.getRole() === "ROLE_REGULAR") {
+            setCanUpdate(true);
+            setCanDelete(true);
+        }
+
+    }, [rowSelectionModel]);
 
     useEffect(() => {
         setPaginationManager(new PaginationManager(paginationModel.pageSize, paginationModel.page));
@@ -324,21 +356,21 @@ const SuppliersTableView = () => {
 
                 <Button
                     onClick={showAddRowsContainers}
-                    disabled={dbQueryButtonsDisabled}
+                    disabled={dbQueryButtonsDisabled || !canAdd}
                 >
                     Add new rows
                 </Button>
 
                 <Button
                     onClick={showUpdateRowsContainers}
-                    disabled={dbQueryButtonsDisabled  || rowSelectionModel.length === 0}
+                    disabled={dbQueryButtonsDisabled  || rowSelectionModel.length === 0 || !canUpdate}
                 >
                     Update selected rows
                 </Button>
 
                 <Button
                     onClick={() => setModalDeleteOpen(true)}
-                    disabled={dbQueryButtonsDisabled || rowSelectionModel.length === 0}
+                    disabled={dbQueryButtonsDisabled || rowSelectionModel.length === 0 || !canDelete}
                 >
                     Delete selected columns
                 </Button>
