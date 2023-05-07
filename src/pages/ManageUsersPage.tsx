@@ -1,11 +1,11 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import UserRequests from '../api/UserRequests';
-import UserDTO from '../domain/User/UserDTO';
 import './ManageUsersPage.scss';
-import { Snackbar, Alert, Pagination, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Select, MenuItem } from '@mui/material';
+import { Snackbar, Alert, Pagination, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Select, MenuItem } from '@mui/material';
 import UserInfo from '../domain/User/UserInfo';
 import { PaginationManager } from '../helpers/PaginationManager';
+import { UserContext } from '../helpers/UserContext';
 
 type UsersTableRowProps = {
     user: any;
@@ -13,8 +13,8 @@ type UsersTableRowProps = {
 
 const ManageUsersPage = () => {
 
-    const [user, setUser] = useState<UserDTO | null>(null);
-
+    const { user } = useContext(UserContext);
+    
     const [rows, setRows] = useState<JSON[]>([]);
     const [rowHeaders, setRowHeaders] = useState<any>();
 
@@ -26,16 +26,6 @@ const ManageUsersPage = () => {
     const [paginationManager, setPaginationManager] = useState<PaginationManager>(new PaginationManager());
 
     const [page, setPage] = useState<number>(1);
-
-    const fetchCurrentUser = async () => {
-        await UserRequests.getCurrentUser()
-            .then((response) => {
-                setUser(new UserDTO(response.data));
-            })
-            .catch((error) => {
-                setUser(new UserDTO());
-            });
-    }
 
     const fetchUsers = async (page: number, size: number) => {
         setLoading(true);
@@ -50,7 +40,11 @@ const ManageUsersPage = () => {
     }
 
     useEffect(() => {
-        fetchCurrentUser();
+        if (user?.getRole() !== 'ROLE_ADMIN') {
+            window.location.href = '/';
+        }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
