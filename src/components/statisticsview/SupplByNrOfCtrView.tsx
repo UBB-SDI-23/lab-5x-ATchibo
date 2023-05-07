@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import './DlrByAvgCarPriceView.scss';
 import SupplierRequests from '../../api/SupplierRequests';
-import { DataGrid, GridColDef, GridRowSelectionModel } from '@mui/x-data-grid';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { Button, Snackbar, Alert } from '@mui/material';
 import SupplierInfo from '../../domain/Supplier/SupplierInfo';
 
@@ -16,9 +16,6 @@ const SupplByNrOfCtrView = () => {
         pageSize: 25,
         page: 0,
     });
-
-    const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
-
 
     useEffect(() => {
         fetchData(paginationModel.page, paginationModel.pageSize);
@@ -88,10 +85,7 @@ const SupplByNrOfCtrView = () => {
     const displayError = (err: any) => {
         if (err.response) {
             console.log("Error fetching dealerships");
-            console.log(err.response.data.message);
-            console.log(err.response.status);
-            console.log(err.response.headers);
-            setAlertErrorText(err.response.data.message + " " + err.response.status + " " + err.response.headers);
+            setAlertErrorText(err.response.data.message + " " + err.response.status);
         } else {
             console.log("Error: " + err.message);
             setAlertErrorText(err.message);
@@ -106,13 +100,8 @@ const SupplByNrOfCtrView = () => {
                 <DataGrid
                     rows={rows}
                     columns={columns}
-                    checkboxSelection
                     paginationModel={paginationModel}
                     onPaginationModelChange={setPaginationModel}
-                    onRowSelectionModelChange={(newRowSelectionModel) => {
-                        setRowSelectionModel(newRowSelectionModel);
-                    }}
-                    rowSelectionModel={rowSelectionModel}
                 />
             </div>
 

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import './DlrByAvgCarPriceView.scss';
 import DealershipRequests from '../../api/DealershipRequests';
-import { DataGrid, GridColDef, GridRowSelectionModel } from '@mui/x-data-grid';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { Button, Snackbar, Alert } from '@mui/material';
 import DealershipInfo from '../../domain/DealershipInfo';
 
@@ -16,9 +16,6 @@ const DlrByAvgCarPriceView = () => {
         pageSize: 25,
         page: 0,
     });
-
-    const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
-
 
     useEffect(() => {
         fetchData(paginationModel.page, paginationModel.pageSize);
@@ -47,8 +44,6 @@ const DlrByAvgCarPriceView = () => {
             displayError(err);
         }
     }
-
-
 
     const [alertSuccess, setAlertSuccess] = useState<boolean>(false);
     const [alertError, setAlertError] = useState<boolean>(false);
@@ -106,16 +101,8 @@ const DlrByAvgCarPriceView = () => {
                 <DataGrid
                     rows={rows}
                     columns={columns}
-                    checkboxSelection
                     paginationModel={paginationModel}
                     onPaginationModelChange={setPaginationModel}
-                    onRowSelectionModelChange={(newRowSelectionModel) => {
-                        console.log("newRowSelectionModel: " + newRowSelectionModel);
-                        console.log("newRowSelectionModel index: " + newRowSelectionModel);
-
-                        setRowSelectionModel(newRowSelectionModel);
-                    }}
-                    rowSelectionModel={rowSelectionModel}
                 />
             </div>
 
