@@ -24,10 +24,14 @@ const MainMenu = () => {
         navigate(Values.manageUsersPageUrl);
     }
 
+    const goToManageDb = () => {
+        navigate(Values.manageDatabasePageUrl);
+    }
+
     return (
         <div className='main-menu'>
             <MenuItem 
-                title='Manage your database' 
+                title='Manage your tables' 
                 description='Add, remove or update the entries from your database'
                 btnText={"Go"}
                 btnClick={goToManageTable}
@@ -45,6 +49,15 @@ const MainMenu = () => {
                     description='Add, remove or update the users of your database'
                     btnText='Go'
                     btnClick={goToManageUsers}
+                />
+            }
+            {
+                user?.getRole() === 'ROLE_ADMIN' &&
+                <MenuItem
+                    title='Manage database'
+                    description='Execute bulk delete and insertion scripts'
+                    btnText='Go'
+                    btnClick={goToManageDb}
                 />
             }
         </div>

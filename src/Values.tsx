@@ -10,6 +10,7 @@ class Values {
     static registerPageUrl = "/register";
     static usersPageUrl = "/users";
     static manageUsersPageUrl = "/manage-users";
+    static manageDatabasePageUrl = "/manage-database";
 
     // Colors
     static mainColor = "#0f7d4d";
@@ -27,6 +28,7 @@ class Values {
     static dealershipsDeleteUrl = "/";
     static dealershipsByNameUrl = "/autocomplete";
     static dealershipsByAvgCarPriceUrl = "/sort-by-avg-car-price";
+    static dealershipsDeleteAllUrl = "";
 
     // Cars
     static carsBaseUrl = "/cars";
@@ -35,6 +37,7 @@ class Values {
     static carsUpdateUrl = "";
     static carsDeleteUrl = "/";
     static carsWithPriceAboveUrl = "/minPrice";
+    static carsDeleteAllUrl = "";
 
     // Employees
     static employeesBaseUrl = "/employees";
@@ -42,6 +45,7 @@ class Values {
     static employeesByIdUrl = "/";
     static employeesUpdateUrl = "";
     static employeesDeleteUrl = "/";
+    static employeesDeleteAllUrl = "";
 
     // Contracts
     static contractsBaseUrl = "/contracts";
@@ -49,6 +53,7 @@ class Values {
     static contractsByIdUrl = "/";
     static contractsUpdateUrl = "";
     static contractsDeleteUrl = "/";
+    static contractsDeleteAllUrl = "";
 
     // Suppliers
     static suppliersBaseUrl = "/suppliers";
@@ -58,6 +63,7 @@ class Values {
     static suppliersDeleteUrl = "/";
     static suppliersByNameUrl = "/autocomplete";
     static suppliersByNrContractsUrl = "/by-nr-contracts";
+    static suppliersDeleteAllUrl = "";
 
     // Users
     static usersBaseUrl = "/users";
@@ -67,6 +73,8 @@ class Values {
     static usersCurrentUrl = "/current";
     static usersAllUrl = "";
     static usersUpdateRoleUrl = "/role";
+
+    static usersInsertBulkDataUrl = "/run-script";
 
     // Login
     static loginUrl = "/login";

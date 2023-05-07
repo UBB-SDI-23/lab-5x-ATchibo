@@ -1,0 +1,21 @@
+@import '../values.scss';
+
+#main-div {
+    width: 100%;
+    margin: auto;
+}
+
+#title-delete {
+    font-size: 2em;
+    margin-top: 0;
+    margin-bottom: $margin-lg;
+}
+
+#bulk-delete-table {
+    width: 100%;
+    display: table;
+    border-collapse: collapse;
+    background-color: #f2f2f2;
+    border-radius: $border-radius;
+    overflow: hidden;
+}

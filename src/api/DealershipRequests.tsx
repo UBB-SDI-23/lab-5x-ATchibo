@@ -55,6 +55,10 @@ class DealershipRequests {
 
         return res;
     }
+
+    async deleteAllDealerships(): Promise<any> {
+        return await getApi(BASE_URL).delete(Values.dealershipsDeleteAllUrl);
+    }
 }
 
 let d = new DealershipRequests();
