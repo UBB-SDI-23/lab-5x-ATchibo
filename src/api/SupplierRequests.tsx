@@ -53,6 +53,10 @@ class SupplierRequests {
 
         return res;
     }
+
+    async deleteAllSuppliers(): Promise<any> { 
+        return await getApi(BASE_URL).delete(Values.suppliersDeleteAllUrl);
+    }
 }
 
 let d = new SupplierRequests();

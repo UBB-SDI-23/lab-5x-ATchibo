@@ -48,6 +48,10 @@ class CarRequests {
 
         return res;
     }
+
+    async deleteAllCars (): Promise<any> {
+        return await getApi(BASE_URL).delete(Values.carsDeleteAllUrl);
+    }
 }
 
 let d = new CarRequests();

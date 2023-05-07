@@ -39,6 +39,10 @@ class ContractRequests {
 
         return res;
     }
+
+    async deleteAllContracts(): Promise<any> {
+        return await getApi(BASE_URL).delete(Values.contractsDeleteAllUrl);
+    }
 }
 
 let d = new ContractRequests();

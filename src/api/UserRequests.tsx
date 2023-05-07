@@ -63,6 +63,14 @@ class UserRequests {
             {role}
         )
     }
+
+    async insertBulkData(): Promise<any> {
+        return await request(
+            "POST",
+            Values.usersInsertBulkDataUrl,
+            {}
+        )
+    }
 }
 
 let d = new UserRequests();

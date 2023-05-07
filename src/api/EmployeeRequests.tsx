@@ -39,6 +39,10 @@ class EmployeeRequests {
 
         return res;
     }
+
+    async deleteAllEmployees(): Promise<any> {
+        return getApi(BASE_URL).delete(Values.employeesDeleteAllUrl);
+    }
 }
 
 let d = new EmployeeRequests();
