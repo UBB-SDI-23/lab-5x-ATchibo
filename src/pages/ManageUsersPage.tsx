@@ -3,18 +3,20 @@ import { useState, useEffect } from 'react';
 import UserRequests from '../api/UserRequests';
 import UserDTO from '../domain/User/UserDTO';
 import './ManageUsersPage.scss';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { Snackbar, Alert, Pagination } from '@mui/material';
+import { Snackbar, Alert, Pagination, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Select, MenuItem } from '@mui/material';
 import UserInfo from '../domain/User/UserInfo';
 import { PaginationManager } from '../helpers/PaginationManager';
-import UsersTableRow from '../components/others/UsersTableRow';
+
+type UsersTableRowProps = {
+    user: any;
+}
 
 const ManageUsersPage = () => {
 
     const [user, setUser] = useState<UserDTO | null>(null);
 
-    const columns: GridColDef[] = UserInfo.columns;
     const [rows, setRows] = useState<JSON[]>([]);
+    const [rowHeaders, setRowHeaders] = useState<any>();
 
     const [loading, setLoading] = useState<boolean>(false);
     const [alertSuccess, setAlertSuccess] = useState<boolean>(false);
@@ -53,6 +55,7 @@ const ManageUsersPage = () => {
 
     useEffect(() => {
         setPaginationManager(new PaginationManager());
+        setRowHeaders(UserInfo.columns.map((column) => column.headerName));
         fetchUsers(paginationManager.getCurrentPage(), paginationManager.getPageSize()); 
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -75,10 +78,7 @@ const ManageUsersPage = () => {
     const displayError = (err: any) => {
         if (err.response) {
             console.log("Error fetching employees");
-            console.log(err.response.data.message);
-            console.log(err.response.status);
-            console.log(err.response.headers);
-            setAlertErrorText(err.response.data.message + " " + err.response.status + " " + err.response.headers);
+            setAlertErrorText(err.response.data.message + " " + err.response.status);
         } else {
             console.log("Error: " + err.message);
             setAlertErrorText(err.message);
@@ -103,6 +103,71 @@ const ManageUsersPage = () => {
         }, 3000);
     }
 
+    const UsersTableRow = ({ user }: UsersTableRowProps) => {
+        
+        const [open, setOpen] = useState<boolean>(false);
+        const roles = UserInfo.roles;
+        const [selectedRole, setSelectedRole] = useState<string>(roles.indexOf(user.role) as unknown as string);
+
+        const menuItems = roles.map((role, index) => {
+            return <MenuItem key={index} value={index}>{role}</MenuItem>
+        })
+
+        const updateRole = async () => {
+            setLoading(true);
+            await UserRequests.updateUserRole(user.id, roles[selectedRole as unknown as number])
+                .then((response) => {
+                    showAlertSuccess();
+                    user.role = roles[selectedRole as unknown as number];
+                })
+                .catch((error) => {
+                    displayError(error);
+                });
+        }
+
+        return (
+            <tr className="users-table-row">
+                <td>{user.id}</td>
+                <td>{user.username}</td>
+                <td>{user.email}</td>
+                <td>{user.role}</td>
+                <td>
+                    <Button size="small" className="edit-role-button" onClick={() => setOpen(true)}>
+                        Edit role
+                    </Button>
+                </td>
+                {
+                    open && 
+                    <Dialog open={open}>
+                        <DialogTitle>Edit role</DialogTitle>
+                        <DialogContent>
+                            <DialogContentText>
+                                Choose a new role for <b>{user.username}</b>
+                            </DialogContentText>
+                            <Select
+                                style={{width: '100%', margin: '10px 0'}}
+                                value={selectedRole}
+                                onChange={(event) => setSelectedRole(event.target.value as string)}
+                            >
+                                {menuItems}
+                            </Select>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={() => setOpen(false)}>Cancel</Button>
+                            <Button onClick={() => {
+                                setOpen(false);
+                                updateRole();
+                            }}>
+                                Change
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
+                }
+            </tr>
+        );
+    }
+    
+
     return (
         <div id='manage-users-div'>
             {
@@ -110,6 +175,7 @@ const ManageUsersPage = () => {
                 <div>
                     <h1>Manage users</h1>
                     <Pagination
+                        className="pagination"
                         count={40002}
                         page={page}
                         onChange={changePage}
@@ -117,14 +183,25 @@ const ManageUsersPage = () => {
                         siblingCount={2}
                     />
 
-                    <UsersTableRow key={0} user={rows[0]} />
-                    <UsersTableRow key={1} user={rows[0]} />
+                    <table className="users-table">
+                        <thead>
+                            <tr className='users-table-row'>
+                            {
+                                rowHeaders?.map((header: any) => (
+                                    <th key={header}>{header}</th>
+                                ))
+                            }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                rows.map((row: any) => (
+                                    <UsersTableRow key={row.id} user={row} />
+                                ))
+                            }
+                        </tbody>
+                    </table>
 
-                    {/* <DataGrid
-                        rows={rows}
-                        columns={columns}
-                        pagination={true}
-                    /> */}
                 </div>
             }
             {

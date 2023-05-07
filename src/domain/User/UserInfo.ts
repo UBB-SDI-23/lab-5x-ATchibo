@@ -2,10 +2,14 @@ import { GridColDef } from "@mui/x-data-grid";
 
 class UserInfo {
 
+    static roles = ["ROLE_ADMIN", "ROLE_MODERATOR", "ROLE_REGULAR"];
+
     static columns: GridColDef[] = [
         { field: 'id', headerName: 'ID', width: 100 },
         { field: 'username', headerName: 'Username', width: 200 },
+        { field: 'email', headerName: 'Email', width: 120},
         { field: 'role', headerName: 'Role', width: 120},
+        { field: 'editrole', headerName: 'Change Role', width: 120},
     ];
 
     static isFirstNameValid(firstName: string): boolean {

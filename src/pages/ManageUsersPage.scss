@@ -3,3 +3,65 @@
 #manage-users-div {
     margin: $margin-lg;
 }
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: $margin-lg;
+}
+
+.users-table {
+    width: 100%;
+    display: table;
+    border-collapse: collapse;
+    background-color: #f2f2f2;
+    border-radius: $border-radius;
+    overflow: hidden;
+}
+
+.users-table-row {
+    display: table-row;
+    background-color: white;
+}
+
+.users-table-row:nth-child(odd) {
+    background-color: #f9f9f9;
+}
+
+th, td {
+    display: table-cell;
+    padding: $padding-lg;
+    text-align: center;
+    vertical-align: middle;
+}
+
+th {
+    font-weight: bold;
+    background-color: #e6e6e6;
+}
+
+/* Responsive styles */
+@media (max-width: 600px) {
+    .users-table {
+        display: block;
+        overflow-x: auto;
+    }
+
+    .users-table-row {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    th, td {
+        display: flex;
+        flex-basis: 50%;
+        padding: $padding-lg;
+        border: none;
+    }
+
+    th {
+        font-weight: bold;
+        flex-basis: 100%;
+    }
+}

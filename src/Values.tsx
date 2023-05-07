@@ -66,6 +66,7 @@ class Values {
     static usersCountNrEntitiesAddedUrl = "/nr-entities-added";
     static usersCurrentUrl = "/current";
     static usersAllUrl = "";
+    static usersUpdateRoleUrl = "/role";
 
     // Login
     static loginUrl = "/login";

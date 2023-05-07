@@ -55,6 +55,14 @@ class UserRequests {
             {id: userId}
         )
     }
+
+    async updateUserRole(userId: number, role: string): Promise<any> {
+        return await request(
+            "PUT",
+            Values.usersBaseUrl + "/" + userId.toString() + Values.usersUpdateRoleUrl,
+            {role}
+        )
+    }
 }
 
 let d = new UserRequests();

@@ -1,6 +1,5 @@
 import React from 'react';
 import UserDTO from '../domain/User/UserDTO';
-import LocalStorageManager from './LocalStorageManager';
 
 interface IUserContext {
   user: UserDTO;
@@ -8,6 +7,6 @@ interface IUserContext {
 }
 
 export const UserContext = React.createContext<IUserContext>({
-  user: new UserDTO(LocalStorageManager.getUser()) || new UserDTO(),
+  user: new UserDTO(new UserDTO()),
   setUser: () => {},
 });

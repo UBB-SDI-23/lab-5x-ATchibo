@@ -10,7 +10,18 @@
 
 .options-buttons-div {
     display: flex;
-    // justify-content: space-evenly;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+  
+.options-buttons-div button {
+    margin: 5px;
+}
+
+@media (max-width: 600px) {
+    .options-buttons-div button {
+        flex-basis: 50%;
+    }
 }
 
 .entity-edit-container-div {

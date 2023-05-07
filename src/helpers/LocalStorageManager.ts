@@ -1,4 +1,3 @@
-import UserDTO from "../domain/User/UserDTO";
 
 class LocalStorageManager {
     static authTokenPrefix: string = "auth_token";
@@ -16,25 +15,25 @@ class LocalStorageManager {
         window.localStorage.removeItem(LocalStorageManager.authTokenPrefix);
     }
 
-    static setUser(user: UserDTO) {
-        window.localStorage.setItem(LocalStorageManager.userPrefix, JSON.stringify(user));
-    }
+    // static setUser(user: UserDTO) {
+    //     window.localStorage.setItem(LocalStorageManager.userPrefix, JSON.stringify(user));
+    // }
 
-    static getUser(): UserDTO | null {
-        const user = window.localStorage.getItem(LocalStorageManager.userPrefix);
-        if (user) {
-            return JSON.parse(user);
-        }
-        return null;
-    }
+    // static getUser(): UserDTO | null {
+    //     const user = window.localStorage.getItem(LocalStorageManager.userPrefix);
+    //     if (user) {
+    //         return JSON.parse(user);
+    //     }
+    //     return null;
+    // }
 
-    static removeUser() {
-        window.localStorage.removeItem(LocalStorageManager.userPrefix);
-    }
+    // static removeUser() {
+    //     window.localStorage.removeItem(LocalStorageManager.userPrefix);
+    // }
 
     static performLogoutCleaning() {
         LocalStorageManager.removeAuthToken();
-        LocalStorageManager.removeUser();
+        // LocalStorageManager.removeUser();
     }
 }
 

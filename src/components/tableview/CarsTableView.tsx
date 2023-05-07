@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Button, Snackbar, Alert, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Autocomplete, Pagination } from '@mui/material';
 import { GridColDef, GridRowSelectionModel, GridRowId } from '@mui/x-data-grid';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useContext } from 'react';
 import './CarsTableView.scss';
 import { useNavigate } from 'react-router-dom';
 import Values from '../../Values';
@@ -13,6 +13,7 @@ import DealershipDTO from '../../domain/DealershipDTO';
 import DealershipRequests from '../../api/DealershipRequests';
 import { debounce } from 'lodash';
 import { DataGridPro } from '@mui/x-data-grid-pro';
+import { UserContext } from '../../helpers/UserContext';
 
 interface EditContainerProps {
     car: CarDTO
@@ -20,15 +21,16 @@ interface EditContainerProps {
 
 const CarsTableView = () => {
 
+    const { user } = useContext(UserContext);
+    const [canUpdate, setCanUpdate] = useState<boolean>(user.getRole() === "ROLE_ADMIN" || user.getRole() === "ROLE_MANAGER");
+    // const [canAdd, setCanAdd] = useState<boolean>(user.getRole() === "ROLE_ADMIN" || user.getRole() === "ROLE_MANAGER" || user.getRole() === "ROLE_REGULAR");
+    const canAdd: boolean = user.getRole() === "ROLE_ADMIN" || user.getRole() === "ROLE_MANAGER" || user.getRole() === "ROLE_REGULAR";
+    const [canDelete, setCanDelete] = useState<boolean>(user.getRole() === "ROLE_ADMIN" || user.getRole() === "ROLE_MANAGER");
+
     const [currentCars, setCurrentCars] = useState<CarDTO[]>([]);
     const [selectedRowsFields, setSelectedRowsFields] = useState<JSX.Element[]>([]);
 
     const [dbQueryButtonsDisabled, setDbQueryButtonsDisabled] = useState<boolean>(false);
-
-    // const [paginationModel, setPaginationModel] = useState({
-    //     pageSize: 25,
-    //     page: 0,
-    // });
 
     const [loading, setLoading] = useState<boolean>(false);
 
@@ -49,13 +51,6 @@ const CarsTableView = () => {
             );
         }));
     }, [currentCars]);
-
-    // useEffect(() => {
-    //     paginationManager.setPageSize(paginationModel.pageSize);
-    //     paginationManager.setCurrentPage(paginationModel.page);
-
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [paginationModel]);
 
     useEffect(() => {
         paginationManager.setTotalElements(rows.length);
@@ -111,6 +106,31 @@ const CarsTableView = () => {
     }
 
     useEffect(() => {
+        for (let rowId in rowSelectionModel) {
+
+            for (let i = 0; i < rows.length; i++) {
+                // @ts-ignore
+                if (rows[i]["id"] === rowSelectionModel[rowId]) {
+                    const row = rows[i];
+
+                    // @ts-ignore
+                    if (row["authorUsername"] !== user.getUsername() && user.getRole() !== "ROLE_ADMIN" && user.getRole() !== "ROLE_MANAGER") {
+                        setCanUpdate(false);
+                        setCanDelete(false);
+                        return;
+                    }
+                }
+            }
+        }
+
+        if (rowSelectionModel.length > 0 && user.getRole() === "ROLE_REGULAR") {
+            setCanUpdate(true);
+            setCanDelete(true);
+        }
+
+    }, [rowSelectionModel]);
+
+    useEffect(() => {
         setPaginationManager(new PaginationManager(25, 0));
         fetchCars(paginationManager.getCurrentPage(), paginationManager.getPageSize()); 
 
@@ -130,10 +150,6 @@ const CarsTableView = () => {
     const getAllRows = () => {
         fetchCars(0, paginationManager.getTotalElements() || paginationManager.getPageSize()); 
     }
-
-    // const loadMoreRows = () => {
-    //     addCarsPage(paginationManager.getTotalPages(), paginationManager.getPageSize());
-    // }
 
     const updateRows = () => {
         if (checkUpdatedCars()) {
@@ -177,16 +193,6 @@ const CarsTableView = () => {
         }
     }
 
-    // const addCarsPage = async (page: number, size: number) => {
-    //     try {
-    //         const newRows = await CarRequests.getCarsJson(page, size);
-    //         setRows(rows.concat(newRows));
-    //         showAlertSuccess();
-    //     } catch (err: any) {
-    //         displayError(err);
-    //     }
-    // }
-
     const changePage = (event: React.ChangeEvent<unknown>, value: number) => {
         setLoading(true);
         setPage(value);
@@ -227,10 +233,7 @@ const CarsTableView = () => {
     const displayError = (err: any) => {
         if (err.response) {
             console.log("Error fetching cars");
-            console.log(err.response.data.message);
-            console.log(err.response.status);
-            console.log(err.response.headers);
-            setAlertErrorText(err.response.data.message + " " + err.response.status + " " + err.response.headers);
+            setAlertErrorText(err.response.data.message + " " + err.response.status);
         } else {
             console.log("Error: " + err.message);
             setAlertErrorText(err.message);
@@ -399,7 +402,7 @@ const CarsTableView = () => {
             </div>
 
             <Pagination
-                count={40002}
+                count={40000}
                 page={page}
                 onChange={changePage}
                 boundaryCount={4}
@@ -435,21 +438,21 @@ const CarsTableView = () => {
 
                 <Button
                     onClick={showAddRowsContainers}
-                    disabled={dbQueryButtonsDisabled}
+                    disabled={dbQueryButtonsDisabled || !canAdd}
                 >
                     Add new rows
                 </Button>
 
                 <Button
                     onClick={showUpdateRowsContainers}
-                    disabled={dbQueryButtonsDisabled  || rowSelectionModel.length === 0}
+                    disabled={dbQueryButtonsDisabled  || rowSelectionModel.length === 0 || !canUpdate}
                 >
                     Update selected rows
                 </Button>
 
                 <Button
                     onClick={() => setModalDeleteOpen(true)}
-                    disabled={dbQueryButtonsDisabled || rowSelectionModel.length === 0}
+                    disabled={dbQueryButtonsDisabled || rowSelectionModel.length === 0 || !canDelete}
                 >
                     Delete selected columns
                 </Button>
