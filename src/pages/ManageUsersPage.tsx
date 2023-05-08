@@ -2,7 +2,7 @@
 import { useState, useEffect, useContext } from 'react';
 import UserRequests from '../api/UserRequests';
 import './ManageUsersPage.scss';
-import { Snackbar, Alert, Pagination, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Select, MenuItem } from '@mui/material';
+import { Snackbar, Alert, Pagination, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Select, MenuItem, TextField } from '@mui/material';
 import UserInfo from '../domain/User/UserInfo';
 import { PaginationManager } from '../helpers/PaginationManager';
 import { UserContext } from '../helpers/UserContext';
@@ -27,6 +27,8 @@ const ManageUsersPage = () => {
 
     const [page, setPage] = useState<number>(1);
 
+    const [pageSize, setPageSize] = useState<number>(0);
+
     const fetchUsers = async (page: number, size: number) => {
         setLoading(true);
         await UserRequests.getAllUsersJson(page, size)
@@ -37,6 +39,21 @@ const ManageUsersPage = () => {
             .catch((error) => {
                 displayError(error);
             });
+    }
+
+    const uploadPageSize = async (size: number) => {
+        setLoading(true);
+        await UserRequests.setPageSize(size)
+            .then((response) => {
+                showAlertSuccess();
+            })
+            .catch((error) => {
+                displayError(error);
+            });
+    }
+
+    const putPageSize = async () => {
+        await uploadPageSize(pageSize);
     }
 
     useEffect(() => {
@@ -168,6 +185,28 @@ const ManageUsersPage = () => {
                 user?.getRole() === 'ROLE_ADMIN' &&
                 <div>
                     <h1>Manage users</h1>
+                    <div id="page-size-div">
+                        <TextField
+                            id="page-size-input"
+                            label="Page size for users"
+                            type="number"
+                            variant='standard'
+                            onKeyDown={(e) => {
+                                if (!(e.key >= '0' && e.key <= '9') && e.key !== 'Backspace' && e.key !== 'Delete' && e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') {
+                                    e.preventDefault()
+                                }
+                            }}
+                            onChange={(e) => {
+                                setPageSize(parseInt(e.target.value));
+                            }}
+                        />
+                        <Button
+                            color="primary"
+                            onClick={putPageSize}
+                        >
+                            Change
+                        </Button>
+                    </div>
                     <Pagination
                         className="pagination"
                         count={40002}
