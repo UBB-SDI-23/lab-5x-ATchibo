@@ -209,7 +209,7 @@ const ManageUsersPage = () => {
                     </div>
                     <Pagination
                         className="pagination"
-                        count={40002}
+                        count={1429}
                         page={page}
                         onChange={changePage}
                         boundaryCount={4}
