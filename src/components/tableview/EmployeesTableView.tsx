@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Button, Snackbar, Alert, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Autocomplete } from '@mui/material';
-import { GridColDef, GridRowSelectionModel, DataGrid, GridRowId } from '@mui/x-data-grid';
+import { Button, Snackbar, Alert, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Autocomplete, Pagination } from '@mui/material';
+import { GridColDef, GridRowSelectionModel, GridRowId } from '@mui/x-data-grid';
 import { useState, useEffect, useCallback, useContext } from 'react';
 import './EmployeesTableView.scss';
 import { useNavigate } from 'react-router-dom';
@@ -13,6 +13,7 @@ import DealershipDTO from '../../domain/DealershipDTO';
 import DealershipRequests from '../../api/DealershipRequests';
 import { debounce } from 'lodash';
 import { UserContext } from '../../helpers/UserContext';
+import { DataGridPro } from '@mui/x-data-grid-pro';
 
 interface EditContainerProps {
     employee: EmployeeDTO
@@ -31,12 +32,9 @@ const EmployeesTableView = () => {
 
     const [dbQueryButtonsDisabled, setDbQueryButtonsDisabled] = useState<boolean>(false);
 
-    const [paginationModel, setPaginationModel] = useState({
-        pageSize: 25,
-        page: 0,
-    });
+    const [page, setPage] = useState<number>(1);
 
-    const [paginationManager, setPaginationManager] = useState<PaginationManager>(new PaginationManager(paginationModel.pageSize, paginationModel.page));
+    const [paginationManager, setPaginationManager] = useState<PaginationManager>(new PaginationManager(25, 0));
 
     const columns: GridColDef[] = EmployeeInfo.columns;
     const [rows, setRows] = useState<JSON[]>([]);
@@ -51,13 +49,6 @@ const EmployeesTableView = () => {
             );
         }));
     }, [currentEmployees]);
-
-    useEffect(() => {
-        paginationManager.setPageSize(paginationModel.pageSize);
-        paginationManager.setCurrentPage(paginationModel.page);
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [paginationModel]);
 
     useEffect(() => {
         paginationManager.setTotalElements(rows.length);
@@ -138,7 +129,7 @@ const EmployeesTableView = () => {
     }, [rowSelectionModel]);
 
     useEffect(() => {
-        setPaginationManager(new PaginationManager(paginationModel.pageSize, paginationModel.page));
+        setPaginationManager(new PaginationManager(25, 0));
         fetchEmployees(paginationManager.getCurrentPage(), paginationManager.getPageSize()); 
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -158,8 +149,11 @@ const EmployeesTableView = () => {
         fetchEmployees(0, paginationManager.getTotalElements() || paginationManager.getPageSize()); 
     }
 
-    const loadMoreRows = () => {
-        addEmployeesPage(paginationManager.getTotalPages(), paginationManager.getPageSize());
+    const changePage = (event: React.ChangeEvent<unknown>, value: number) => {
+        setLoading(true);
+        setPage(value);
+        paginationManager.setCurrentPage(value-1);
+        fetchEmployees(paginationManager.getCurrentPage(), paginationManager.getPageSize());
     }
 
     const updateRows = () => {
@@ -185,17 +179,6 @@ const EmployeesTableView = () => {
             setLoading(true);
             setRows(await EmployeeRequests.getEmployeesJson(page, size));
             showAlertSuccess(); 
-        } catch (err: any) {
-            displayError(err);
-        }
-    }
-
-    const addEmployeesPage = async (page: number, size: number) => {
-        try {
-            setLoading(true);
-            const newRows = await EmployeeRequests.getEmployeesJson(page, size);
-            setRows(rows.concat(newRows));
-            showAlertSuccess();
         } catch (err: any) {
             displayError(err);
         }
@@ -233,9 +216,6 @@ const EmployeesTableView = () => {
     const displayError = (err: any) => {
         if (err.response) {
             console.log("Error fetching employees");
-            console.log(err.response.data.message);
-            console.log(err.response.status);
-            console.log(err.response.headers);
             setAlertErrorText(err.response.data.message + " " + err.response.status + " " + err.response.headers);
         } else {
             console.log("Error: " + err.message);
@@ -418,13 +398,20 @@ const EmployeesTableView = () => {
 
     return (
         <div>
+            <Pagination
+                style={{ marginTop: '20px' }}
+                count={40000}
+                page={page}
+                onChange={changePage}
+                boundaryCount={5}
+                siblingCount={5}
+            />
             <div className='table-div'>
-                <DataGrid
+                <DataGridPro
                     rows={rows}
                     columns={columns}
+                    pagination={false}
                     checkboxSelection
-                    paginationModel={paginationModel}
-                    onPaginationModelChange={setPaginationModel}
                     onRowSelectionModelChange={(newRowSelectionModel) => {
                         setRowSelectionModel(newRowSelectionModel);
                     }}
@@ -437,12 +424,6 @@ const EmployeesTableView = () => {
                     onClick={getAllRows}
                 >
                     Refresh table
-                </Button>
-
-                <Button
-                    onClick={loadMoreRows}
-                >
-                    Load more rows
                 </Button>
 
                 <Button

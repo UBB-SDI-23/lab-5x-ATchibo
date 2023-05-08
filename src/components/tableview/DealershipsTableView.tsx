@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Button, Snackbar, Alert, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import { Button, Snackbar, Alert, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Pagination } from '@mui/material';
 import { GridColDef, GridRowSelectionModel, GridRowId } from '@mui/x-data-grid';
 import { useState, useEffect, useContext } from 'react';
 import DealershipRequests from '../../api/DealershipRequests';
@@ -30,12 +30,9 @@ const DealershipsTableView = () => {
 
     const [dbQueryButtonsDisabled, setDbQueryButtonsDisabled] = useState<boolean>(false);
 
-    const [paginationModel, setPaginationModel] = useState({
-        pageSize: 25,
-        page: 0,
-    });
+    const [page, setPage] = useState<number>(1);
 
-    const [paginationManager, setPaginationManager] = useState<PaginationManager>(new PaginationManager(paginationModel.pageSize, paginationModel.page));
+    const [paginationManager, setPaginationManager] = useState<PaginationManager>(new PaginationManager(25, 0));
 
     const columns: GridColDef[] = DealershipInfo.columns;
     const [rows, setRows] = useState<JSON[]>([]);
@@ -50,13 +47,6 @@ const DealershipsTableView = () => {
             );
         }));
     }, [currentDealerships]);
-
-    useEffect(() => {
-        paginationManager.setPageSize(paginationModel.pageSize);
-        paginationManager.setCurrentPage(paginationModel.page);
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [paginationModel]);
 
     useEffect(() => {
         paginationManager.setTotalElements(rows.length);
@@ -137,7 +127,7 @@ const DealershipsTableView = () => {
     }, [rowSelectionModel]);
 
     useEffect(() => {
-        setPaginationManager(new PaginationManager(paginationModel.pageSize, paginationModel.page));
+        setPaginationManager(new PaginationManager(25, 0));
         fetchDealerships(paginationManager.getCurrentPage(), paginationManager.getPageSize()); 
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -157,8 +147,11 @@ const DealershipsTableView = () => {
         fetchDealerships(0, paginationManager.getTotalElements() || paginationManager.getPageSize()); 
     }
 
-    const loadMoreRows = () => {
-        addDealershipsPage(paginationManager.getTotalPages(), paginationManager.getPageSize());
+    const changePage = (event: React.ChangeEvent<unknown>, value: number) => {
+        setLoading(true);
+        setPage(value);
+        paginationManager.setCurrentPage(value-1);
+        fetchDealerships(paginationManager.getCurrentPage(), paginationManager.getPageSize());
     }
 
     const updateRows = () => {
@@ -184,17 +177,6 @@ const DealershipsTableView = () => {
             setLoading(true);
             setRows(await DealershipRequests.getDealershipsJson(page, size));
             showAlertSuccess(); 
-        } catch (err: any) {
-            displayError(err);
-        }
-    }
-
-    const addDealershipsPage = async (page: number, size: number) => {
-        try {
-            setLoading(true);
-            const newRows = await DealershipRequests.getDealershipsJson(page, size);
-            setRows(rows.concat(newRows));
-            showAlertSuccess();
         } catch (err: any) {
             displayError(err);
         }
@@ -232,9 +214,6 @@ const DealershipsTableView = () => {
     const displayError = (err: any) => {
         if (err.response) {
             console.log("Error fetching dealerships");
-            console.log(err.response.data.message);
-            console.log(err.response.status);
-            console.log(err.response.headers);
             setAlertErrorText(err.response.data.message + " " + err.response.status + " " + err.response.headers);
         } else {
             console.log("Error: " + err.message);
@@ -346,14 +325,20 @@ const DealershipsTableView = () => {
 
     return (
         <div>
+            <Pagination
+                style={{ marginTop: '20px' }}
+                count={40000}
+                page={page}
+                onChange={changePage}
+                boundaryCount={5}
+                siblingCount={5}
+            />
             <div className='table-div'>
                 <DataGridPro
                     rows={rows}
                     columns={columns}
-                    pagination={true}
+                    pagination={false}
                     checkboxSelection
-                    paginationModel={paginationModel}
-                    onPaginationModelChange={setPaginationModel}
                     onRowSelectionModelChange={(newRowSelectionModel) => {
                         setRowSelectionModel(newRowSelectionModel);
                     }}
@@ -366,12 +351,6 @@ const DealershipsTableView = () => {
                     onClick={getAllRows}
                 >
                     Refresh table
-                </Button>
-
-                <Button
-                    onClick={loadMoreRows}
-                >
-                    Load more rows
                 </Button>
 
                 <Button

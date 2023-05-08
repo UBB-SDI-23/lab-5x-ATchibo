@@ -212,8 +212,8 @@ const ManageUsersPage = () => {
                         count={1429}
                         page={page}
                         onChange={changePage}
-                        boundaryCount={4}
-                        siblingCount={2}
+                        boundaryCount={5}
+                        siblingCount={5}
                     />
 
                     <table className="users-table">

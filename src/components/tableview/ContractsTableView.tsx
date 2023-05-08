@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Button, Snackbar, Alert, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Autocomplete } from '@mui/material';
-import { GridColDef, GridRowSelectionModel, DataGrid, GridRowId } from '@mui/x-data-grid';
+import { Button, Snackbar, Alert, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Autocomplete, Pagination } from '@mui/material';
+import { GridColDef, GridRowSelectionModel, GridRowId } from '@mui/x-data-grid';
 import { useState, useEffect, useCallback, useContext } from 'react';
 import './EmployeesTableView.scss';
 import { useNavigate } from 'react-router-dom';
@@ -15,6 +15,7 @@ import { debounce } from 'lodash';
 import SupplierDTO from '../../domain/Supplier/SupplierDTO';
 import SupplierRequests from '../../api/SupplierRequests';
 import { UserContext } from '../../helpers/UserContext';
+import { DataGridPro } from '@mui/x-data-grid-pro';
 
 interface EditContainerProps {
     contract: ContractDTO
@@ -33,12 +34,9 @@ const ContractsTableView = () => {
 
     const [dbQueryButtonsDisabled, setDbQueryButtonsDisabled] = useState<boolean>(false);
 
-    const [paginationModel, setPaginationModel] = useState({
-        pageSize: 25,
-        page: 0,
-    });
+    const [page, setPage] = useState<number>(1);
 
-    const [paginationManager, setPaginationManager] = useState<PaginationManager>(new PaginationManager(paginationModel.pageSize, paginationModel.page));
+    const [paginationManager, setPaginationManager] = useState<PaginationManager>(new PaginationManager(25, 0));
 
     const columns: GridColDef[] = ContractInfo.columns;
     const [rows, setRows] = useState<JSON[]>([]);
@@ -53,13 +51,6 @@ const ContractsTableView = () => {
             );
         }));
     }, [currentContracts]);
-
-    useEffect(() => {
-        paginationManager.setPageSize(paginationModel.pageSize);
-        paginationManager.setCurrentPage(paginationModel.page);
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [paginationModel]);
 
     useEffect(() => {
         paginationManager.setTotalElements(rows.length);
@@ -140,7 +131,7 @@ const ContractsTableView = () => {
     }, [rowSelectionModel]);
 
     useEffect(() => {
-        setPaginationManager(new PaginationManager(paginationModel.pageSize, paginationModel.page));
+        setPaginationManager(new PaginationManager(25, 0));
         fetchContracts(paginationManager.getCurrentPage(), paginationManager.getPageSize()); 
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -160,8 +151,11 @@ const ContractsTableView = () => {
         fetchContracts(0, paginationManager.getTotalElements() || paginationManager.getPageSize()); 
     }
 
-    const loadMoreRows = () => {
-        addContractsPage(paginationManager.getTotalPages(), paginationManager.getPageSize());
+    const changePage = (event: React.ChangeEvent<unknown>, value: number) => {
+        setLoading(true);
+        setPage(value);
+        paginationManager.setCurrentPage(value-1);
+        fetchContracts(paginationManager.getCurrentPage(), paginationManager.getPageSize());
     }
 
     const updateRows = () => {
@@ -187,17 +181,6 @@ const ContractsTableView = () => {
             setLoading(true);
             setRows(await ContractRequests.getContractsJson(page, size));
             showAlertSuccess(); 
-        } catch (err: any) {
-            displayError(err);
-        }
-    }
-
-    const addContractsPage = async (page: number, size: number) => {
-        try {
-            setLoading(true);
-            const newRows = await ContractRequests.getContractsJson(page, size);
-            setRows(rows.concat(newRows));
-            showAlertSuccess();
         } catch (err: any) {
             displayError(err);
         }
@@ -427,13 +410,20 @@ const ContractsTableView = () => {
 
     return (
         <div>
+            <Pagination
+                style={{ marginTop: '20px' }}
+                count={40000}
+                page={page}
+                onChange={changePage}
+                boundaryCount={5}
+                siblingCount={5}
+            />
             <div className='table-div'>
-                <DataGrid
+                <DataGridPro
                     rows={rows}
                     columns={columns}
+                    pagination={false}
                     checkboxSelection
-                    paginationModel={paginationModel}
-                    onPaginationModelChange={setPaginationModel}
                     onRowSelectionModelChange={(newRowSelectionModel) => {
                         setRowSelectionModel(newRowSelectionModel);
                     }}
@@ -446,12 +436,6 @@ const ContractsTableView = () => {
                     onClick={getAllRows}
                 >
                     Refresh table
-                </Button>
-
-                <Button
-                    onClick={loadMoreRows}
-                >
-                    Load more rows
                 </Button>
 
                 <Button
