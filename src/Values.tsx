@@ -73,6 +73,7 @@ class Values {
     static usersCurrentUrl = "/current";
     static usersAllUrl = "";
     static usersUpdateRoleUrl = "/role";
+    static usersSetPageSizeUrl = "/page-size";
 
     static usersInsertBulkDataUrl = "/run-script";
 

@@ -74,13 +74,14 @@ class UserRequests {
     }
 
     async insertBulkData(): Promise<any> {
-
         return await getApi(Values.baseBackendUrl).post(Values.usersBaseUrl + Values.usersInsertBulkDataUrl, {});
-        // return await request(
-        //     "POST",
-        //     Values.usersInsertBulkDataUrl,
-        //     {}
-        // )
+    }
+
+    async setPageSize(size: number): Promise<any> {
+        console.log("setPageSize");
+        console.log(size);
+        console.log(Values.usersBaseUrl + Values.usersSetPageSizeUrl + "/" + size);
+        return await getApi(Values.baseBackendUrl).post(Values.usersBaseUrl + Values.usersSetPageSizeUrl + "/" + size);
     }
 }
 
