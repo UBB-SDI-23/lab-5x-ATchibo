@@ -38,7 +38,7 @@ class UserRequests {
     }
 
     async insertBulkData(): Promise<any> {
-        return await getApi(Values.baseBackendUrl).post(Values.usersBaseUrl + Values.usersInsertBulkDataUrl, {});
+        return await getApi(Values.baseBackendUrl).post(Values.usersInsertBulkDataUrl, {});
     }
 
     async setPageSize(size: number): Promise<any> {
