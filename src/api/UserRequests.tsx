@@ -8,7 +8,7 @@ class UserRequests {
     }
 
     async getAllUsersJson(page: number = 0, size: number = 0): Promise<JSON[]> {
-        const ans = await this.getAllUsers(page, size);
+        const ans = await this.getAllUsers(page, size); 
         return ans.data;
     }
 
