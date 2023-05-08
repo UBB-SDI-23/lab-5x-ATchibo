@@ -1,8 +1,8 @@
 
 class Values {
     // Pages
-    static siteUrl = "http://localhost:3000"; 
-    // static siteUrl = "https://tchibo-cafeluta.netlify.com";
+    // static siteUrl = "http://localhost:3000"; 
+    static siteUrl = "https://tchibo-cafeluta.netlify.com";
     static homePageUrl = "/";
     static manageTablesUrl = "/manage-tables";
     static statisticsUrl = "/statistics";
