@@ -61,11 +61,11 @@ export const getApi = (BASE_URL: string) => {
       return response;
     },
     async (error) => {
-		console.log("error");
+		// console.log("error");
       const originalRequest = error.config;
       const refreshToken = LocalStorageManager.getRefreshToken();
 
-	  console.log(error.config);
+	//   console.log(error.config);
 
       if (
         refreshToken !== null &&

@@ -83,12 +83,9 @@ const LoginMenu = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                 />
-                {/* <FormControlLabel
-                    control={<Checkbox value="remember" color="primary" />}
-                    label="Remember me"
-                /> */}
                 <Button
                     type="submit"
+                    id="login"
                     fullWidth
                     className="submit"
                 >
@@ -99,6 +96,7 @@ const LoginMenu = () => {
             <div id="link-div">
                 <p>OR</p>
                 <Button
+                    id="btnguest"
                     fullWidth
                     onClick={continueAsGuest}
                 >

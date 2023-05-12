@@ -11,6 +11,7 @@ import ContractRequests from '../api/ContractRequests';
 import SupplierRequests from '../api/SupplierRequests';
 import CarRequests from '../api/CarRequests';
 import EmployeeRequests from '../api/EmployeeRequests';
+import LocalStorageManager from '../helpers/LocalStorageManager';
 
 const ManageDatabasePage = () => {
     
@@ -27,12 +28,14 @@ const ManageDatabasePage = () => {
     const [performAction, serPerformAction] = useState<any>(null);
 
     const fetchUser = async () => {
+        if (LocalStorageManager.getAuthToken() === "") 
+            return;
         await UserRequests.getCurrentUser()
             .then((response) => {
                 setUser(new UserDTO(response.data));
             })
             .catch((error) => {
-                console.log(error.response.data);
+                console.log(error);
             });
     }
 
