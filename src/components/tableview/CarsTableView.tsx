@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Button, Snackbar, Alert, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Autocomplete, Pagination } from '@mui/material';
+import { Button, Snackbar, Alert, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Autocomplete, Pagination, IconButton } from '@mui/material';
 import { GridColDef, GridRowSelectionModel, GridRowId } from '@mui/x-data-grid';
 import { useState, useEffect, useCallback, useContext } from 'react';
 import './CarsTableView.scss';
@@ -12,8 +12,10 @@ import CarRequests from '../../api/CarRequests';
 import DealershipDTO from '../../domain/DealershipDTO';
 import DealershipRequests from '../../api/DealershipRequests';
 import { debounce } from 'lodash';
-import { DataGridPro } from '@mui/x-data-grid-pro';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { UserContext } from '../../helpers/UserContext';
+import { Table, Tbody, Td, Th, Thead, Tr } from 'react-super-responsive-table';
 
 interface EditContainerProps {
     car: CarDTO
@@ -375,6 +377,41 @@ const CarsTableView = () => {
         )
     }
 
+    const TableRow = (data: any) => {
+
+        data = data.data;
+
+        return (
+            <Tr>
+                <Td>{data.id}</Td>
+                <Td>{data.brand}</Td>
+                <Td>{data.model}</Td>
+                <Td>{data.dealershipName}</Td>
+                <Td>{data.authorUsername}</Td>
+                <Td>
+                    <IconButton
+                        onClick={() => {
+                            setRowSelectionModel([data.id]);
+                            showUpdateRowsContainers();
+                        }}
+                    >
+                        <EditIcon />
+                    </IconButton>
+                </Td>
+                <Td>
+                    <IconButton
+                        onClick={() => {
+                            setRowSelectionModel([data.id]);
+                            setModalDeleteOpen(true);
+                        }}
+                    >
+                        <DeleteIcon />
+                    </IconButton>
+                </Td>
+            </Tr>
+        );
+    }
+
     return (
         <div>
             <div style={{display: "flex", margin: "10px 0px"}}>
@@ -410,16 +447,26 @@ const CarsTableView = () => {
             />
 
             <div className='table-div'>
-                <DataGridPro
-                    rows={rows}
-                    columns={columns}
-                    pagination={false}
-                    checkboxSelection
-                    onRowSelectionModelChange={(newRowSelectionModel) => {
-                        setRowSelectionModel(newRowSelectionModel);
-                    }}
-                    rowSelectionModel={rowSelectionModel}
-                />
+                <Table className="users-table">
+                    <Thead>
+                        <Tr className='users-table-row'>
+                            <Th>ID</Th>
+                            <Th>Brand</Th>
+                            <Th>Model</Th>
+                            <Th>Dealership</Th>
+                            <Th>Author</Th>
+                            <Th>Edit</Th>
+                            <Th>Delete</Th>
+                        </Tr>
+                    </Thead>
+                    <Tbody>
+                        {
+                            rows.map((row: any) => (
+                                <TableRow key={row.id} data={row} />
+                            ))
+                        }
+                    </Tbody>
+                </Table>        
             </div>
 
             <div className='options-buttons-div'>
@@ -441,20 +488,6 @@ const CarsTableView = () => {
                     disabled={dbQueryButtonsDisabled || !canAdd}
                 >
                     Add new rows
-                </Button>
-
-                <Button
-                    onClick={showUpdateRowsContainers}
-                    disabled={dbQueryButtonsDisabled  || rowSelectionModel.length === 0 || !canUpdate}
-                >
-                    Update selected rows
-                </Button>
-
-                <Button
-                    onClick={() => setModalDeleteOpen(true)}
-                    disabled={dbQueryButtonsDisabled || rowSelectionModel.length === 0 || !canDelete}
-                >
-                    Delete selected columns
                 </Button>
             </div>
 

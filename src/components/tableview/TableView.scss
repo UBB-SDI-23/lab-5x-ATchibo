@@ -1,1 +1,11 @@
 @import '../../values.scss';
+
+.table-view-div {
+    margin-top: $margin-lg;
+    max-width: 95%;
+
+    margin-left: auto;
+    margin-right: auto;
+
+    margin-bottom: $margin-lg;
+}

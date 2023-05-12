@@ -25,7 +25,7 @@ const TableView = () => {
     };
 
     return (
-        <Card size='xl'>
+        <div className='table-view-div'>
             <FormControl variant='standard' fullWidth>
                 <InputLabel id="select-label">Select table</InputLabel>
                 <Select
@@ -59,9 +59,7 @@ const TableView = () => {
                 tableName === "Suppliers" &&
                 <SuppliersTableView />
             }
-            
-
-        </Card>
+        </div>
     )
 }
 
