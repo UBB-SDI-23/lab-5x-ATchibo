@@ -57,7 +57,7 @@ export const getApi = (BASE_URL: string) => {
   // Response interceptor
   instance.interceptors.response.use(
     (response) => {
-		console.log("response");
+		// console.log("response");
       return response;
     },
     async (error) => {

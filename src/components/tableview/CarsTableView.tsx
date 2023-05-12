@@ -16,6 +16,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { UserContext } from '../../helpers/UserContext';
 import { Table, Tbody, Td, Th, Thead, Tr } from 'react-super-responsive-table';
+import '../../general-style.scss';
+import InfoIcon from '@mui/icons-material/Info';
 
 interface EditContainerProps {
     car: CarDTO
@@ -382,14 +384,25 @@ const CarsTableView = () => {
         data = data.data;
 
         return (
-            <Tr>
-                <Td>{data.id}</Td>
-                <Td>{data.brand}</Td>
-                <Td>{data.model}</Td>
-                <Td>{data.dealershipName}</Td>
-                <Td>{data.authorUsername}</Td>
-                <Td>
+            <Tr className="table-row">
+                <Td className="table-d">{data.id}</Td>
+                <Td className="table-d">{data.brand}</Td>
+                <Td className="table-d">{data.model}</Td>
+                <Td className="table-d">{data.dealershipName}</Td>
+                <Td className="table-d">{data.authorUsername}</Td>
+                <Td className="table-d">
                     <IconButton
+                        onClick={() => {
+                            setRowSelectionModel([data.id]);
+                            viewCarDetails();
+                        }}
+                    >
+                        <InfoIcon />
+                    </IconButton>
+                </Td>
+                <Td className="table-d">
+                    <IconButton
+                        disabled={!canUpdate}
                         onClick={() => {
                             setRowSelectionModel([data.id]);
                             showUpdateRowsContainers();
@@ -398,8 +411,9 @@ const CarsTableView = () => {
                         <EditIcon />
                     </IconButton>
                 </Td>
-                <Td>
+                <Td className="table-d">
                     <IconButton
+                        disabled={!canDelete}
                         onClick={() => {
                             setRowSelectionModel([data.id]);
                             setModalDeleteOpen(true);
@@ -413,7 +427,7 @@ const CarsTableView = () => {
     }
 
     return (
-        <div>
+        <div style={{height: "100%", display: "block"}}>
             <div style={{display: "flex", margin: "10px 0px"}}>
                 <TextField
                     id='price' 
@@ -438,6 +452,21 @@ const CarsTableView = () => {
                 </Button>
             </div>
 
+            <div className='options-buttons-div'>
+                <Button
+                    onClick={getAllRows}
+                >
+                    Refresh table
+                </Button>
+
+                <Button
+                    onClick={showAddRowsContainers}
+                    disabled={dbQueryButtonsDisabled || !canAdd}
+                >
+                    Add new rows
+                </Button>
+            </div>
+
             <Pagination
                 count={40000}
                 page={page}
@@ -447,16 +476,17 @@ const CarsTableView = () => {
             />
 
             <div className='table-div'>
-                <Table className="users-table">
+                <Table className="custom-table">
                     <Thead>
-                        <Tr className='users-table-row'>
-                            <Th>ID</Th>
-                            <Th>Brand</Th>
-                            <Th>Model</Th>
-                            <Th>Dealership</Th>
-                            <Th>Author</Th>
-                            <Th>Edit</Th>
-                            <Th>Delete</Th>
+                        <Tr className='table-row'>
+                            <Th className="table-h">ID</Th>
+                            <Th className="table-h">Brand</Th>
+                            <Th className="table-h">Model</Th>
+                            <Th className="table-h">Dealership</Th>
+                            <Th className="table-h">Author</Th>
+                            <Th className="table-h">Info</Th>
+                            <Th className="table-h">Edit</Th>
+                            <Th className="table-h">Delete</Th>
                         </Tr>
                     </Thead>
                     <Tbody>
@@ -468,29 +498,6 @@ const CarsTableView = () => {
                     </Tbody>
                 </Table>        
             </div>
-
-            <div className='options-buttons-div'>
-                <Button
-                    onClick={getAllRows}
-                >
-                    Refresh table
-                </Button>
-
-                <Button
-                    onClick={viewCarDetails}
-                    disabled={rowSelectionModel.length !== 1}
-                >
-                    View more details
-                </Button>
-
-                <Button
-                    onClick={showAddRowsContainers}
-                    disabled={dbQueryButtonsDisabled || !canAdd}
-                >
-                    Add new rows
-                </Button>
-            </div>
-
 
             {
                 selectedRowsFields.length > 0 &&
