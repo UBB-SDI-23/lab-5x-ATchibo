@@ -17,7 +17,6 @@ import { Tr, Td, Table, Tbody, Th, Thead } from 'react-super-responsive-table';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import InfoIcon from '@mui/icons-material/Info';
-import { DataGridPro } from '@mui/x-data-grid-pro';
 
 interface EditContainerProps {
     employee: EmployeeDTO

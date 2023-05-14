@@ -1,4 +1,3 @@
-// import { IsEmail, IsNotEmpty, Min } from 'class-validator';
 
 class EmployeeDTO {
     private id: number;
