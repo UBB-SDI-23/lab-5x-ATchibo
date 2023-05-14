@@ -22,7 +22,13 @@
     display: table-cell;
     padding: $padding-lg;
     text-align: center;
-    vertical-align: top;
+    vertical-align: middle;
+}
+
+@media (max-width: 600px) {
+    .table-h, .table-d {
+        vertical-align: top;
+    }
 }
 
 .table-h {
