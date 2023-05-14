@@ -42,7 +42,6 @@ const CarsTableView = () => {
 
     const [paginationManager, setPaginationManager] = useState<PaginationManager>(new PaginationManager(25, 0));
 
-    const columns: GridColDef[] = CarInfo.columns;
     const [rows, setRows] = useState<JSON[]>([]);
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
 
@@ -198,6 +197,8 @@ const CarsTableView = () => {
     }
 
     const changePage = (event: React.ChangeEvent<unknown>, value: number) => {
+        if (value < 1)
+            return;
         setLoading(true);
         setPage(value);
         paginationManager.setCurrentPage(value-1);
@@ -256,6 +257,10 @@ const CarsTableView = () => {
 
     const EntityEditContainer = ({car}: EditContainerProps) => {
 
+        if (car.getAuthorUsername() === "") {
+            car.setAuthorUsername(user.getUsername());
+        }
+
         const initialDealership = new DealershipDTO(car.getDealershipId() || -1, car.getDealershipName() || "", "", "", "", "", 0);
 
         const [dealershipsDTOs, setDealershipsDTOs] = useState<DealershipDTO[]>([initialDealership]);
@@ -263,7 +268,6 @@ const CarsTableView = () => {
         const fetchSuggestions = async (query: string) => {
             try {
                 const suggestions = await DealershipRequests.getDealershipsByName(query);
-                console.log(suggestions.data);
                 setDealershipsDTOs(await suggestions.data);
             } catch (err: any) {
                 // displayError(err);
@@ -452,28 +456,35 @@ const CarsTableView = () => {
                 </Button>
             </div>
 
-            <div className='options-buttons-div'>
-                <Button
-                    onClick={getAllRows}
-                >
-                    Refresh table
-                </Button>
+            <div className='top-div'>
+                <div className='options-buttons-div'>
+                    <Button
+                        onClick={getAllRows}
+                    >
+                        Refresh table
+                    </Button>
 
-                <Button
-                    onClick={showAddRowsContainers}
-                    disabled={dbQueryButtonsDisabled || !canAdd}
-                >
-                    Add new rows
-                </Button>
+                    <Button
+                        onClick={showAddRowsContainers}
+                        disabled={!canAdd}
+                    >
+                        Add new rows
+                    </Button>
+                </div>
+                    
+                <Pagination
+                    className="pagination"
+                    count={40000}
+                    page={page}
+                    onChange={changePage}
+                    boundaryCount={5}
+                    siblingCount={5}
+                />
+                <div className="mobile-pagination">
+                    <Button onClick={(event) => changePage(event, page-1)} className="prev-button">Previous</Button>
+                    <Button onClick={(event) => changePage(event, page+1)} className="next-button">Next</Button>
+                </div>
             </div>
-
-            <Pagination
-                count={40000}
-                page={page}
-                onChange={changePage}
-                boundaryCount={5}
-                siblingCount={5}
-            />
 
             <div className='table-div'>
                 <Table className="custom-table">
@@ -499,25 +510,22 @@ const CarsTableView = () => {
                 </Table>        
             </div>
 
-            {
-                selectedRowsFields.length > 0 &&
-                <>
+            <Dialog
+                open={selectedRowsFields.length > 0}
+                onClose={() => setSelectedRowsFields([])}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogContent>
+                <DialogContentText id="alert-dialog-description">
                     {selectedRowsFields}
-                    <div className='confirmation-buttons-div'>
-                        <Button
-                            onClick={updateRows}
-                        >
-                            Confirm changes
-                        </Button>
-        
-                        <Button
-                            onClick={cancelUpdateRows}
-                        >
-                            Cancel
-                        </Button>
-                    </div>        
-                </>
-            }
+                </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => {cancelUpdateRows(); setSelectedRowsFields([]);}} autoFocus>Cancel</Button>
+                    <Button onClick={() => {updateRows(); setSelectedRowsFields([]);}}>Proceed</Button>
+                </DialogActions>
+            </Dialog>
 
             <Dialog
                 open={modalDeleteOpen}
@@ -534,11 +542,10 @@ const CarsTableView = () => {
                 </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                <Button onClick={() => setModalDeleteOpen(false)} autoFocus>Cancel</Button>
-                <Button onClick={() => {deleteRows(); setModalDeleteOpen(false);}}>Proceed</Button>
+                    <Button onClick={() => setModalDeleteOpen(false)} autoFocus>Cancel</Button>
+                    <Button onClick={() => {deleteRows(); setModalDeleteOpen(false);}}>Proceed</Button>
                 </DialogActions>
             </Dialog>
-
 
             <Snackbar open={alertSuccess}>
                 <Alert severity="success">

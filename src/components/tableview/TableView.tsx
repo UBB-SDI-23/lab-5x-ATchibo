@@ -1,6 +1,5 @@
 import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import { useState } from 'react';
-import Card from '../Card';
 import './TableView.scss';
 
 import DealershipsTableView from './DealershipsTableView';

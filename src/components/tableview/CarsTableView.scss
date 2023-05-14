@@ -7,6 +7,13 @@
     margin-bottom: $margin-lg;
 }
 
+.top-div {
+    background-color: white;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+}
+
 .options-buttons-div {
     display: flex;
     flex-wrap: wrap;
@@ -17,9 +24,27 @@
     margin: 5px;
 }
 
+.pagination {
+    display: block;
+}
+
+.mobile-pagination {
+    display: none; /* Hide mobile pagination by default */
+}
+
 @media (max-width: 600px) {
     .options-buttons-div button {
         flex-basis: 50%;
+    }
+
+    .pagination {
+        display: none !important; /* Hide desktop pagination on mobile */
+    }
+    
+    .mobile-pagination {
+        display: flex; /* Show mobile pagination */
+        justify-content: space-between;
+        margin-top: 20px; /* Adjust the spacing as needed */
     }
 }
 .entity-edit-container-div {

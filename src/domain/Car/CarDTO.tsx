@@ -9,7 +9,8 @@ class CarDTO {
     private description: string;
     private dealershipId: number;
     private dealershipName: string;
-  
+    private authorUsername: string;
+
     constructor(
         carDtoOrId?: CarDTO | number | any,
         brand?: string,
@@ -19,7 +20,8 @@ class CarDTO {
         price?: number,
         description?: string,
         dealershipId?: number,
-        dealershipName?: string
+        dealershipName?: string,
+        authorUsername?: string
       ) {
         if (typeof carDtoOrId === 'number') {
           // If the first argument is a number, assume it's an id
@@ -32,6 +34,7 @@ class CarDTO {
           this.description = description || '';
           this.dealershipId = dealershipId || -1;
           this.dealershipName = dealershipName || '';
+          this.authorUsername = authorUsername || '';
         } else if (carDtoOrId instanceof CarDTO) {
           // If the first argument is a CarDTO object, copy its properties
           const carDto = carDtoOrId;
@@ -44,6 +47,7 @@ class CarDTO {
           this.description = carDto.description;
           this.dealershipId = carDto.dealershipId;
           this.dealershipName = carDto.dealershipName;
+          this.authorUsername = carDto.authorUsername;
         } else if (typeof carDtoOrId === 'object') {
           // If the first argument is an object, assume it's a JSON object and assign its properties
           const carDto = carDtoOrId as any;
@@ -56,6 +60,7 @@ class CarDTO {
           this.description = carDto.description || '';
           this.dealershipId = carDto.dealershipId || -1;
           this.dealershipName = carDto.dealershipName || '';
+          this.authorUsername = carDto.authorUsername || '';
         } else {
           // If no arguments are provided, initialize all properties to defaults
           this.id = 0;
@@ -67,6 +72,7 @@ class CarDTO {
           this.description = '';
           this.dealershipId = -1;
           this.dealershipName = '';
+          this.authorUsername = '';
         }
     }
     
@@ -141,6 +147,14 @@ class CarDTO {
   
     setDealershipName(value: string) {
       this.dealershipName = value;
+    }
+
+    getAuthorUsername(): string {
+        return this.authorUsername;
+    }
+
+    setAuthorUsername(value: string) {
+        this.authorUsername = value;
     }
 }
   
