@@ -9,7 +9,6 @@ import DealershipDTO from '../../domain/DealershipDTO';
 import { useNavigate } from 'react-router-dom';
 import Values from '../../Values';
 import { PaginationManager } from '../../helpers/PaginationManager';
-import { DataGridPro } from '@mui/x-data-grid-pro';
 import { UserContext } from '../../helpers/UserContext';
 import { Tr, Td, Table, Tbody, Th, Thead } from 'react-super-responsive-table';
 import EditIcon from '@mui/icons-material/Edit';

@@ -4,13 +4,15 @@ export default class SupplierDTO {
     private email: string;
     private phone: string;
     private nrContracts: number;
+    private authorUsername: string;
   
     constructor(
       id?: number | SupplierDTO | any,
       name?: string,
       email?: string,
       phone?: string,
-      nrContracts?: number
+      nrContracts?: number,
+      authorUsername?: string
     ) {
       if (typeof id === 'number') {
         this.id = id;
@@ -18,6 +20,7 @@ export default class SupplierDTO {
         this.email = email || '';
         this.phone = phone || '';
         this.nrContracts = nrContracts || 0;
+        this.authorUsername = authorUsername || '';
       } else if (id instanceof SupplierDTO) {
         const supplier = id;
         this.id = supplier.id;
@@ -25,6 +28,7 @@ export default class SupplierDTO {
         this.email = supplier.email;
         this.phone = supplier.phone;
         this.nrContracts = supplier.nrContracts;
+        this.authorUsername = supplier.authorUsername;
       } else if (typeof id === 'object') {
         const supplier = id as any;
         this.id = supplier.id || 0;
@@ -32,12 +36,14 @@ export default class SupplierDTO {
         this.email = supplier.email || '';
         this.phone = supplier.phone || '';
         this.nrContracts = supplier.nrContracts || 0;
+        this.authorUsername = supplier.authorUsername || '';
       } else {
         this.id = 0;
         this.name = '';
         this.email = '';
         this.phone = '';
         this.nrContracts = 0;
+        this.authorUsername = '';
       }
     }
   
@@ -79,6 +85,14 @@ export default class SupplierDTO {
   
     public setNrContracts(nrContracts: number): void {
       this.nrContracts = nrContracts;
+    }
+
+    public getAuthorUsername(): string {
+      return this.authorUsername;
+    }
+
+    public setAuthorUsername(authorUsername: string): void {
+        this.authorUsername = authorUsername;
     }
 }
   
