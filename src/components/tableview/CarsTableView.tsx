@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Button, Snackbar, Alert, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Autocomplete, Pagination, IconButton } from '@mui/material';
-import { GridColDef, GridRowSelectionModel, GridRowId } from '@mui/x-data-grid';
+import { GridRowSelectionModel, GridRowId } from '@mui/x-data-grid';
 import { useState, useEffect, useCallback, useContext } from 'react';
 import './CarsTableView.scss';
 import { useNavigate } from 'react-router-dom';
@@ -34,8 +34,6 @@ const CarsTableView = () => {
     const [currentCars, setCurrentCars] = useState<CarDTO[]>([]);
     const [selectedRowsFields, setSelectedRowsFields] = useState<JSX.Element[]>([]);
 
-    const [dbQueryButtonsDisabled, setDbQueryButtonsDisabled] = useState<boolean>(false);
-
     const [loading, setLoading] = useState<boolean>(false);
 
     const [page, setPage] = useState<number>(1);
@@ -67,8 +65,6 @@ const CarsTableView = () => {
             return;
         }
 
-        setDbQueryButtonsDisabled(true);
-
         setCurrentCars(rowSelectionModel.map((row: GridRowId) => {
 
             for (let i = 0; i < rows.length; i++) {
@@ -83,8 +79,6 @@ const CarsTableView = () => {
     }
 
     const showAddRowsContainers = () => {
-        setDbQueryButtonsDisabled(true);
-
         setCurrentCars([new CarDTO()]);
     }
 
@@ -169,7 +163,6 @@ const CarsTableView = () => {
 
     const cancelUpdateRows = () => {
         setCurrentCars([]);
-        setDbQueryButtonsDisabled(false);
     }
 
     const filterCarsByPrice = () => {
@@ -212,7 +205,6 @@ const CarsTableView = () => {
         .then((res: any) => {
             showAlertSuccess();
             setCurrentCars([]);
-            setDbQueryButtonsDisabled(false);
             getAllRows();
         })
         .catch((err: any) => {
@@ -290,76 +282,74 @@ const CarsTableView = () => {
         }, [debouncedFetchSuggestions]);
 
         return (
-            <div className='entity-edit-container-div'>
-                    <TextField className='edit-container-text-field' label='ID' variant='standard' defaultValue={car.getId() || "Not available"} disabled={true} />
-                    
-                    <TextField className='edit-container-text-field' 
-                        id='brand' 
-                        label='Brand' 
-                        variant='standard' 
-                        defaultValue={car.getBrand()} 
-                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                            car.setBrand(event.target.value);
-                        }}
-                    />
+            <div className='entity-edit-container-div'>                    
+                <TextField className='edit-container-text-field' 
+                    id='brand' 
+                    label='Brand' 
+                    variant='standard' 
+                    defaultValue={car.getBrand()} 
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                        car.setBrand(event.target.value);
+                    }}
+                />
 
-                    <TextField className='edit-container-text-field' 
-                        id='model' 
-                        label='Model' 
-                        variant='standard' 
-                        defaultValue={car.getModel()} 
-                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                            car.setModel(event.target.value);
-                        }}
-                    />
+                <TextField className='edit-container-text-field' 
+                    id='model' 
+                    label='Model' 
+                    variant='standard' 
+                    defaultValue={car.getModel()} 
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                        car.setModel(event.target.value);
+                    }}
+                />
 
-                    <TextField className='edit-container-text-field' 
-                        id='year' 
-                        label='Year' 
-                        variant='standard' 
-                        onKeyDown={(e) => {
-                            if (!(e.key >= '0' && e.key <= '9')) {
-                                e.preventDefault()
-                            }
-                        }}
-                        defaultValue={car.getYear()} 
-                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                            car.setYear(parseInt(event.target.value));
-                        }}
-                    />
+                <TextField className='edit-container-text-field' 
+                    id='year' 
+                    label='Year' 
+                    variant='standard' 
+                    onKeyDown={(e) => {
+                        if (!(e.key >= '0' && e.key <= '9')) {
+                            e.preventDefault()
+                        }
+                    }}
+                    defaultValue={car.getYear()} 
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                        car.setYear(parseInt(event.target.value));
+                    }}
+                />
 
-                    <TextField className='edit-container-text-field' 
-                        id='color' 
-                        label='Color' 
-                        variant='standard' 
-                        defaultValue={car.getColor()} 
-                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                            car.setColor(event.target.value);
-                        }}
-                    />
+                <TextField className='edit-container-text-field' 
+                    id='color' 
+                    label='Color' 
+                    variant='standard' 
+                    defaultValue={car.getColor()} 
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                        car.setColor(event.target.value);
+                    }}
+                />
 
-                    <TextField className='edit-container-text-field' 
-                        id='price' 
-                        label='Price' 
-                        variant='standard' 
-                        onKeyDown={(e) => {
-                            if (!(e.key >= '0' && e.key <= '9') && e.key !== 'Backspace' && e.key !== 'Delete' && e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') {
-                                e.preventDefault()
-                            }
-                        }}
-                        defaultValue={car.getPrice()} 
-                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                            car.setPrice(parseInt(event.target.value));
-                        }}
-                    />
+                <TextField className='edit-container-text-field' 
+                    id='price' 
+                    label='Price' 
+                    variant='standard' 
+                    onKeyDown={(e) => {
+                        if (!(e.key >= '0' && e.key <= '9') && e.key !== 'Backspace' && e.key !== 'Delete' && e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') {
+                            e.preventDefault()
+                        }
+                    }}
+                    defaultValue={car.getPrice()} 
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                        car.setPrice(parseInt(event.target.value));
+                    }}
+                />
 
-                    <TextField className='edit-container-text-field' id='description' label='Description' variant='standard' defaultValue={car.getDescription()} 
-                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                            car.setDescription(event.target.value);
-                        }}
-                    />
+                <TextField className='edit-container-text-field' id='description' label='Description' variant='standard' defaultValue={car.getDescription()} 
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                        car.setDescription(event.target.value);
+                    }}
+                />
 
-                    <>
+                <>
                     <Autocomplete className='edit-container-text-field'
                         id='dealership'
                         options={dealershipsDTOs}
@@ -378,7 +368,7 @@ const CarsTableView = () => {
                             }
                         }}
                     />
-                    </>
+                </>
             </div>
         )
     }
@@ -389,7 +379,6 @@ const CarsTableView = () => {
 
         return (
             <Tr className="table-row">
-                <Td className="table-d">{data.id}</Td>
                 <Td className="table-d">{data.brand}</Td>
                 <Td className="table-d">{data.model}</Td>
                 <Td className="table-d">{data.dealershipName}</Td>
@@ -486,29 +475,26 @@ const CarsTableView = () => {
                 </div>
             </div>
 
-            <div className='table-div'>
-                <Table className="custom-table">
-                    <Thead>
-                        <Tr className='table-row'>
-                            <Th className="table-h">ID</Th>
-                            <Th className="table-h">Brand</Th>
-                            <Th className="table-h">Model</Th>
-                            <Th className="table-h">Dealership</Th>
-                            <Th className="table-h">Author</Th>
-                            <Th className="table-h">Info</Th>
-                            <Th className="table-h">Edit</Th>
-                            <Th className="table-h">Delete</Th>
-                        </Tr>
-                    </Thead>
-                    <Tbody>
-                        {
-                            rows.map((row: any) => (
-                                <TableRow key={row.id} data={row} />
-                            ))
-                        }
-                    </Tbody>
-                </Table>        
-            </div>
+            <Table responsive className="custom-table">
+                <Thead>
+                    <Tr className='table-row'>
+                        <Th className="table-h">Brand</Th>
+                        <Th className="table-h">Model</Th>
+                        <Th className="table-h">Dealership</Th>
+                        <Th className="table-h">Author</Th>
+                        <Th className="table-h"></Th>
+                        <Th className="table-h"></Th>
+                        <Th className="table-h"></Th>
+                    </Tr>
+                </Thead>
+                <Tbody>
+                    {
+                        rows.map((row: any) => (
+                            <TableRow key={row.id} data={row} />
+                        ))
+                    }
+                </Tbody>
+            </Table>
 
             <Dialog
                 open={selectedRowsFields.length > 0}
