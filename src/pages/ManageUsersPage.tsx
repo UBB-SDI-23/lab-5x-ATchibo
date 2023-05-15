@@ -1,10 +1,9 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect } from 'react';
 import UserRequests from '../api/UserRequests';
 import './ManageUsersPage.scss';
 import { Snackbar, Alert, Pagination, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Select, MenuItem, TextField } from '@mui/material';
 import UserInfo from '../domain/User/UserInfo';
 import { PaginationManager } from '../helpers/PaginationManager';
-import { UserContext } from '../helpers/UserContext';
 import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table'
 import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css'
 import UserDTO from '../domain/User/UserDTO';
