@@ -117,6 +117,10 @@ const ManageUsersPage = () => {
         }, 3000);
     }
 
+    const getAllRows = () => {
+        fetchUsers(paginationManager.getCurrentPage(), paginationManager.getPageSize());
+    }
+
     const UsersTableRow = ({ user }: UsersTableRowProps) => {
         
         const [open, setOpen] = useState<boolean>(false);
@@ -210,14 +214,29 @@ const ManageUsersPage = () => {
                             Change
                         </Button>
                     </div>
-                    <Pagination
-                        className="pagination"
-                        count={1429}
-                        page={page}
-                        onChange={changePage}
-                        boundaryCount={5}
-                        siblingCount={5}
-                    />
+                    
+                    <div className='top-div'>
+                        <div className='options-buttons-div'>
+                            <Button
+                                onClick={getAllRows}
+                            >
+                                Refresh table
+                            </Button>
+                        </div>
+                            
+                        <Pagination
+                            className="pagination"
+                            count={40000}
+                            page={page}
+                            onChange={changePage}
+                            boundaryCount={5}
+                            siblingCount={5}
+                        />
+                        <div className="mobile-pagination">
+                            <Button onClick={(event) => changePage(event, page-1)} className="prev-button">Previous</Button>
+                            <Button onClick={(event) => changePage(event, page+1)} className="next-button">Next</Button>
+                        </div>
+                    </div>
 
                     <Table className="users-table">
                         <Thead>
