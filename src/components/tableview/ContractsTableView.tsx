@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Button, Snackbar, Alert, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Autocomplete, Pagination } from '@mui/material';
-import { GridColDef, GridRowSelectionModel, GridRowId } from '@mui/x-data-grid';
+import { Button, Snackbar, Alert, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Autocomplete, Pagination, IconButton } from '@mui/material';
+import { GridRowSelectionModel, GridRowId } from '@mui/x-data-grid';
 import { useState, useEffect, useCallback, useContext } from 'react';
 import './EmployeesTableView.scss';
 import { useNavigate } from 'react-router-dom';
@@ -15,7 +15,10 @@ import { debounce } from 'lodash';
 import SupplierDTO from '../../domain/Supplier/SupplierDTO';
 import SupplierRequests from '../../api/SupplierRequests';
 import { UserContext } from '../../helpers/UserContext';
-import { DataGridPro } from '@mui/x-data-grid-pro';
+import { Tr, Td, Table, Tbody, Th, Thead } from 'react-super-responsive-table';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import InfoIcon from '@mui/icons-material/Info';
 
 interface EditContainerProps {
     contract: ContractDTO
@@ -32,13 +35,10 @@ const ContractsTableView = () => {
     const [currentContracts, setCurrentContracts] = useState<ContractDTO[]>([]);
     const [selectedRowsFields, setSelectedRowsFields] = useState<JSX.Element[]>([]);
 
-    const [dbQueryButtonsDisabled, setDbQueryButtonsDisabled] = useState<boolean>(false);
-
     const [page, setPage] = useState<number>(1);
 
     const [paginationManager, setPaginationManager] = useState<PaginationManager>(new PaginationManager(25, 0));
 
-    const columns: GridColDef[] = ContractInfo.columns;
     const [rows, setRows] = useState<JSON[]>([]);
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
 
@@ -64,8 +64,6 @@ const ContractsTableView = () => {
             return;
         }
 
-        setDbQueryButtonsDisabled(true);
-
         setCurrentContracts(rowSelectionModel.map((row: GridRowId) => {
 
             for (let i = 0; i < rows.length; i++) {
@@ -80,8 +78,6 @@ const ContractsTableView = () => {
     }
 
     const showAddRowsContainers = () => {
-        setDbQueryButtonsDisabled(true);
-
         setCurrentContracts([new ContractDTO()]);
     }
 
@@ -173,7 +169,6 @@ const ContractsTableView = () => {
 
     const cancelUpdateRows = () => {
         setCurrentContracts([]);
-        setDbQueryButtonsDisabled(false);
     }
 
     const fetchContracts = async (page: number, size: number) => {
@@ -192,7 +187,6 @@ const ContractsTableView = () => {
         .then((res: any) => {
             showAlertSuccess();
             setCurrentContracts([]);
-            setDbQueryButtonsDisabled(false);
             getAllRows();
         })
         .catch((err: any) => {
@@ -236,6 +230,10 @@ const ContractsTableView = () => {
     const [modalDeleteOpen, setModalDeleteOpen] = useState<boolean>(false);
 
     const EntityEditContainer = ({contract}: EditContainerProps) => {
+
+        if (!contract.getAuthorUsername()) {
+            contract.setAuthorUsername(user.getUsername());
+        }
 
         const initialDealership = new DealershipDTO(contract.getDealershipId() || -1, contract.getDealershipName() || "", "", "", "", "", 0);
 
@@ -408,85 +406,123 @@ const ContractsTableView = () => {
         )
     }
 
+    const TableRow = (data: any) => {
+
+        data = data.data;
+
+        return (
+            <Tr className="table-row">
+                <Td className="table-d">{data.contractDate}</Td>
+                <Td className="table-d">{data.contractYearsDuration}</Td>
+                <Td className="table-d">{data.dealershipName}</Td>
+                <Td className="table-d">{data.supplierName}</Td>
+                <Td className="table-d">{data.authorUsername}</Td>
+                <Td className="table-d">
+                    <IconButton
+                        onClick={() => {
+                            setRowSelectionModel([data.id]);
+                            viewContractDetails();
+                        }}
+                    >
+                        <InfoIcon />
+                    </IconButton>
+                </Td>
+                <Td className="table-d">
+                    <IconButton
+                        disabled={!canUpdate}
+                        onClick={() => {
+                            setRowSelectionModel([data.id]);
+                            showUpdateRowsContainers();
+                        }}
+                    >
+                        <EditIcon />
+                    </IconButton>
+                </Td>
+                <Td className="table-d">
+                    <IconButton
+                        disabled={!canDelete}
+                        onClick={() => {
+                            setRowSelectionModel([data.id]);
+                            setModalDeleteOpen(true);
+                        }}
+                    >
+                        <DeleteIcon />
+                    </IconButton>
+                </Td>
+            </Tr>
+        );
+    }
+
     return (
-        <div>
-            <Pagination
-                style={{ marginTop: '20px' }}
-                count={40000}
-                page={page}
-                onChange={changePage}
-                boundaryCount={5}
-                siblingCount={5}
-            />
-            <div className='table-div'>
-                <DataGridPro
-                    rows={rows}
-                    columns={columns}
-                    pagination={false}
-                    checkboxSelection
-                    onRowSelectionModelChange={(newRowSelectionModel) => {
-                        setRowSelectionModel(newRowSelectionModel);
-                    }}
-                    rowSelectionModel={rowSelectionModel}
+        <div style={{height: "100%", display: "block"}}>
+            <div className='top-div'>
+                <div className='options-buttons-div'>
+                    <Button
+                        onClick={getAllRows}
+                    >
+                        Refresh table
+                    </Button>
+
+                    <Button
+                        onClick={showAddRowsContainers}
+                        disabled={!canAdd}
+                    >
+                        Add new rows
+                    </Button>
+                </div>
+                    
+                <Pagination
+                    className="pagination"
+                    count={40000}
+                    page={page}
+                    onChange={changePage}
+                    boundaryCount={5}
+                    siblingCount={5}
                 />
+                <div className="mobile-pagination">
+                    <Button onClick={(event) => changePage(event, page-1)} className="prev-button">Previous</Button>
+                    <Button onClick={(event) => changePage(event, page+1)} className="next-button">Next</Button>
+                </div>
             </div>
+            
+            <Table responsive className="custom-table">
+                <Thead>
+                    <Tr className='table-row'>
+                        <Th className="table-h">Contract date</Th>
+                        <Th className="table-h">Contract duration (years)</Th>
+                        <Th className="table-h">Dealership</Th>
+                        <Th className="table-h">Supplier</Th>
+                        <Th className="table-h">Author</Th>
+                        <Th className="table-h"></Th>
+                        <Th className="table-h"></Th>
+                        <Th className="table-h"></Th>
+                    </Tr>
+                </Thead>
+                <Tbody>
+                    {
+                        rows.map((row: any) => (
+                            <TableRow key={row.id} data={row} />
+                        ))
+                    }
+                </Tbody>
+            </Table>
 
-            <div className='options-buttons-div'>
-                <Button
-                    onClick={getAllRows}
-                >
-                    Refresh table
-                </Button>
-
-                <Button
-                    onClick={viewContractDetails}
-                    disabled={rowSelectionModel.length !== 1}
-                >
-                    View more details
-                </Button>
-
-                <Button
-                    onClick={showAddRowsContainers}
-                    disabled={dbQueryButtonsDisabled || !canAdd}
-                >
-                    Add new rows
-                </Button>
-
-                <Button
-                    onClick={showUpdateRowsContainers}
-                    disabled={dbQueryButtonsDisabled  || rowSelectionModel.length === 0 || !canUpdate}
-                >
-                    Update selected rows
-                </Button>
-
-                <Button
-                    onClick={() => setModalDeleteOpen(true)}
-                    disabled={dbQueryButtonsDisabled || rowSelectionModel.length === 0 || !canDelete}
-                >
-                    Delete selected columns
-                </Button>
-            </div>
-
-
-            {
-                selectedRowsFields.length > 0 &&
-                <>
+            <Dialog
+                open={selectedRowsFields.length > 0}
+                onClose={() => setSelectedRowsFields([])}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogContent>
+                <DialogContentText id="alert-dialog-description">
                     {selectedRowsFields}
-                    <div className='confirmation-buttons-div'>
-                        <Button
-                            onClick={updateRows}
-                        >
-                            Confirm changes
-                        </Button>
-        
-                        <Button
-                            onClick={cancelUpdateRows}
-                        >
-                            Cancel
-                        </Button>
-                    </div>        
-                </>
-            }
+                </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => {cancelUpdateRows(); setSelectedRowsFields([]);}} autoFocus>Cancel</Button>
+                    <Button onClick={() => {updateRows(); setSelectedRowsFields([]);}}>Proceed</Button>
+                </DialogActions>
+            </Dialog>
 
             <Dialog
                 open={modalDeleteOpen}

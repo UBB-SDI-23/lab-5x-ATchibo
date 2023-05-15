@@ -1,12 +1,12 @@
-import TableDataMenu from '../components/menus/TableDataMenu';
 import './TableManagementPage.scss';
 import GoUpButton from '../components/GoUpButton';
+import TableView from '../components/tableview/TableView';
 
 const TableManagementPage = () => {
 
     return (
         <div className='table-data-menu-div'>
-            <TableDataMenu/>
+            <TableView/>
             <GoUpButton/>
         </div>
     )

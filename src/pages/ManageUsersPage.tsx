@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useContext } from 'react';
 import UserRequests from '../api/UserRequests';
 import './ManageUsersPage.scss';
@@ -6,6 +5,8 @@ import { Snackbar, Alert, Pagination, Button, Dialog, DialogActions, DialogConte
 import UserInfo from '../domain/User/UserInfo';
 import { PaginationManager } from '../helpers/PaginationManager';
 import { UserContext } from '../helpers/UserContext';
+import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table'
+import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css'
 
 type UsersTableRowProps = {
     user: any;
@@ -137,16 +138,16 @@ const ManageUsersPage = () => {
         }
 
         return (
-            <tr className="users-table-row">
-                <td>{user.id}</td>
-                <td>{user.username}</td>
-                <td>{user.email}</td>
-                <td>{user.role}</td>
-                <td>
+            <Tr className="users-table-row">
+                <Td>{user.id}</Td>
+                <Td>{user.username}</Td>
+                <Td>{user.email}</Td>
+                <Td>{user.role}</Td>
+                <Td>
                     <Button size="small" className="edit-role-button" onClick={() => setOpen(true)}>
                         Edit role
                     </Button>
-                </td>
+                </Td>
                 {
                     open && 
                     <Dialog open={open}>
@@ -174,7 +175,7 @@ const ManageUsersPage = () => {
                         </DialogActions>
                     </Dialog>
                 }
-            </tr>
+            </Tr>
         );
     }
     
@@ -216,24 +217,24 @@ const ManageUsersPage = () => {
                         siblingCount={5}
                     />
 
-                    <table className="users-table">
-                        <thead>
-                            <tr className='users-table-row'>
-                            {
-                                rowHeaders?.map((header: any) => (
-                                    <th key={header}>{header}</th>
-                                ))
-                            }
-                            </tr>
-                        </thead>
-                        <tbody>
+                    <Table className="users-table">
+                        <Thead>
+                            <Tr className='users-table-row'>
+                                <Th>ID</Th>
+                                <Th>Username</Th>
+                                <Th>Email</Th>
+                                <Th>Role</Th>
+                                <Th>Actions</Th>
+                            </Tr>
+                        </Thead>
+                        <Tbody>
                             {
                                 rows.map((row: any) => (
                                     <UsersTableRow key={row.id} user={row} />
                                 ))
                             }
-                        </tbody>
-                    </table>
+                        </Tbody>
+                    </Table>
 
                 </div>
             }

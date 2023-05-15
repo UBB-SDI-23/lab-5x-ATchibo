@@ -14,12 +14,13 @@
 }
 
 #form-div {
-    margin-right: auto;
-    margin-left: auto;
+    margin-top: 3*$margin-lg;
+    margin-right: $margin-lg;
+    margin-left: $margin-lg;
 }
 
 #link-div {
-    // display: flexbox;
-
+    margin-right: $margin-lg;
+    margin-left: $margin-lg;
     margin-top: $margin-md;
 }

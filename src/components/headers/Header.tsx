@@ -41,12 +41,15 @@ const Header = () => {
     }
 
     const fetchUser = async () => {
+        if (LocalStorageManager.getAuthToken() === "") 
+            return;
+
         await UserRequests.getCurrentUser()
             .then((response) => {
                 setUser(new UserDTO(response.data));
             })
             .catch((error) => {
-                console.log(error.response.data);
+                console.log(error);
             });
     }
 
@@ -87,7 +90,7 @@ const Header = () => {
                         }}
                     >
                         <MenuItem onClick={goToProfile}>Profile</MenuItem>
-                        <MenuItem onClick={logout}>{user?.getRole() === "ROLE_GUEST" ? "Log in" : "Logout"}</MenuItem>
+                        <MenuItem id="logout" onClick={logout}>{user?.getRole() === "ROLE_GUEST" ? "Log in" : "Logout"}</MenuItem>
                     </Menu>
                 </div>
             </div>

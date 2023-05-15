@@ -1,0 +1,37 @@
+@import './values.scss';
+
+.custom-table {
+    width: 100%;
+    display: table;
+    border-collapse: collapse;
+    background-color: #f2f2f2;
+    border-radius: $border-radius;
+    overflow: hidden;
+}
+
+.table-row {
+    display: table-row;
+    background-color: white;
+}
+
+.table-row:nth-child(odd) {
+    background-color: #f9f9f9;
+}
+
+.table-h, .table-d {
+    display: table-cell;
+    padding: $padding-lg;
+    text-align: center;
+    vertical-align: middle;
+}
+
+@media (max-width: 600px) {
+    .table-h, .table-d {
+        vertical-align: top;
+    }
+}
+
+.table-h {
+    font-weight: bold;
+    background-color: #e6e6e6;
+}

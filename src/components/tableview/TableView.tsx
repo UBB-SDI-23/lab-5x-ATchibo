@@ -1,6 +1,5 @@
 import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import { useState } from 'react';
-import Card from '../Card';
 import './TableView.scss';
 
 import DealershipsTableView from './DealershipsTableView';
@@ -25,7 +24,7 @@ const TableView = () => {
     };
 
     return (
-        <Card size='xl'>
+        <div className='table-view-div'>
             <FormControl variant='standard' fullWidth>
                 <InputLabel id="select-label">Select table</InputLabel>
                 <Select
@@ -59,9 +58,7 @@ const TableView = () => {
                 tableName === "Suppliers" &&
                 <SuppliersTableView />
             }
-            
-
-        </Card>
+        </div>
     )
 }
 

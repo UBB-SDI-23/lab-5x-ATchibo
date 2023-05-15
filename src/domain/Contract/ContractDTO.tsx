@@ -7,6 +7,7 @@ export default class ContractDTO {
     private dealershipName: string;
     private supplierId: number;
     private supplierName: string;
+    private authorUsername: string;
   
     constructor(
         contractDtoOrId?: ContractDTO | number | any,
@@ -15,7 +16,8 @@ export default class ContractDTO {
         dealershipId?: number,
         dealershipName?: string,
         supplierId?: number,
-        supplierName?: string
+        supplierName?: string,
+        authorUsername?: string
       ) {
         if (typeof contractDtoOrId === 'number') {
           // If the first argument is a number, assume it's an id
@@ -26,6 +28,7 @@ export default class ContractDTO {
           this.dealershipName = dealershipName || '';
           this.supplierId = supplierId || -1;
           this.supplierName = supplierName || '';
+          this.authorUsername = authorUsername || '';
         } else if (contractDtoOrId instanceof ContractDTO) {
           // If the first argument is a ContractDTO object, copy its properties
           const contractDto = contractDtoOrId;
@@ -36,6 +39,7 @@ export default class ContractDTO {
           this.dealershipName = contractDto.dealershipName;
           this.supplierId = contractDto.supplierId;
           this.supplierName = contractDto.supplierName;
+          this.authorUsername = contractDto.authorUsername;
         } else if (typeof contractDtoOrId === 'object') {
           // If the first argument is an object, assume it's a JSON object and assign its properties
           const contractDto = contractDtoOrId as any;
@@ -46,6 +50,7 @@ export default class ContractDTO {
           this.dealershipName = contractDto.dealershipName || '';
           this.supplierId = contractDto.supplierId || -1;
           this.supplierName = contractDto.supplierName || '';
+          this.authorUsername = contractDto.authorUsername || '';
         } else {
           // If no arguments are provided, initialize all properties to defaults
           this.id = 0;
@@ -55,6 +60,7 @@ export default class ContractDTO {
           this.dealershipName = '';
           this.supplierId = -1;
           this.supplierName = '';
+          this.authorUsername = '';
         }
     }
   
@@ -112,6 +118,14 @@ export default class ContractDTO {
   
     public setSupplierName(supplierName: string): void {
       this.supplierName = supplierName;
+    }
+
+    public getAuthorUsername(): string {
+      return this.authorUsername;
+    }
+
+    public setAuthorUsername(authorUsername: string): void {
+      this.authorUsername = authorUsername;
     }
 }
   

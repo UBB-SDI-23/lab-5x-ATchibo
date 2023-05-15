@@ -1,4 +1,3 @@
-// import { IsEmail, IsNotEmpty, Min } from 'class-validator';
 
 class EmployeeDTO {
     private id: number;
@@ -9,6 +8,7 @@ class EmployeeDTO {
     private salary: number;
     private dealershipId: number;
     private dealershipName: string;
+    private authorUsername: string;
 
     constructor(
         idOrDTO?: number | EmployeeDTO | any,
@@ -18,7 +18,8 @@ class EmployeeDTO {
         phone?: string,
         salary?: number,
         dealershipId?: number,
-        dealershipName?: string
+        dealershipName?: string,
+        authorUsername?: string
     ) {
         if (typeof idOrDTO === 'number') {
             this.id = idOrDTO;
@@ -29,6 +30,7 @@ class EmployeeDTO {
             this.salary = salary || 0;
             this.dealershipId = dealershipId || -1;
             this.dealershipName = dealershipName || '';
+            this.authorUsername = authorUsername || '';
         } else if (idOrDTO instanceof EmployeeDTO) {
             const dto = idOrDTO;
             this.id = dto.id;
@@ -39,6 +41,7 @@ class EmployeeDTO {
             this.salary = dto.salary;
             this.dealershipId = dto.dealershipId;
             this.dealershipName = dto.dealershipName;
+            this.authorUsername = dto.authorUsername;
         } else if (typeof idOrDTO === 'object') {
             const dto = idOrDTO as any;
             this.id = dto.id || 0;
@@ -49,6 +52,7 @@ class EmployeeDTO {
             this.salary = dto.salary || 0;
             this.dealershipId = dto.dealershipId || -1;
             this.dealershipName = dto.dealershipName || '';
+            this.authorUsername = dto.authorUsername || '';
         } else {
             this.id = 0;
             this.name = '';
@@ -58,6 +62,7 @@ class EmployeeDTO {
             this.salary = 0;
             this.dealershipId = -1;
             this.dealershipName = '';
+            this.authorUsername = '';
         }
     }
 
@@ -123,6 +128,14 @@ class EmployeeDTO {
 
     setDealershipName(dealershipName: string): void {
         this.dealershipName = dealershipName;
+    }
+
+    public getAuthorUsername(): string {
+        return this.authorUsername;
+    }
+
+    public setAuthorUsername(authorUsername: string): void {
+        this.authorUsername = authorUsername;
     }
 }
 

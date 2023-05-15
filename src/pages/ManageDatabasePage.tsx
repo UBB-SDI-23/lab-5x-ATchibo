@@ -11,6 +11,8 @@ import ContractRequests from '../api/ContractRequests';
 import SupplierRequests from '../api/SupplierRequests';
 import CarRequests from '../api/CarRequests';
 import EmployeeRequests from '../api/EmployeeRequests';
+import LocalStorageManager from '../helpers/LocalStorageManager';
+import { Table, Tbody, Td, Th, Thead, Tr } from 'react-super-responsive-table';
 
 const ManageDatabasePage = () => {
     
@@ -27,12 +29,14 @@ const ManageDatabasePage = () => {
     const [performAction, serPerformAction] = useState<any>(null);
 
     const fetchUser = async () => {
+        if (LocalStorageManager.getAuthToken() === "") 
+            return;
         await UserRequests.getCurrentUser()
             .then((response) => {
                 setUser(new UserDTO(response.data));
             })
             .catch((error) => {
-                console.log(error.response.data);
+                console.log(error);
             });
     }
 
@@ -183,42 +187,42 @@ const ManageDatabasePage = () => {
             <Card>
                 <p id="title-delete">Bulk delete</p>
 
-                <table id='bulk-delete-table'>
-                    <thead>
-                        <tr>
-                            <th>Table</th>
-                            {/* <th>Number of rows</th> */}
-                            <th>Delete</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Contracts</td>
-                            {/* <td>100</td> */}
-                            <td><Button onClick={deleteContracts}>Delete</Button></td>
-                        </tr>
-                        <tr>
-                            <td>Suppliers</td>
-                            {/* <td>100</td> */}
-                            <td><Button onClick={deleteSuppliers}>Delete</Button></td>
-                        </tr>
-                        <tr>
-                            <td>Cars</td>
-                            {/* <td>100</td> */}
-                            <td><Button onClick={deleteCars}>Delete</Button></td>
-                        </tr>
-                        <tr>
-                            <td>Employees</td>
-                            {/* <td>100</td> */}
-                            <td><Button onClick={deleteEmployees}>Delete</Button></td>
-                        </tr>
-                        <tr>
-                            <td>Dealerships</td>
-                            {/* <td>100</td> */}
-                            <td><Button onClick={deleteDealerships}>Delete</Button></td>
-                        </tr>
-                    </tbody>
-                </table>
+                <Table id='bulk-delete-table'>
+                    <Thead>
+                        <Tr>
+                            <Th>Table</Th>
+                            {/* <Th>Number of rows</Th> */}
+                            <Th>Delete</Th>
+                        </Tr>
+                    </Thead>
+                    <Tbody>
+                        <Tr>
+                            <Td>Contracts</Td>
+                            {/* <Td>100</Td> */}
+                            <Td><Button onClick={deleteContracts}>Delete</Button></Td>
+                        </Tr>
+                        <Tr>
+                            <Td>Suppliers</Td>
+                            {/* <Td>100</Td> */}
+                            <Td><Button onClick={deleteSuppliers}>Delete</Button></Td>
+                        </Tr>
+                        <Tr>
+                            <Td>Cars</Td>
+                            {/* <Td>100</Td> */}
+                            <Td><Button onClick={deleteCars}>Delete</Button></Td>
+                        </Tr>
+                        <Tr>
+                            <Td>Employees</Td>
+                            {/* <Td>100</Td> */}
+                            <Td><Button onClick={deleteEmployees}>Delete</Button></Td>
+                        </Tr>
+                        <Tr>
+                            <Td>Dealerships</Td>
+                            {/* <Td>100</Td> */}
+                            <Td><Button onClick={deleteDealerships}>Delete</Button></Td>
+                        </Tr>
+                    </Tbody>
+                </Table>
             </Card>
             <MenuItem 
                 title='Execute bulk insert script'

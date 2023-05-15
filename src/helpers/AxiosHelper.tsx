@@ -57,15 +57,15 @@ export const getApi = (BASE_URL: string) => {
   // Response interceptor
   instance.interceptors.response.use(
     (response) => {
-		console.log("response");
+		// console.log("response");
       return response;
     },
     async (error) => {
-		console.log("error");
+		// console.log("error");
       const originalRequest = error.config;
       const refreshToken = LocalStorageManager.getRefreshToken();
 
-	  console.log(error.config);
+	//   console.log(error.config);
 
       if (
         refreshToken !== null &&

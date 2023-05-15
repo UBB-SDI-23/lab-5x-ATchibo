@@ -7,13 +7,14 @@ class DealershipDTO {
     private email: string;
     private website: string;
     private nrOfCars: number;
+    private authorUsername: string;
 
     public constructor(id: number, name: string, address: string, phone: string, email: string, website: string, nrOfCars: number);
     public constructor(jsonString: JSON);
     public constructor();
 
     public constructor(...arr: any[]) {
-        if (arr.length === 7) {
+        if (arr.length === 8) {
             this.id = arr[0];
             this.name = arr[1];
             this.address = arr[2];
@@ -21,6 +22,7 @@ class DealershipDTO {
             this.email = arr[4];
             this.website = arr[5];
             this.nrOfCars = arr[6];
+            this.authorUsername = arr[7];
         } else if (arr.length === 1) {
             let obj = arr[0];
             this.id = obj.id;
@@ -30,6 +32,7 @@ class DealershipDTO {
             this.email = obj.email;
             this.website = obj.website;
             this.nrOfCars = obj.nrOfCars;
+            this.authorUsername = obj.authorUsername;
         } else {
             this.id = 0;
             this.name = "";
@@ -38,6 +41,7 @@ class DealershipDTO {
             this.email = "";
             this.website = "";
             this.nrOfCars = 0;
+            this.authorUsername = "";
         }
     }
 
@@ -91,6 +95,14 @@ class DealershipDTO {
 
     public setNrOfCars(nrOfCars: number): void {
         this.nrOfCars = nrOfCars;
+    }
+
+    public getAuthorUsername(): string {
+        return this.authorUsername;
+    }
+
+    public setAuthorUsername(authorUsername: string): void {
+        this.authorUsername = authorUsername;
     }
 }
 

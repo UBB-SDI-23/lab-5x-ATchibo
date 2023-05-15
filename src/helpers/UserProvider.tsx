@@ -12,9 +12,9 @@ export const UserProvider: React.FC<IUserProviderProps> = ({ children }) => {
   const [user, setUser] = useState<UserDTO>(new UserDTO());
 
   const fetchUser = async () => {
-	if (!LocalStorageManager.getAuthToken() || LocalStorageManager.getAuthToken() === "") {
-		return;
-	}
+    if (!LocalStorageManager.getAuthToken() || LocalStorageManager.getAuthToken() === "") {
+      return;
+    }
 
     await UserRequests.getCurrentUser()
       .then((response) => {
@@ -25,9 +25,7 @@ export const UserProvider: React.FC<IUserProviderProps> = ({ children }) => {
       )
       .catch((error) => {
 			    console.log("buba mare");
-          if (error.response.status !== 404) {
-              console.log(error.response.data);
-          }
+          console.log(error);
       }
     );
   }
