@@ -7,6 +7,8 @@ import { PaginationManager } from '../helpers/PaginationManager';
 import { UserContext } from '../helpers/UserContext';
 import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table'
 import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css'
+import UserDTO from '../domain/User/UserDTO';
+import Values from '../Values';
 
 type UsersTableRowProps = {
     user: any;
@@ -14,7 +16,7 @@ type UsersTableRowProps = {
 
 const ManageUsersPage = () => {
 
-    const { user } = useContext(UserContext);
+    const [user, setUser] = useState<UserDTO>(new UserDTO());
     
     const [rows, setRows] = useState<JSON[]>([]);
 
@@ -31,6 +33,33 @@ const ManageUsersPage = () => {
     const [page, setPage] = useState<number>(1);
 
     const [pageSize, setPageSize] = useState<number>(0);
+
+
+    const fetchUser = async () => {    
+        await UserRequests.getCurrentUser()
+          .then((response) => {
+              if (response.status === 200) {
+                  setUser(new UserDTO(response.data));
+
+				  if (response.data.role !== 'ROLE_ADMIN') {
+					window.location.href = Values.homePageUrl;
+				  }
+              }
+          }
+          )
+          .catch((error) => {
+              console.log(error);
+			  window.location.href = Values.homePageUrl;
+          }
+        );
+	}
+    
+    useEffect(() => {
+        fetchUser();
+
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
 
     const fetchUsers = async (page: number, size: number) => {
         setLoading(true);
@@ -58,14 +87,6 @@ const ManageUsersPage = () => {
     const putPageSize = async () => {
         await uploadPageSize(pageSize);
     }
-
-    useEffect(() => {
-        if (user?.getRole() !== 'ROLE_ADMIN') {
-            window.location.href = '/';
-        }
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
 
     useEffect(() => {
         setPaginationManager(new PaginationManager());
@@ -259,14 +280,6 @@ const ManageUsersPage = () => {
 
                 </div>
             }
-            {
-                user?.getRole() !== 'ROLE_ADMIN' && user !== null &&
-                <div>
-                    <h1>Access denied</h1>
-                    <p>You don't have the required permissions to access this page</p>
-                </div>
-            }
-
 
             <Snackbar open={alertSuccess}>
                 <Alert severity="success">
