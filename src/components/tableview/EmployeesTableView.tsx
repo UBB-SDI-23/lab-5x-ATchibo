@@ -142,7 +142,7 @@ const EmployeesTableView = () => {
     }
 
     const getAllRows = () => {
-        fetchEmployees(0, paginationManager.getTotalElements() || paginationManager.getPageSize()); 
+        fetchEmployees(paginationManager.getCurrentPage(), paginationManager.getPageSize());
     }
 
     const changePage = (event: React.ChangeEvent<unknown>, value: number) => {
