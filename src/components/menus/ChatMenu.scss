@@ -1,0 +1,21 @@
+@import '../../values.scss';
+
+.chat-menu {
+    background-color: aquamarine;
+    width: 90%;
+    margin: auto;
+}
+
+.chat-menu-title {
+    margin-bottom: $margin-lg;
+}
+
+.chat-menu-content {
+    background-color: aliceblue;
+    margin: $margin-sm $margin-lg;
+}
+
+.chat-menu-send-box {
+    background-color: antiquewhite;
+    display: flex;
+}

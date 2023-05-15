@@ -11,6 +11,7 @@ class Values {
     static usersPageUrl = "/users";
     static manageUsersPageUrl = "/manage-users";
     static manageDatabasePageUrl = "/manage-database";
+    static chatPageUrl = "/chat";
 
     // Colors
     static mainColor = "#0f7d4d";

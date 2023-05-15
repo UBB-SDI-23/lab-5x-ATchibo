@@ -42,6 +42,12 @@ const MainMenu = () => {
                 btnText='Go'
                 btnClick={goToStatistics}
             />
+            <MenuItem
+                title='Go to chat page'
+                description='Chat with other users of the application'
+                btnText='Go'
+                btnClick={() => navigate(Values.chatPageUrl)}
+            />
             {
                 user?.getRole() === 'ROLE_ADMIN' &&
                 <MenuItem

@@ -22,6 +22,7 @@ import UserInfoPage from './pages/UserInfoPage';
 import ProtectedRoute from './helpers/ProtectedRoute';
 import ManageUsersPage from './pages/ManageUsersPage';
 import ManageDatabasePage from './pages/ManageDatabasePage';
+import ChatPage from './pages/ChatPage';
 
 function App() {
 
@@ -81,6 +82,7 @@ function App() {
               <Route path={Values.manageUsersPageUrl} element={<ProtectedRoute><ManageUsersPage/></ProtectedRoute>}/>
               <Route path={Values.usersPageUrl + "/:uId"} element={<ProtectedRoute><UserInfoPage/></ProtectedRoute>}/>
               <Route path={Values.manageDatabasePageUrl} element={<ProtectedRoute><ManageDatabasePage/></ProtectedRoute>}/>
+              <Route path={Values.chatPageUrl} element={<ProtectedRoute><ChatPage/></ProtectedRoute>}/>
               <Route path="*" element={<ProtectedRoute><NoPage/></ProtectedRoute>} />
             </Route>
           </Routes>
