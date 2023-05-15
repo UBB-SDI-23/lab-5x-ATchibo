@@ -35,7 +35,7 @@ const LoginMenu = () => {
                 if (err.response) {
                     alert("Login failed: " + err.response.data.message + " " + err.response.status);
                 } else {
-                    alert("Error: " + err.message);
+                    alert("Error: Invalid user or password");
                 }
             }
         );
