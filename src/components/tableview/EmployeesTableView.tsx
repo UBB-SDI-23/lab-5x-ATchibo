@@ -221,8 +221,8 @@ const EmployeesTableView = () => {
 
     const navigate = useNavigate();
 
-    const viewEmployeeDetails = () => {
-        navigate(Values.manageTablesUrl + '/employees/' + rowSelectionModel[0]);
+    const viewEmployeeDetails = (id: any) => {
+        navigate(Values.manageTablesUrl + '/employees/' + id);
     }
 
     const [modalDeleteOpen, setModalDeleteOpen] = useState<boolean>(false);
@@ -400,42 +400,43 @@ const EmployeesTableView = () => {
             <Tr className="table-row">
                 <Td className="table-d">{data.name}</Td>
                 <Td className="table-d">{data.role}</Td>
-                <Td className="table-d">{data.email}</Td>
-                <Td className="table-d">{data.phone}</Td>
-                <Td className="table-d">{data.salary}</Td>
                 <Td className="table-d">{data.dealershipName}</Td>
                 <Td className="table-d">{data.authorUsername}</Td>
                 <Td className="table-d">
-                    <IconButton
-                        onClick={() => {
-                            setRowSelectionModel([data.id]);
-                            viewEmployeeDetails();
-                        }}
-                    >
-                        <InfoIcon />
-                    </IconButton>
-                </Td>
-                <Td className="table-d">
-                    <IconButton
-                        disabled={!canUpdate}
-                        onClick={() => {
-                            setRowSelectionModel([data.id]);
-                            showUpdateRowsContainers();
-                        }}
-                    >
-                        <EditIcon />
-                    </IconButton>
-                </Td>
-                <Td className="table-d">
-                    <IconButton
-                        disabled={!canDelete}
-                        onClick={() => {
-                            setRowSelectionModel([data.id]);
-                            setModalDeleteOpen(true);
-                        }}
-                    >
-                        <DeleteIcon />
-                    </IconButton>
+                    <div>
+                        <IconButton
+                            onClick={() => {
+                                setRowSelectionModel([data.id]);
+                                viewEmployeeDetails(data.id);
+                            }}
+                        >
+                            <InfoIcon />
+                        </IconButton>
+                        {
+                            canUpdate &&
+                            <IconButton
+                                disabled={!canUpdate}
+                                onClick={() => {
+                                    setRowSelectionModel([data.id]);
+                                    showUpdateRowsContainers();
+                                }}
+                            >
+                                <EditIcon />
+                            </IconButton>
+                        }
+                        {
+                            canDelete &&
+                            <IconButton
+                                disabled={!canDelete}
+                                onClick={() => {
+                                    setRowSelectionModel([data.id]);
+                                    setModalDeleteOpen(true);
+                                }}
+                            >
+                                <DeleteIcon />
+                            </IconButton>
+                        }
+                    </div>
                 </Td>
             </Tr>
         );
@@ -473,18 +474,13 @@ const EmployeesTableView = () => {
                 </div>
             </div>
 
-            <Table responsive className="custom-table">
+            <Table className="custom-table">
                 <Thead>
                     <Tr className='table-row'>
                         <Th className="table-h">Name</Th>
                         <Th className="table-h">Role</Th>
-                        <Th className="table-h">Email</Th>
-                        <Th className="table-h">Phone</Th>
-                        <Th className="table-h">Salary</Th>
                         <Th className="table-h">Dealership</Th>
                         <Th className="table-h">Author</Th>
-                        <Th className="table-h"></Th>
-                        <Th className="table-h"></Th>
                         <Th className="table-h"></Th>
                     </Tr>
                 </Thead>

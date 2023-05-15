@@ -223,8 +223,8 @@ const ContractsTableView = () => {
 
     const navigate = useNavigate();
 
-    const viewContractDetails = () => {
-        navigate(Values.manageTablesUrl + '/contracts/' + rowSelectionModel[0]);
+    const viewContractDetails = (id: any) => {
+        navigate(Values.manageTablesUrl + '/contracts/' + id);
     }
 
     const [modalDeleteOpen, setModalDeleteOpen] = useState<boolean>(false);
@@ -412,42 +412,45 @@ const ContractsTableView = () => {
 
         return (
             <Tr className="table-row">
-                <Td className="table-d">{data.contractDate}</Td>
                 <Td className="table-d">{data.contractYearsDuration}</Td>
                 <Td className="table-d">{data.dealershipName}</Td>
                 <Td className="table-d">{data.supplierName}</Td>
                 <Td className="table-d">{data.authorUsername}</Td>
                 <Td className="table-d">
-                    <IconButton
-                        onClick={() => {
-                            setRowSelectionModel([data.id]);
-                            viewContractDetails();
-                        }}
-                    >
-                        <InfoIcon />
-                    </IconButton>
-                </Td>
-                <Td className="table-d">
-                    <IconButton
-                        disabled={!canUpdate}
-                        onClick={() => {
-                            setRowSelectionModel([data.id]);
-                            showUpdateRowsContainers();
-                        }}
-                    >
-                        <EditIcon />
-                    </IconButton>
-                </Td>
-                <Td className="table-d">
-                    <IconButton
-                        disabled={!canDelete}
-                        onClick={() => {
-                            setRowSelectionModel([data.id]);
-                            setModalDeleteOpen(true);
-                        }}
-                    >
-                        <DeleteIcon />
-                    </IconButton>
+                    <div>
+                        <IconButton
+                            onClick={() => {
+                                setRowSelectionModel([data.id]);
+                                viewContractDetails(data.id);
+                            }}
+                        >
+                            <InfoIcon />
+                        </IconButton>
+                        {
+                            canUpdate &&
+                            <IconButton
+                                disabled={!canUpdate}
+                                onClick={() => {
+                                    setRowSelectionModel([data.id]);
+                                    showUpdateRowsContainers();
+                                }}
+                            >
+                                <EditIcon />
+                            </IconButton>
+                        }
+                        {
+                            canDelete &&
+                            <IconButton
+                                disabled={!canDelete}
+                                onClick={() => {
+                                    setRowSelectionModel([data.id]);
+                                    setModalDeleteOpen(true);
+                                }}
+                            >
+                                <DeleteIcon />
+                            </IconButton>
+                        }
+                    </div>
                 </Td>
             </Tr>
         );
@@ -485,16 +488,13 @@ const ContractsTableView = () => {
                 </div>
             </div>
             
-            <Table responsive className="custom-table">
+            <Table className="custom-table">
                 <Thead>
                     <Tr className='table-row'>
-                        <Th className="table-h">Contract date</Th>
                         <Th className="table-h">Contract duration (years)</Th>
                         <Th className="table-h">Dealership</Th>
                         <Th className="table-h">Supplier</Th>
                         <Th className="table-h">Author</Th>
-                        <Th className="table-h"></Th>
-                        <Th className="table-h"></Th>
                         <Th className="table-h"></Th>
                     </Tr>
                 </Thead>
