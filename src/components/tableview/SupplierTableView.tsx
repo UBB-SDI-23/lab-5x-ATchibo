@@ -303,7 +303,7 @@ const SuppliersTableView = () => {
         return (
             <Tr className="table-row">
                 <Td className="table-d">{data.name}</Td>
-                <Td className="table-d">{data.email}</Td>
+                <Td className="table-d">{data.phone}</Td>
                 <Td className="table-d">{data.nrContracts}</Td>
                 <Td className="table-d">{data.authorUsername}</Td>
                 <Td className="table-d">
@@ -382,7 +382,7 @@ const SuppliersTableView = () => {
                 <Thead>
                     <Tr className='table-row'>
                         <Th className="table-h">Name</Th>
-                        <Th className="table-h">Email</Th>
+                        <Th className="table-h">Phone</Th>
                         <Th className="table-h">Nr. contracts</Th>
                         <Th className="table-h">Author</Th>
                         <Th className="table-h"></Th>

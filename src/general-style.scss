@@ -1,7 +1,7 @@
 @import './values.scss';
 
 .custom-table {
-    width: 100%;
+    width: 10%;
     display: table;
     border-collapse: collapse;
     background-color: #f2f2f2;
@@ -19,13 +19,14 @@
 }
 
 .table-h, .table-d {
+    white-space: pre-line;
     display: table-cell;
     padding: $padding-lg;
     text-align: center;
     vertical-align: middle;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
     .table-h, .table-d {
         vertical-align: top;
     }

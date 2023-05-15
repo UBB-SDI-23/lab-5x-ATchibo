@@ -167,7 +167,6 @@ const ManageUsersPage = () => {
             <Tr className="users-table-row">
                 <Td>{user.id}</Td>
                 <Td>{user.username}</Td>
-                <Td>{user.email}</Td>
                 <Td>{user.role}</Td>
                 <Td>
                     <Button size="small" className="edit-role-button" onClick={() => setOpen(true)}>
@@ -264,7 +263,6 @@ const ManageUsersPage = () => {
                             <Tr className='users-table-row'>
                                 <Th>ID</Th>
                                 <Th>Username</Th>
-                                <Th>Email</Th>
                                 <Th>Role</Th>
                                 <Th>Actions</Th>
                             </Tr>
