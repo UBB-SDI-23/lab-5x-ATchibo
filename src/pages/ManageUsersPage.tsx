@@ -17,6 +17,8 @@ const ManageUsersPage = () => {
     const { user } = useContext(UserContext);
     
     const [rows, setRows] = useState<JSON[]>([]);
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [rowHeaders, setRowHeaders] = useState<any>();
 
     const [loading, setLoading] = useState<boolean>(false);
