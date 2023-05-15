@@ -7,12 +7,13 @@ import CarsTableView from './CarsTableView';
 import EmployeesTableView from './EmployeesTableView';
 import ContractsTableView from './ContractsTableView';
 import SuppliersTableView from './SupplierTableView';
+import LocalStorageManager from '../../helpers/LocalStorageManager';
 
 const TableView = () => {
 
     const tableNames = ["Dealerships", "Cars", "Employees", "Contracts", "Suppliers"];
-    const [tableName, setTableName] = useState('');
-    const [tableNameIndex, setTableNameIndex] = useState('');
+    const [tableName, setTableName] = useState(LocalStorageManager.getTableName() || '');
+    const [tableNameIndex, setTableNameIndex] = useState(""+tableNames.indexOf(tableName) || '');
 
     const menuItems = tableNames.map((name, index) => {
         return <MenuItem key={index} value={index}>{name}</MenuItem>
@@ -20,6 +21,7 @@ const TableView = () => {
 
     const handleChange = (event: SelectChangeEvent) => {
         setTableName(tableNames[event.target.value as unknown as number]);
+        LocalStorageManager.setTableName(tableNames[event.target.value as unknown as number]);
         setTableNameIndex(event.target.value as string);
     };
 
