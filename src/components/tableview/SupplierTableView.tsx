@@ -379,11 +379,9 @@ const SuppliersTableView = () => {
                 <Thead>
                     <Tr className='table-row'>
                         <Th className="table-h">Name</Th>
-                        <Th className="table-h">Role</Th>
                         <Th className="table-h">Email</Th>
                         <Th className="table-h">Phone</Th>
-                        <Th className="table-h">Salary</Th>
-                        <Th className="table-h">Dealership</Th>
+                        <Th className="table-h">Nr. contracts</Th>
                         <Th className="table-h">Author</Th>
                         <Th className="table-h"></Th>
                         <Th className="table-h"></Th>
