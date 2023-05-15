@@ -118,3 +118,40 @@ describe('The main page', () => {
     cy.url().should('eq', 'http://localhost:3000/');
   });
 });
+
+describe('The manage users page', () => {
+
+    it('Admin can access manage users page', () => {
+      cy.visit('http://localhost:3000/login')
+      cy.get('#username').type('tchibo')
+      cy.get('#password').type('password')
+      cy.get('#login').click()
+      cy.url().should('eq', 'http://localhost:3000/');
+
+      cy.visit('http://localhost:3000/manage-users')
+    });
+
+    it('Admin can set global page size', () => {
+      cy.visit('http://localhost:3000/login')
+      cy.get('#username').type('tchibo')
+      cy.get('#password').type('password')
+      cy.get('#login').click()
+      cy.url().should('eq', 'http://localhost:3000/');
+
+      cy.visit('http://localhost:3000/manage-users')
+
+      cy.get('#page-size-input').should('exist')
+      cy.get('#page-size-input').should('be.visible')
+      cy.get('#page-size-input').type('5')
+      cy.get('#page-size-input').should('have.value', '5')
+      cy.get('#page-size-button').should('exist')
+      cy.get('#page-size-button').should('be.visible')
+      cy.get('#page-size-button').click()
+
+      cy.wait(1000)
+
+      cy.visit('http://localhost:3000/manage-users')
+
+      cy.get('#table-body').children().should('have.length', 5)
+    });
+});

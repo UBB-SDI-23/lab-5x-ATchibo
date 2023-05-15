@@ -228,6 +228,7 @@ const ManageUsersPage = () => {
                             }}
                         />
                         <Button
+                            id="page-size-button"
                             color="primary"
                             onClick={putPageSize}
                         >
@@ -268,7 +269,7 @@ const ManageUsersPage = () => {
                                 <Th>Actions</Th>
                             </Tr>
                         </Thead>
-                        <Tbody>
+                        <Tbody id="table-body">
                             {
                                 rows.map((row: any) => (
                                     <UsersTableRow key={row.id} user={row} />
