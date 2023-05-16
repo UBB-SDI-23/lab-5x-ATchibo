@@ -1,13 +1,63 @@
-import { Button, TextField } from "@mui/material";
+import { Button, Grid, List, ListItem, ListItemText, TextField } from "@mui/material";
+import { makeStyles } from "@mui/styles";
 import { useState } from "react";
 import { over } from "stompjs";
 import SockJS from "sockjs-client";
+
 
 import "./ChatMenu.scss";
 
 let stompClient = null;
 
+const useStyles = makeStyles({
+	table: {
+	  minWidth: 650,
+	},
+	chatSection: {
+	  width: '100%',
+	  height: '80vh'
+	},
+	headBG: {
+		backgroundColor: '#e0e0e0'
+	},
+	borderRight500: {
+		borderRight: '1px solid #e0e0e0'
+	},
+	messageArea: {
+	  height: '70vh',
+	  overflowY: 'auto'
+	},
+  senderName: {
+    fontWeight: "bold",
+    fontSize: "1.2rem",
+    color: "#81e695"
+  },
+  senderBox: {
+    justifyContent: "right",
+  },
+  senderBoxContent: {
+    backgroundColor: "#1f2420",
+    color: "#fff",
+    padding: "0.5rem",
+    borderRadius: "0.5rem",
+  },
+  receiverBox: {
+    alignContent: "left",
+  },
+  receiverBoxContent: {
+    backgroundColor: "gray",
+    color: "#fff",
+    width: "fit-content",
+    padding: "0.5rem",
+    borderRadius: "0.5rem",
+  },
+});
+
+
 const ChatMenu = () => {
+
+	const classes = useStyles();
+
   const [modalNicknameOpen, setModalNicknameOpen] = useState(true);
   const [publicChats, setPublicChats] = useState([]);
   const [userData, setUserData] = useState({
@@ -44,22 +94,37 @@ const ChatMenu = () => {
 
   const MessagesBox = () => {
     return (
-      <div className="chat-menu-messages-box">
-        <ul>
-          {publicChats.map((chat, index) => {
-            const isSelf = chat.senderName === userData.username;
-            const messageClass = isSelf ? "message self" : "message";
-            const avatar = isSelf ? null : <div className="avatar">{chat.senderName}</div>;
+      <List className={classes.messageArea}>
+        {publicChats.map((chat, index) => {
+          const isSelf = chat.senderName === userData.username;
 
+          if (isSelf) {
             return (
-              <li className={messageClass} key={index}>
-                {avatar}
-                <div className="message-data">{chat.message}</div>
-              </li>
+              <ListItem key={index} className={classes.senderBox}>
+                <Grid container width="fit-content" className={classes.senderBoxContent}>
+                  <Grid item xs={12}>
+                    <ListItemText align="right" primary={chat.message}></ListItemText>
+                  </Grid>
+                </Grid>
+              </ListItem>
             );
-          })}
-        </ul>
-      </div>
+          }
+          else {
+            return (
+              <ListItem key={index} className={classes.receiverBox}>
+                <Grid container width="fit-content" className={classes.receiverBoxContent}>
+                  <Grid item xs={12}>
+                    <ListItemText align="left" primary={chat.senderName} className={classes.senderName}></ListItemText>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <ListItemText align="left" primary={chat.message}></ListItemText>
+                  </Grid>
+                </Grid>
+              </ListItem>
+            );
+          }
+        })}
+      </List>
     );
   };
 
