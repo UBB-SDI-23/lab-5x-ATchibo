@@ -5,11 +5,11 @@ import {
   List,
   ListItem,
   ListItemText,
-  TextField
+  TextField,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 
-// @ts-ignore 
+// @ts-ignore
 import { over } from "stompjs";
 // @ts-ignore
 import SockJS from "sockjs-client";
@@ -64,7 +64,7 @@ const useStyles = makeStyles({
 });
 
 const ChatMenu: React.FC = () => {
-    const classes = useStyles();
+  const classes = useStyles();
   const [modalNicknameOpen, setModalNicknameOpen] = useState(true);
   const [publicChats, setPublicChats] = useState<any[]>([]);
   const [userData, setUserData] = useState({
@@ -119,134 +119,133 @@ const ChatMenu: React.FC = () => {
           if (isSelf) {
             return (
               <ListItem key={index} className="senderBox">
-              <Grid
-                             container
-                             width="fit-content"
-                             className={classes.senderBoxContent}
-                           >
-              <Grid item xs={12}>
-              <ListItemText  primary={chat.message} />
-              </Grid>
-              </Grid>
+                <Grid
+                  container
+                  width="fit-content"
+                  className={classes.senderBoxContent}
+                >
+                  <Grid item xs={12}>
+                    <ListItemText primary={chat.message} />
+                  </Grid>
+                </Grid>
               </ListItem>
-              );
-              } else {
-              return (
-              <ListItem key={index} className={classes.receiverBox}>
-              <Grid
-                             container
-                             width="fit-content"
-                             className={classes.receiverBoxContent}
-                           >
-              <Grid item xs={12}>
-              <ListItemText
-                                 
-                                 primary={chat.senderName}
-                                 className={classes.senderName}
-                               />
-              </Grid>
-              <Grid item xs={12}>
-              <ListItemText  primary={chat.message} />
-              </Grid>
-              </Grid>
-              </ListItem>
-              );
-              }
-              })}
-              </List>
-              );
-              };
-              
-              const SendBox: React.FC = () => {
-              const submit = (e: React.FormEvent) => {
-              e.preventDefault();
-              if (userData.message === "") {
-              return;
-              }
-              if (stompClient) {
-                const chatMessage = {
-                  senderName: userData.username,
-                  message: userData.message,
-                  status: "MESSAGE",
-                };
-                stompClient.send("/app/message", {}, JSON.stringify(chatMessage));
-                setUserData({ ...userData, message: "" });
-              }
-            };
-            
-            const handleMessage = (e: React.ChangeEvent<HTMLInputElement>) => {
-              const { value } = e.target;
-              setUserData({ ...userData, message: value });
-            };
-            
-            return (
-              <form className="chat-menu-send-box" onSubmit={submit}>
-                <TextField
-                  autoFocus
-                  id="message"
-                  type="text"
-                  fullWidth
-                  maxRows={4}
-                  value={userData.message}
-                  onChange={handleMessage}
-                  variant="outlined"
-                  size="small"
-                  placeholder="Type a message..."
-                  className="send-box-input"
-                />
-                <Button type="submit" className="send-box-button">
-                  Send
-                </Button>
-              </form>
             );
-          };
-
-          const setNickname = (e: React.FormEvent) => {
-          e.preventDefault();
-          
-          if (userData.username === "") {
-            return;
+          } else {
+            return (
+              <ListItem key={index} className={classes.receiverBox}>
+                <Grid
+                  container
+                  width="fit-content"
+                  className={classes.receiverBoxContent}
+                >
+                  <Grid item xs={12}>
+                    <ListItemText
+                      primary={chat.senderName}
+                      className={classes.senderName}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <ListItemText primary={chat.message} />
+                  </Grid>
+                </Grid>
+              </ListItem>
+            );
           }
-          
-          registerUser();
-          setModalNicknameOpen(false);
-        };
+        })}
+      </List>
+    );
+  };
 
-        return (
-        <div className="chat-menu">
-        <div className="chat-menu-title">
-        <h1>Chat</h1>
-        </div>
-        {modalNicknameOpen ? (
-        <div className="nickname-div">
-        <h2>Enter your nickname</h2>
-        <p>You will use this nickname to chat with other users.</p>
-        <form onSubmit={setNickname}>
-        <TextField
-                   autoFocus
-                   id="nickname"
-                   label="Nickname"
-                   type="text"
-                   fullWidth
-                   value={userData.username}
-                   onChange={handleUserName}
-                   variant="outlined"
-                   size="small"
-                   className="nickname-input"
-                 />
-        <br />
-        <br />
-        <Button type="submit">Set nickname</Button>
-        </form>
-        </div>
-        ) : (
-        <div className="chat-menu-content">
-        <MessagesBox />
-        <SendBox />
-        </div>
-        )}
-        </div>
-        );
+  const SendBox: React.FC = () => {
+    const submit = (e: React.FormEvent) => {
+      e.preventDefault();
+      if (userData.message === "") {
+        return;
+      }
+      if (stompClient) {
+        const chatMessage = {
+          senderName: userData.username,
+          message: userData.message,
+          status: "MESSAGE",
         };
-        
-        export default ChatMenu;          
+        stompClient.send("/app/message", {}, JSON.stringify(chatMessage));
+        setUserData({ ...userData, message: "" });
+      }
+    };
+
+    const handleMessage = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { value } = e.target;
+      setUserData({ ...userData, message: value });
+    };
+
+    return (
+      <form className="chat-menu-send-box" onSubmit={submit}>
+        <TextField
+          autoFocus
+          id="message"
+          type="text"
+          fullWidth
+          maxRows={4}
+          value={userData.message}
+          onChange={handleMessage}
+          variant="outlined"
+          size="small"
+          placeholder="Type a message..."
+          className="send-box-input"
+        />
+        <Button type="submit" className="send-box-button">
+          Send
+        </Button>
+      </form>
+    );
+  };
+
+  const setNickname = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (userData.username === "") {
+      return;
+    }
+
+    registerUser();
+    setModalNicknameOpen(false);
+  };
+
+  return (
+    <div className="chat-menu">
+      <div className="chat-menu-title">
+        <h1>Chat</h1>
+      </div>
+      {modalNicknameOpen ? (
+        <div className="nickname-div">
+          <h2>Enter your nickname</h2>
+          <p>You will use this nickname to chat with other users.</p>
+          <form onSubmit={setNickname}>
+            <TextField
+              autoFocus
+              id="nickname"
+              label="Nickname"
+              type="text"
+              fullWidth
+              value={userData.username}
+              onChange={handleUserName}
+              variant="outlined"
+              size="small"
+              className="nickname-input"
+            />
+            <br />
+            <br />
+            <Button type="submit">Set nickname</Button>
+          </form>
+        </div>
+      ) : (
+        <div className="chat-menu-content">
+          <MessagesBox />
+          <SendBox />
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default ChatMenu;
