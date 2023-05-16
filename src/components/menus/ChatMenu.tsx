@@ -82,7 +82,7 @@ const ChatMenu: React.FC = () => {
   const registerUser = () => {
     const socket = new SockJS(Values.websocketUrl);
     stompClient = over(socket);
-    stompClient.connect({withCredentials: true}, onConnected, onError);
+    stompClient.connect({withCredentials: false}, onConnected, onError);
   };
 
   const onConnected = () => {
@@ -171,7 +171,7 @@ const ChatMenu: React.FC = () => {
           message: userData.message,
           status: "MESSAGE",
         };
-        stompClient.send("/app/message", {withCredentials: true}, JSON.stringify(chatMessage));
+        stompClient.send("/app/message", {withCredentials: false}, JSON.stringify(chatMessage));
         setUserData({ ...userData, message: "" });
       }
     };
