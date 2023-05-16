@@ -15,6 +15,7 @@ import { over } from "stompjs";
 import SockJS from "sockjs-client";
 
 import "./ChatMenu.scss";
+import Values from "../../Values";
 
 let stompClient: any = null;
 
@@ -79,7 +80,7 @@ const ChatMenu: React.FC = () => {
   };
 
   const registerUser = () => {
-    const socket = new SockJS("http://localhost:8080/ws");
+    const socket = new SockJS(Values.websocketUrl);
     stompClient = over(socket);
     stompClient.connect({}, onConnected, onError);
   };

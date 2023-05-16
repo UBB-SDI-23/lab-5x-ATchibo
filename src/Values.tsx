@@ -13,7 +13,8 @@ class Values {
     static manageDatabasePageUrl = "/manage-database";
     static chatPageUrl = "/chat";
 
-    static websocketUrl = "wss://tchibo-cafeluta.netlify.com/chat";
+    // static websocketUrl = "http://localhost:8080/ws";
+    static websocketUrl = "https://exquisite-fox.chickenkiller.com/ws";
 
     // Colors
     static mainColor = "#0f7d4d";
