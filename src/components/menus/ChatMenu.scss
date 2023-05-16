@@ -66,18 +66,23 @@
 }
 
 /* Mobile Styles */
-@media screen and (max-width: 767px) {
-  .chat-menu {
-    width: 90%;
-    height: 75vh;
-  }
+// @media screen and (max-width: 767px) {
+//   .chat-menu {
+//     width: 90%;
+//     height: 100%;
+//     display: flex;
+//     flex-direction: column;
+//   }
 
-  .chat-menu-content {
-    padding: auto;
-    height: 75vh;
-  }
+//   .chat-menu-content {
+//     vertical-align: top;
+//     height: 50vh;
+//     justify-content: baseline;
+//   }
 
-  .send-box-input {
-    margin-bottom: 10px;
-  }
-}
+//   .chat-menu-send-box {
+//     margin-top: auto;
+//     vertical-align: top;
+//     height: 10%;
+//   }
+// }
