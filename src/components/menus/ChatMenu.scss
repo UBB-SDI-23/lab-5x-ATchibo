@@ -1,21 +1,87 @@
 @import '../../values.scss';
 
 .chat-menu {
-    background-color: aquamarine;
-    width: 90%;
-    margin: auto;
-}
-
-.chat-menu-title {
-    margin-bottom: $margin-lg;
-}
-
-.chat-menu-content {
-    background-color: aliceblue;
-    margin: $margin-sm $margin-lg;
-}
-
-.chat-menu-send-box {
-    background-color: antiquewhite;
     display: flex;
-}
+    flex-direction: column;
+    height: 100vh;
+    width: 90%;
+    max-width: 1300px;
+    margin: $margin-lg auto;
+    padding: 20px;
+    box-sizing: border-box;
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .chat-menu-title {
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .chat-menu-content {
+    flex-grow: 1;
+    overflow-y: auto;
+  }
+  
+  .chat-menu-messages-box {
+    padding: 10px;
+    list-style-type: none;
+    margin: 0;
+  }
+  
+  .message {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 10px;
+  }
+  
+  .self .message-data {
+    background-color: #DCF8C6;
+    color: #000;
+    margin-left: auto;
+    padding: 8px 12px;
+    border-radius: 10px;
+    align-self: flex-end;
+  }
+  
+  .message .avatar {
+    width: 30px;
+    height: 30px;
+    background-color: #eaeaea;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+  }
+  
+  .message .message-data {
+    background-color: #f2f2f2;
+    color: #000;
+    padding: 8px 12px;
+    border-radius: 10px;
+  }
+  
+  .chat-menu-send-box {
+    display: flex;
+    margin-top: 10px;
+  }
+  
+  .chat-menu-send-box .MuiTextField-root {
+    flex-grow: 1;
+    margin-right: 10px;
+  }
+  
+  .chat-menu-send-box button {
+    white-space: nowrap;
+  }
+  
+  @media (max-width: 600px) {
+    .chat-menu {
+      max-width: 100%;
+      border-radius: 0;
+    }
+  }
+  

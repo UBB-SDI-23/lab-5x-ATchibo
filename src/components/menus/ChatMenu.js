@@ -1,5 +1,5 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { over } from "stompjs";
 import SockJS from "sockjs-client";
 
@@ -19,21 +19,12 @@ const ChatMenu = () => {
         connected: false
     });
 
-    useEffect(() => {
-        console.log("User data: ");
-        console.log(userData);
-    }, [userData]);
-
-    useEffect(() => {
-        console.log("Public chats: ");
-        console.log(publicChats);
-    }, [publicChats]);
-
     const handleUserName = (e) => {
         const { value } = e.target;
         setUserData({...userData, "username": value});
     }
 
+    // eslint-disable-next-line
     const registerUser = () => {
         const socket = new SockJS("http://localhost:8080/ws");
         stompClient = over(socket);
@@ -62,29 +53,21 @@ const ChatMenu = () => {
     }
 
     const MessagesBox = () => {
-
         return (
             <div className="chat-menu-messages-box">
                 <ul>
                 {
                     publicChats.map((chat, index) => {
+                        const isSelf = chat.senderName === userData.username;
+                        const messageClass = isSelf ? 'message self' : 'message';
+                        const avatar = isSelf ? null : (
+                            <div className="avatar">{chat.senderName}</div>
+                        );
+            
                         return (
-                            <li className="message" key={index}>
-                                {
-                                    chat.sender === userData.username && 
-                                    <div className="avatar self">
-                                        {chat.senderName}
-                                    </div>
-                                }
-                                <div className="message-data">
-                                    {chat.message}
-                                </div>
-                                {
-                                    chat.sender !== userData.username && 
-                                    <div className="avatar">
-                                        {chat.senderName}
-                                    </div>
-                                }
+                            <li className={messageClass} key={index}>
+                                {avatar}
+                                <div className="message-data">{chat.message}</div>
                             </li>
                         );
                     })
@@ -92,7 +75,8 @@ const ChatMenu = () => {
                 </ul>
             </div>
         );
-    }
+    };
+      
 
     const SendBox = () => {
 
