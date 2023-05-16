@@ -24,7 +24,6 @@ const ChatMenu = () => {
         setUserData({...userData, "username": value});
     }
 
-    // eslint-disable-next-line
     const registerUser = () => {
         const socket = new SockJS("http://localhost:8080/ws");
         stompClient = over(socket);
@@ -38,14 +37,9 @@ const ChatMenu = () => {
     }
 
     const onMessageReceived = (payload) => {
-
-        console.log("Payload received: " + payload);
-
         const message = JSON.parse(payload.body);
         publicChats.push(message);
         setPublicChats([...publicChats]);
-
-        console.log(publicChats);
     }
 
     const onError = (error) => {
@@ -82,6 +76,9 @@ const ChatMenu = () => {
 
         const submit = (e) => {
             e.preventDefault();
+            if (userData.message === "") {
+                return;
+            }
 
             if (stompClient) {
                 const chatMessage = {
@@ -115,46 +112,50 @@ const ChatMenu = () => {
         );
     }
 
+
+    const setNickname = (e) => {
+        e.preventDefault();
+
+        if (userData.username === "") {
+            return;
+        }
+
+        registerUser();
+        setModalNicknameOpen(false);
+    }
+
     return (
         <div className="chat-menu">
             <div className="chat-menu-title">
                 <h1>Chat</h1>
             </div>
 
-            <div className="chat-menu-content">
-                <MessagesBox />
-                <SendBox />
-            </div>
-
-            <Dialog
-                open={modalNicknameOpen}
-                onClose={() => setModalNicknameOpen(false)}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-            >
-                <DialogTitle id="alert-dialog-title">
-                    Enter your nickname
-                </DialogTitle>
-                <DialogContent>
-                <DialogContentText id="alert-dialog-description">
-                    You will use this nickname to chat with other users.
-                    <br />
-                    <TextField
-                        autoFocus
-                        id="nickname"
-                        label="Nickname"
-                        type="text"
-                        fullWidth
-                        value={userData.username}
-                        onChange={handleUserName}
-                    />
-                </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={() => {window.location.href="/"; setModalNicknameOpen(false)}} autoFocus>Cancel</Button>
-                    <Button onClick={() => {registerUser(); setModalNicknameOpen(false);}}>Proceed</Button>
-                </DialogActions>
-            </Dialog>
+            {
+                modalNicknameOpen ? 
+                <div className="nickname-div">
+                    <h2>Enter your nickname</h2>
+                    <p>You will use this nickname to chat with other users.</p>
+                    <form onSubmit={setNickname}>
+                        <TextField
+                            autoFocus
+                            id="nickname"
+                            label="Nickname"
+                            type="text"
+                            fullWidth
+                            value={userData.username}
+                            onChange={handleUserName}
+                        />
+                        <br/>
+                        <br/>
+                        <Button type="submit">Set nickname</Button>
+                    </form>    
+                </div>
+                :
+                <div className="chat-menu-content">
+                    <MessagesBox />
+                    <SendBox />
+                </div>
+            }
         </div>
     )
 }
