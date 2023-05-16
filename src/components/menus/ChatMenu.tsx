@@ -99,7 +99,9 @@ const ChatMenu: React.FC = () => {
     console.log(error);
   };
 
+  
   const MessagesBox: React.FC = () => {
+
     const messagesRef = useRef<HTMLUListElement | null>(null);
 
     useEffect(() => {
