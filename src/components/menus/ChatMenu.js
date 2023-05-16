@@ -1,6 +1,6 @@
 import { Button, Grid, List, ListItem, ListItemText, TextField } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { over } from "stompjs";
 import SockJS from "sockjs-client";
 
@@ -32,24 +32,25 @@ const useStyles = makeStyles({
     fontSize: "1.2rem",
     color: "#81e695"
   },
-  senderBox: {
-    justifyContent: "right",
-  },
   senderBoxContent: {
-    backgroundColor: "#1f2420",
+    backgroundColor: "#0f7d4d",
     color: "#fff",
     padding: "0.5rem",
     borderRadius: "0.5rem",
+    maxWidth: "70%",
+    overflowWrap: "break-word",
   },
   receiverBox: {
-    alignContent: "left",
+    justifyContent: "flex-end",
   },
   receiverBoxContent: {
-    backgroundColor: "gray",
+    backgroundColor: "#292e2a",
     color: "#fff",
     width: "fit-content",
     padding: "0.5rem",
     borderRadius: "0.5rem",
+    maxWidth: "70%",
+    overflowWrap: "break-word",
   },
 });
 
@@ -93,14 +94,25 @@ const ChatMenu = () => {
   };
 
   const MessagesBox = () => {
+
+    const messagesRef = useRef(null);
+
+    useEffect(() => {
+      // Scroll to the bottom of the message box when a new message is received
+      if (messagesRef.current) {
+        messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
+      }
+    }, [publicChats]); // Trigger the effect when publicChats state changes
+
+
     return (
-      <List className={classes.messageArea}>
+      <List className={classes.messageArea} ref={messagesRef} >
         {publicChats.map((chat, index) => {
           const isSelf = chat.senderName === userData.username;
 
           if (isSelf) {
             return (
-              <ListItem key={index} className={classes.senderBox}>
+              <ListItem key={index} className="senderBox">
                 <Grid container width="fit-content" className={classes.senderBoxContent}>
                   <Grid item xs={12}>
                     <ListItemText align="right" primary={chat.message}></ListItemText>

@@ -1,5 +1,10 @@
 @import '../../values.scss';
 
+
+.senderBox {
+    justify-content: flex-end !important;
+}
+
 .chat-menu {
     margin: $margin-md auto;
     padding: 20px;
