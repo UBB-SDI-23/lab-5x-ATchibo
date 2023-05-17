@@ -214,9 +214,13 @@ const ChatMenu: React.FC = () => {
       return;
     }
 
-    registerUser();
+    // registerUser();
     setModalNicknameOpen(false);
   };
+
+  useEffect(() => {
+    registerUser();
+  }, []);
 
   return (
     <div className="chat-menu">
