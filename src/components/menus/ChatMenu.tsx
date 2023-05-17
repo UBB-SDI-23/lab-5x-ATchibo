@@ -220,6 +220,8 @@ const ChatMenu: React.FC = () => {
 
   useEffect(() => {
     registerUser();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
