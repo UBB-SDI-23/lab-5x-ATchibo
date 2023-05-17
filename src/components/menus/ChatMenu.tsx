@@ -218,15 +218,15 @@ const ChatMenu: React.FC = () => {
 
     setUserData({ ...userData, username: username });
 
-    // registerUser();
+    registerUser();
     setModalNicknameOpen(false);
   };
 
-  useEffect(() => {
-    registerUser();
+  // useEffect(() => {
+  //   registerUser();
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
   return (
     <div className="chat-menu">
