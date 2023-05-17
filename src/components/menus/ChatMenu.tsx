@@ -252,9 +252,9 @@ const ChatMenu: React.FC = () => {
         </div>
       )}
 
-      <Snackbar open={userData.username !== "" && userData.connected === false}>
+      <Snackbar open={!modalNicknameOpen && userData.connected === false}>
           <Alert severity="info">
-              Loading...
+              Connecting...
           </Alert>   
       </Snackbar>
     </div>
