@@ -244,7 +244,7 @@ const ChatMenu: React.FC = () => {
               label="Nickname"
               type="text"
               fullWidth
-              value={userData.username}
+              value={username}
               onChange={handleUserName}
               variant="outlined"
               size="small"
