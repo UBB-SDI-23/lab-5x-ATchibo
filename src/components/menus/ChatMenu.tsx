@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import {
+  Alert,
   Button,
   Grid,
   List,
   ListItem,
   ListItemText,
+  Snackbar,
   TextField,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
@@ -81,6 +83,7 @@ const ChatMenu: React.FC = () => {
 
   const registerUser = () => {
     const socket = new SockJS(Values.websocketUrl);
+    socket.withCredentials = false;
     stompClient = over(socket);
     stompClient.connect({}, onConnected, onError);
   };
@@ -184,6 +187,7 @@ const ChatMenu: React.FC = () => {
     return (
       <form className="chat-menu-send-box" onSubmit={submit}>
         <TextField
+          disabled={!userData.connected}
           autoFocus
           id="message"
           type="text"
@@ -196,7 +200,7 @@ const ChatMenu: React.FC = () => {
           placeholder="Type a message..."
           className="send-box-input"
         />
-        <Button type="submit" className="send-box-button">
+        <Button disabled={!userData.connected} type="submit" className="send-box-button">
           Send
         </Button>
       </form>
@@ -247,6 +251,12 @@ const ChatMenu: React.FC = () => {
           <SendBox />
         </div>
       )}
+
+      <Snackbar open={userData.username !== "" && userData.connected === false}>
+          <Alert severity="info">
+              Loading...
+          </Alert>   
+      </Snackbar>
     </div>
   );
 };
