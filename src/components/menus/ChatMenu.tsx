@@ -70,6 +70,7 @@ const ChatMenu: React.FC = () => {
   const classes = useStyles();
   const [modalNicknameOpen, setModalNicknameOpen] = useState(true);
   const [publicChats, setPublicChats] = useState<any[]>([]);
+  const [userName, setUserName] = useState<string>("");
   const [userData, setUserData] = useState({
     username: "",
     message: "",
@@ -78,7 +79,8 @@ const ChatMenu: React.FC = () => {
 
   const handleUserName = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
-    setUserData({ ...userData, username: value });
+    setUserName(value);
+    // setUserData({ ...userData, username: value });
   };
 
   const registerUser = () => {
@@ -170,7 +172,7 @@ const ChatMenu: React.FC = () => {
       }
       if (stompClient) {
         const chatMessage = {
-          senderName: userData.username,
+          senderName: userData.username === "" ? userName : userData.username,
           message: userData.message,
           status: "MESSAGE",
         };
@@ -210,9 +212,11 @@ const ChatMenu: React.FC = () => {
   const setNickname = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (userData.username === "") {
+    if (userName === "") {
       return;
     }
+
+    setUserData({ ...userData, username: userName });
 
     // registerUser();
     setModalNicknameOpen(false);
@@ -240,7 +244,7 @@ const ChatMenu: React.FC = () => {
               label="Nickname"
               type="text"
               fullWidth
-              value={userData.username}
+              value={userName}
               onChange={handleUserName}
               variant="outlined"
               size="small"
