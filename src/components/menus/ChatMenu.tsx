@@ -70,6 +70,7 @@ const ChatMenu: React.FC = () => {
   const classes = useStyles();
   const [modalNicknameOpen, setModalNicknameOpen] = useState(true);
   const [publicChats, setPublicChats] = useState<any[]>([]);
+  const [username, setUsername] = useState("");
   const [userData, setUserData] = useState({
     username: "",
     message: "",
@@ -78,7 +79,8 @@ const ChatMenu: React.FC = () => {
 
   const handleUserName = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
-    setUserData({ ...userData, username: value });
+    setUsername(value);
+    // setUserData({ ...userData, username: value });
   };
 
   const registerUser = () => {
@@ -213,6 +215,8 @@ const ChatMenu: React.FC = () => {
     if (userData.username === "") {
       return;
     }
+
+    setUserData({ ...userData, username: username });
 
     // registerUser();
     setModalNicknameOpen(false);
