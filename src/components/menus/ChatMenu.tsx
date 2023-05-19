@@ -12,9 +12,9 @@ import {
 import { makeStyles } from "@mui/styles";
 
 // @ts-ignore
-import { client } from "stompjs";
+import { over } from "stompjs";
 // @ts-ignore
-// import SockJS from "sockjs-client";
+import SockJS from "sockjs-client";
 
 import "./ChatMenu.scss";
 import Values from "../../Values";
@@ -84,10 +84,8 @@ const ChatMenu: React.FC = () => {
   };
 
   const registerUser = () => {
-    // const socket = new SockJS(Values.websocketUrl);
-    // socket.withCredentials = false;
-    // stompClient = over(socket);
-    stompClient = client(Values.websocketUrl);
+    const socket = new SockJS(Values.websocketUrl);
+    stompClient = over(socket);
     stompClient.connect({}, onConnected, onError);
   };
 
