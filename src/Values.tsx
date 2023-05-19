@@ -14,7 +14,7 @@ class Values {
     static chatPageUrl = "/chat";
 
     // static websocketUrl = "ws://localhost:8080/ws/websocket";
-    static websocketUrl = "wss://exquisite-fox.chickenkiller.com/ws/websocket";
+    static websocketUrl = "ws://exquisite-fox.chickenkiller.com/ws/websocket";
 
     // Colors
     static mainColor = "#0f7d4d";
