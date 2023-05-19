@@ -13,8 +13,8 @@ class Values {
     static manageDatabasePageUrl = "/manage-database";
     static chatPageUrl = "/chat";
 
-    // static websocketUrl = "http://localhost:8080/ws";
-    static websocketUrl = "https://exquisite-fox.chickenkiller.com/ws";
+    // static websocketUrl = "ws://localhost:8080/ws/websocket";
+    static websocketUrl = "wss://exquisite-fox.chickenkiller.com/ws/websocket";
 
     // Colors
     static mainColor = "#0f7d4d";
