@@ -13,15 +13,16 @@ class Values {
     static manageDatabasePageUrl = "/manage-database";
     static chatPageUrl = "/chat";
 
-    static websocketUrl = "wss://tchibo-cafeluta.netlify.com/chat";
+    // static websocketUrl = "http://localhost:8080/ws";
+    static websocketUrl = "https://exquisite-fox.chickenkiller.com/ws";
 
     // Colors
     static mainColor = "#0f7d4d";
     static secondaryColor = "#0c5937";
 
     // Backend
-    static baseBackendUrl = "http://localhost:8080/api";
-    // static baseBackendUrl = "https://exquisite-fox.chickenkiller.com/api";
+    // static baseBackendUrl = "http://localhost:8080/api";
+    static baseBackendUrl = "https://exquisite-fox.chickenkiller.com/api";
     
     // Dealerships
     static dealershipsBaseUrl = "/dealerships";

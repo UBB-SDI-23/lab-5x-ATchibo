@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import {
+  Alert,
   Button,
   Grid,
   List,
   ListItem,
   ListItemText,
+  Snackbar,
   TextField,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
@@ -15,6 +17,7 @@ import { over } from "stompjs";
 import SockJS from "sockjs-client";
 
 import "./ChatMenu.scss";
+import Values from "../../Values";
 
 let stompClient: any = null;
 
@@ -67,6 +70,7 @@ const ChatMenu: React.FC = () => {
   const classes = useStyles();
   const [modalNicknameOpen, setModalNicknameOpen] = useState(true);
   const [publicChats, setPublicChats] = useState<any[]>([]);
+  const [userName, setUserName] = useState<string>("");
   const [userData, setUserData] = useState({
     username: "",
     message: "",
@@ -75,11 +79,13 @@ const ChatMenu: React.FC = () => {
 
   const handleUserName = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
-    setUserData({ ...userData, username: value });
+    setUserName(value);
+    // setUserData({ ...userData, username: value });
   };
 
   const registerUser = () => {
-    const socket = new SockJS("http://localhost:8080/ws");
+    const socket = new SockJS(Values.websocketUrl);
+    socket.withCredentials = false;
     stompClient = over(socket);
     stompClient.connect({}, onConnected, onError);
   };
@@ -166,7 +172,7 @@ const ChatMenu: React.FC = () => {
       }
       if (stompClient) {
         const chatMessage = {
-          senderName: userData.username,
+          senderName: userData.username === "" ? userName : userData.username,
           message: userData.message,
           status: "MESSAGE",
         };
@@ -183,6 +189,7 @@ const ChatMenu: React.FC = () => {
     return (
       <form className="chat-menu-send-box" onSubmit={submit}>
         <TextField
+          disabled={!userData.connected}
           autoFocus
           id="message"
           type="text"
@@ -195,7 +202,7 @@ const ChatMenu: React.FC = () => {
           placeholder="Type a message..."
           className="send-box-input"
         />
-        <Button type="submit" className="send-box-button">
+        <Button disabled={!userData.connected} type="submit" className="send-box-button">
           Send
         </Button>
       </form>
@@ -205,13 +212,21 @@ const ChatMenu: React.FC = () => {
   const setNickname = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (userData.username === "") {
+    if (userName === "") {
       return;
     }
 
-    registerUser();
+    setUserData({ ...userData, username: userName });
+
+    // registerUser();
     setModalNicknameOpen(false);
   };
+
+  useEffect(() => {
+    registerUser();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="chat-menu">
@@ -229,7 +244,7 @@ const ChatMenu: React.FC = () => {
               label="Nickname"
               type="text"
               fullWidth
-              value={userData.username}
+              value={userName}
               onChange={handleUserName}
               variant="outlined"
               size="small"
@@ -246,6 +261,12 @@ const ChatMenu: React.FC = () => {
           <SendBox />
         </div>
       )}
+
+      <Snackbar open={!modalNicknameOpen && userData.connected === false}>
+          <Alert severity="info">
+              Connecting...
+          </Alert>   
+      </Snackbar>
     </div>
   );
 };
