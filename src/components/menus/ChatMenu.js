@@ -40,9 +40,6 @@ const useStyles = makeStyles({
     fontSize: "1.2rem",
     color: "#81e695",
   },
-  senderBox: {
-    justifyContent: "flex-start",
-  },
   senderBoxContent: {
     backgroundColor: "#0f7d4d",
     color: "#fff",
@@ -52,7 +49,7 @@ const useStyles = makeStyles({
     overflowWrap: "break-word",
   },
   receiverBox: {
-    justifyContent: "flex-end",
+    justifyContent: "flex-start",
   },
   receiverBoxContent: {
     backgroundColor: "#292e2a",
@@ -124,7 +121,7 @@ const ChatMenu = () => {
 
           if (isSelf) {
             return (
-              <ListItem key={index} className={classes.senderBox}>
+              <ListItem key={index}>
                 <Grid
                   container
                   width="fit-content"
