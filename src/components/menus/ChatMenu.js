@@ -49,7 +49,7 @@ const useStyles = makeStyles({
     overflowWrap: "break-word",
   },
   receiverBox: {
-    justifyContent: "flex-start",
+    justifyContent: "flex-end",
   },
   receiverBoxContent: {
     backgroundColor: "#292e2a",
