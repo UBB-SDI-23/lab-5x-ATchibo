@@ -40,6 +40,9 @@ const useStyles = makeStyles({
     fontSize: "1.2rem",
     color: "#81e695",
   },
+  senderBox: {
+    justifyContent: "flex-end",
+  },
   senderBoxContent: {
     backgroundColor: "#0f7d4d",
     color: "#fff",
@@ -49,7 +52,7 @@ const useStyles = makeStyles({
     overflowWrap: "break-word",
   },
   receiverBox: {
-    justifyContent: "flex-end",
+    justifyContent: "flex-start",
   },
   receiverBoxContent: {
     backgroundColor: "#292e2a",
@@ -76,14 +79,18 @@ const ChatMenu = () => {
   const [clientRef, setClientRef] = useState(null);
   // let clientRef = null;
 
+  const handleMessageReceived = (payload) => {
+    setPublicChats((prevChats) => [...prevChats, payload]);
+  };
+
+  const handleConnect = () => {
+    setUserData({ ...userData, username: userName, connected: true });
+  };
+
   const handleUserName = (e) => {
     const { value } = e.target;
     setUserName(value);
     // setUserData({ ...userData, username: value });
-  };
-
-  const handleMessageReceived = (payload) => {
-    setPublicChats((prevChats) => [...prevChats, payload]);
   };
 
   const handleLogin = (e) => {
@@ -93,16 +100,12 @@ const ChatMenu = () => {
       return;
     }
 
-    // setUserData({ ...userData, username: userName, connected: true });
+    setUserData({ ...userData, username: userName });
 
     // clientRef.sendMessage("/app/chat.addUser",
         // JSON.stringify({sender: userName, type: 'JOIN'}));
 
     setModalNicknameOpen(false);
-  };
-
-  const handleConnect = () => {
-    setUserData({ ...userData, username: userName, connected: true });
   };
 
   const MessagesBox = () => {
@@ -125,7 +128,7 @@ const ChatMenu = () => {
 
           if (isSelf) {
             return (
-              <ListItem key={index}>
+              <ListItem key={index} className="senderBox">
                 <Grid
                   container
                   width="fit-content"
@@ -166,6 +169,9 @@ const ChatMenu = () => {
   const SendBox = () => {
     
     const submit = (e) => {
+
+      console.log("submit");  
+      console.log(userData);
 
       e.preventDefault();
       if (userData.message === "") {
