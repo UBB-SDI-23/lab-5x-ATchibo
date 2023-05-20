@@ -14,14 +14,12 @@ import { makeStyles } from "@mui/styles";
 // @ts-ignore
 import { over } from "stompjs";
 // @ts-ignore
-// import SockJS from "sockjs-client";
+import SockJS from "sockjs-client";
 
 import "./ChatMenu.scss";
 import Values from "../../Values";
 
 let stompClient: any = null;
-
-var W3CWebSocket = require('websocket').w3cwebsocket;
 
 const useStyles = makeStyles({
   table: {
@@ -86,7 +84,7 @@ const ChatMenu: React.FC = () => {
   };
 
   const registerUser = () => {
-    const socket = new W3CWebSocket(Values.websocketUrl, 'echo-protocol');
+    const socket = new WebSocket(Values.websocketUrl);
     stompClient = over(socket);
     stompClient.connect({}, onConnected, onError);
   };
