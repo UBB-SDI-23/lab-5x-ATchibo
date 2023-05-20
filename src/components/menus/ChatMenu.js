@@ -93,12 +93,16 @@ const ChatMenu = () => {
       return;
     }
 
-    setUserData({ ...userData, username: userName, connected: true });
+    // setUserData({ ...userData, username: userName, connected: true });
 
     // clientRef.sendMessage("/app/chat.addUser",
         // JSON.stringify({sender: userName, type: 'JOIN'}));
 
     setModalNicknameOpen(false);
+  };
+
+  const handleConnect = () => {
+    setUserData({ ...userData, username: userName, connected: true });
   };
 
   const MessagesBox = () => {
@@ -214,6 +218,7 @@ const ChatMenu = () => {
       
       <SockJsClient url={Values.websocketUrl} topics={['/topic/public']}
         onMessage={(msg) => handleMessageReceived(msg)}
+        onConnect={handleConnect}
         ref={(client) => {
             setClientRef(client);
         }}
