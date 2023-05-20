@@ -14,7 +14,7 @@ import { makeStyles } from "@mui/styles";
 // @ts-ignore
 import { over } from "stompjs";
 // @ts-ignore
-import SockJS from "sockjs-client";
+// import SockJS from "sockjs-client";
 
 import "./ChatMenu.scss";
 import Values from "../../Values";
