@@ -40,6 +40,9 @@ const useStyles = makeStyles({
     fontSize: "1.2rem",
     color: "#81e695",
   },
+  senderBox: {
+    justifyContent: "flex-start",
+  },
   senderBoxContent: {
     backgroundColor: "#0f7d4d",
     color: "#fff",
@@ -121,7 +124,7 @@ const ChatMenu = () => {
 
           if (isSelf) {
             return (
-              <ListItem key={index} className="senderBox">
+              <ListItem key={index} className={classes.senderBox}>
                 <Grid
                   container
                   width="fit-content"
@@ -162,7 +165,7 @@ const ChatMenu = () => {
   const SendBox = () => {
     
     const submit = (e) => {
-      
+
       e.preventDefault();
       if (userData.message === "") {
         return;
@@ -193,7 +196,6 @@ const ChatMenu = () => {
           disabled={!userData.connected}
           autoFocus
           id="message"
-          type="text"
           fullWidth
           maxRows={4}
           value={userData.message}
