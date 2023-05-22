@@ -15,6 +15,7 @@ import SockJsClient from 'react-stomp';
 
 import "./ChatMenu.scss";
 import Values from "../../Values";
+import LocalStorageManager from "../../helpers/LocalStorageManager";
 
 
 const useStyles = makeStyles({
@@ -67,14 +68,21 @@ const useStyles = makeStyles({
 
 const ChatMenu = () => {
   const classes = useStyles();
-  const [modalNicknameOpen, setModalNicknameOpen] = useState(true);
+  const [modalNicknameOpen, setModalNicknameOpen] = useState(LocalStorageManager.getUsername() === "");
   const [publicChats, setPublicChats] = useState([]);
   const [userName, setUserName] = useState("");
   const [userData, setUserData] = useState({
-    username: "",
+    username: LocalStorageManager.getUsername() || "",
     message: "",
     connected: false,
   });
+
+  useEffect(() => {
+    setUserName(LocalStorageManager.getUsername() || "");
+    setUserData({ ...userData, username: LocalStorageManager.getUsername() || "" });
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const [clientRef, setClientRef] = useState(null);
   // let clientRef = null;
@@ -101,6 +109,8 @@ const ChatMenu = () => {
     }
 
     setUserData({ ...userData, username: userName });
+
+    LocalStorageManager.setUsername(userName);
 
     // clientRef.sendMessage("/app/chat.addUser",
         // JSON.stringify({sender: userName, type: 'JOIN'}));
@@ -231,9 +241,17 @@ const ChatMenu = () => {
       />
 
       <div className="chat-menu-title">
-        <h1>Chat</h1>
+        {
+          userData.username !== "" ?
+          <h1>
+            Chatting as {userData.username}
+          </h1> :
+          <h1>
+            Chat
+          </h1>
+        }
       </div>
-      {modalNicknameOpen ? (
+      {modalNicknameOpen && userData.username === "" ? (
         <div className="nickname-div">
           <h2>Enter your nickname</h2>
           <p>You will use this nickname to chat with other users.</p>

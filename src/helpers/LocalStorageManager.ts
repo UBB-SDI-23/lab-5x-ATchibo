@@ -5,6 +5,14 @@ class LocalStorageManager {
     static userPrefix: string = "user";
     static tablePrefix: string = "table";
 
+    static setUsername(username: string) {
+        localStorage.setItem(LocalStorageManager.userPrefix, username);
+    }
+
+    static getUsername(): string | null {
+        return localStorage.getItem(LocalStorageManager.userPrefix);
+    }
+
     static setAuthToken(auth_token: string) {
         window.localStorage.setItem(LocalStorageManager.authTokenPrefix, auth_token);
     }
@@ -39,8 +47,7 @@ class LocalStorageManager {
     }   
 
     static performLogoutCleaning() {
-        LocalStorageManager.removeAuthToken();
-        LocalStorageManager.removeRefreshToken();
+        window.localStorage.clear();
     }
 
 }
