@@ -68,7 +68,7 @@ const useStyles = makeStyles({
 
 const ChatMenu = () => {
   const classes = useStyles();
-  const [modalNicknameOpen, setModalNicknameOpen] = useState(LocalStorageManager.getUsername() === "");
+  const [modalNicknameOpen, setModalNicknameOpen] = useState(true);
   const [publicChats, setPublicChats] = useState([]);
   const [userName, setUserName] = useState("");
   const [userData, setUserData] = useState({
@@ -251,7 +251,7 @@ const ChatMenu = () => {
           </h1>
         }
       </div>
-      {modalNicknameOpen && userData.username === "" ? (
+      {modalNicknameOpen ? (
         <div className="nickname-div">
           <h2>Enter your nickname</h2>
           <p>You will use this nickname to chat with other users.</p>
