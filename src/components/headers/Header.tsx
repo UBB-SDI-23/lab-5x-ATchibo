@@ -3,20 +3,21 @@ import './Header.scss'
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 import Values from '../../Values';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Button, Menu, MenuItem } from '@mui/material';
 import LocalStorageManager from '../../helpers/LocalStorageManager';
 import UserDTO from '../../domain/User/UserDTO';
 import UserRequests from '../../api/UserRequests';
+import { UserContext } from '../../helpers/UserContext';
 
 const Header = () => {
 
-    const [user, setUser] = useState<UserDTO>(new UserDTO());
-
+    const { user, setUser } = useContext(UserContext) || new UserDTO();
+    
     const navigate = useNavigate();
 
     const userRole = user?.getRole().split('_')[1] || "App";
-    const username = LocalStorageManager.getUsername() || user?.getUsername() || "User";
+    const username = user?.getUsername() || "User";
 
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
