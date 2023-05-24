@@ -11,15 +11,12 @@ import {
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 
-// @ts-ignore
-import { over } from "stompjs";
-// @ts-ignore
-import SockJS from "sockjs-client";
+import SockJsClient from 'react-stomp';
 
 import "./ChatMenu.scss";
 import Values from "../../Values";
+import LocalStorageManager from "../../helpers/LocalStorageManager";
 
-let stompClient: any = null;
 
 const useStyles = makeStyles({
   table: {
@@ -44,6 +41,9 @@ const useStyles = makeStyles({
     fontSize: "1.2rem",
     color: "#81e695",
   },
+  senderBox: {
+    justifyContent: "flex-end",
+  },
   senderBoxContent: {
     backgroundColor: "#0f7d4d",
     color: "#fff",
@@ -53,7 +53,7 @@ const useStyles = makeStyles({
     overflowWrap: "break-word",
   },
   receiverBox: {
-    justifyContent: "flex-end",
+    justifyContent: "flex-start",
   },
   receiverBoxContent: {
     backgroundColor: "#292e2a",
@@ -66,49 +66,61 @@ const useStyles = makeStyles({
   },
 });
 
-const ChatMenu: React.FC = () => {
+const ChatMenu = () => {
   const classes = useStyles();
   const [modalNicknameOpen, setModalNicknameOpen] = useState(true);
-  const [publicChats, setPublicChats] = useState<any[]>([]);
-  const [userName, setUserName] = useState<string>("");
+  const [publicChats, setPublicChats] = useState([]);
+  const [userName, setUserName] = useState("");
   const [userData, setUserData] = useState({
-    username: "",
+    username: LocalStorageManager.getUsername() || "",
     message: "",
     connected: false,
   });
 
-  const handleUserName = (e: React.ChangeEvent<HTMLInputElement>) => {
+  useEffect(() => {
+    setUserName(LocalStorageManager.getUsername() || "");
+    setUserData({ ...userData, username: LocalStorageManager.getUsername() || "" });
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const [clientRef, setClientRef] = useState(null);
+  // let clientRef = null;
+
+  const handleMessageReceived = (payload) => {
+    setPublicChats((prevChats) => [...prevChats, payload]);
+  };
+
+  const handleConnect = () => {
+    setUserData({ ...userData, username: userName, connected: true });
+  };
+
+  const handleUserName = (e) => {
     const { value } = e.target;
     setUserName(value);
     // setUserData({ ...userData, username: value });
   };
 
-  const registerUser = () => {
-    const socket = new SockJS(Values.websocketUrl);
-    socket.withCredentials = false;
-    stompClient = over(socket);
-    stompClient.connect({}, onConnected, onError);
+  const handleLogin = (e) => {
+    e.preventDefault();
+
+    if (userName === "") {
+      return;
+    }
+
+    setUserData({ ...userData, username: userName });
+
+    LocalStorageManager.setUsername(userName);
+
+    // clientRef.sendMessage("/app/chat.addUser",
+        // JSON.stringify({sender: userName, type: 'JOIN'}));
+
+    setModalNicknameOpen(false);
   };
 
-  const onConnected = () => {
-    setUserData({ ...userData, connected: true });
-    stompClient.subscribe("/chatroom/public", onMessageReceived);
-    console.log("Connected");
-  };
+  const MessagesBox = () => {
 
-  const onMessageReceived = (payload: any) => {
-    const message = JSON.parse(payload.body);
-    setPublicChats((prevChats) => [...prevChats, message]);
-  };
-
-  const onError = (error: any) => {
-    console.log(error);
-  };
-
-  
-  const MessagesBox: React.FC = () => {
-
-    const messagesRef = useRef<HTMLUListElement | null>(null);
+    const messagesRef = useRef(null);
 
     useEffect(() => {
       // Scroll to the bottom of the message box when a new message is received
@@ -122,7 +134,7 @@ const ChatMenu: React.FC = () => {
     return (
       <List className={classes.messageArea} ref={messagesRef}>
         {publicChats.map((chat, index) => {
-          const isSelf = chat.senderName === userData.username;
+          const isSelf = (chat.senderName === userData.username || chat.senderName === userName);
 
           if (isSelf) {
             return (
@@ -164,24 +176,33 @@ const ChatMenu: React.FC = () => {
     );
   };
 
-  const SendBox: React.FC = () => {
-    const submit = (e: React.FormEvent) => {
+  const SendBox = () => {
+    
+    const submit = (e) => {
+
+      console.log("submit");  
+      console.log(userData);
+
       e.preventDefault();
       if (userData.message === "") {
         return;
       }
-      if (stompClient) {
+
+      if (clientRef && userData.username) {
         const chatMessage = {
           senderName: userData.username === "" ? userName : userData.username,
           message: userData.message,
-          status: "MESSAGE",
+          type: "CHAT",
         };
-        stompClient.send("/app/message", {}, JSON.stringify(chatMessage));
+
+        clientRef.sendMessage("/app/chat.sendMessage",
+                JSON.stringify(chatMessage));
+        
         setUserData({ ...userData, message: "" });
       }
     };
 
-    const handleMessage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleMessage = (e) => {
       const { value } = e.target;
       setUserData({ ...userData, message: value });
     };
@@ -192,7 +213,6 @@ const ChatMenu: React.FC = () => {
           disabled={!userData.connected}
           autoFocus
           id="message"
-          type="text"
           fullWidth
           maxRows={4}
           value={userData.message}
@@ -209,35 +229,33 @@ const ChatMenu: React.FC = () => {
     );
   };
 
-  const setNickname = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (userName === "") {
-      return;
-    }
-
-    setUserData({ ...userData, username: userName });
-
-    // registerUser();
-    setModalNicknameOpen(false);
-  };
-
-  useEffect(() => {
-    registerUser();
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   return (
     <div className="chat-menu">
+      
+      <SockJsClient url={Values.websocketUrl} topics={['/topic/public']}
+        onMessage={(msg) => handleMessageReceived(msg)}
+        onConnect={handleConnect}
+        ref={(client) => {
+            setClientRef(client);
+        }}
+      />
+
       <div className="chat-menu-title">
-        <h1>Chat</h1>
+        {
+          userData.username !== "" ?
+          <h1>
+            Chatting as {userData.username}
+          </h1> :
+          <h1>
+            Chat
+          </h1>
+        }
       </div>
       {modalNicknameOpen ? (
         <div className="nickname-div">
           <h2>Enter your nickname</h2>
           <p>You will use this nickname to chat with other users.</p>
-          <form onSubmit={setNickname}>
+          <form onSubmit={handleLogin}>
             <TextField
               autoFocus
               id="nickname"

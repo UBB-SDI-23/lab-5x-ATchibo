@@ -29,6 +29,7 @@ const LoginMenu = () => {
                 console.log(response);
                 LocalStorageManager.setRefreshToken(response.data.refreshToken);
                 LocalStorageManager.setAuthToken(response.data.token);
+                LocalStorageManager.setUsername(username);
                 navigate(Values.homePageUrl);
             })
             .catch((err: any) => {
@@ -43,6 +44,7 @@ const LoginMenu = () => {
 
     const continueAsGuest = () => {
         LocalStorageManager.setAuthToken("");
+        LocalStorageManager.setUsername("");
         navigate(Values.homePageUrl);
     }
 
