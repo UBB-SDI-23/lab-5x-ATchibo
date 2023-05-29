@@ -376,10 +376,10 @@ const CarsTableView = () => {
                     }}
                 />
 
-                <Button className='edit-container-button' 
+                {/* <Button className='edit-container-button' 
                     onClick={() => window.open(Values.siteUrl + Values.estimateCarPriceUrl, '_blank')}>
                         Estimate price
-                </Button>
+                </Button> */}
 
                 <TextField className='edit-container-text-field' 
                     id='description' 
