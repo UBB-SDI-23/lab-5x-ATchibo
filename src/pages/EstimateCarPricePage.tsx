@@ -4,7 +4,6 @@ import './EstimateCarPricePage.scss';
 import { useState } from 'react';
 import Card from '../components/Card';
 import AIRequests from '../api/AIRequests';
-import { set } from 'lodash';
 
 const EstimateCarPricePage = () => {
 
