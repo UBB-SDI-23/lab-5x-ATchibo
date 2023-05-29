@@ -12,6 +12,7 @@ class Values {
     static manageUsersPageUrl = "/manage-users";
     static manageDatabasePageUrl = "/manage-database";
     static chatPageUrl = "/chat";
+    static estimateCarPriceUrl = "/estimate-car-price";
 
     // Colors
     static mainColor = "#0f7d4d";
@@ -19,8 +20,11 @@ class Values {
 
     // Backend
 
-    // static backendUrl = "https://exquisite-fox.chickenkiller.com";
-    static backendUrl = "http://localhost:8080";
+    static backendUrl = "https://exquisite-fox.chickenkiller.com";
+    // static backendUrl = "http://localhost:8080";
+
+    // static aiPriceBackendUrl = "http://localhost:5000/predict";
+    static aiPriceBackendUrl = "https://exquisite-fox.chickenkiller.com/predict";
 
     static baseBackendUrl = this.backendUrl + "/api";
     static websocketUrl = this.backendUrl + "/ws";

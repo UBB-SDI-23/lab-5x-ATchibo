@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Button, Snackbar, Alert, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Autocomplete, Pagination, IconButton } from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { GridRowSelectionModel, GridRowId } from '@mui/x-data-grid';
 import { useState, useEffect, useCallback, useContext } from 'react';
 import './CarsTableView.scss';
@@ -18,6 +19,7 @@ import { UserContext } from '../../helpers/UserContext';
 import { Table, Tbody, Td, Th, Thead, Tr } from 'react-super-responsive-table';
 import '../../general-style.scss';
 import InfoIcon from '@mui/icons-material/Info';
+import AIRequests from '../../api/AIRequests';
 
 interface EditContainerProps {
     car: CarDTO
@@ -257,6 +259,10 @@ const CarsTableView = () => {
 
         const [dealershipsDTOs, setDealershipsDTOs] = useState<DealershipDTO[]>([initialDealership]);
 
+        const [dealershipSuggestion, setDealershipSuggestion] = useState<string>(car.getDescription() || "");
+
+        const [suggestionLoading, setSuggestionLoading] = useState<boolean>(false);
+
         const fetchSuggestions = async (query: string) => {
             try {
                 const suggestions = await DealershipRequests.getDealershipsByName(query);
@@ -280,6 +286,33 @@ const CarsTableView = () => {
                 debouncedFetchSuggestions.cancel();
             };
         }, [debouncedFetchSuggestions]);
+
+
+        const suggestDescription = async () => {
+
+            console.log("suggesting description");
+
+            if (car.getBrand() === "" || car.getModel() === "") {
+                return;
+            }
+
+            setSuggestionLoading(true);
+            
+            await AIRequests.suggestCarDescription(
+                car.getBrand(), car.getModel(), car.getYear(), car.getColor()
+            ).then((res: any) => {
+                let lastIndex = res.lastIndexOf(". ");
+                let result = res.substring(0, lastIndex);
+                car.setDescription(result);
+                setDealershipSuggestion(result);
+
+                setSuggestionLoading(false);
+            })
+            .catch((err: any) => {
+                console.log(err);
+                setSuggestionLoading(false);
+            });
+        }
 
         return (
             <div className='entity-edit-container-div'>                    
@@ -308,7 +341,7 @@ const CarsTableView = () => {
                     label='Year' 
                     variant='standard' 
                     onKeyDown={(e) => {
-                        if (!(e.key >= '0' && e.key <= '9')) {
+                        if (!(e.key >= '0' && e.key <= '9') && e.key !== 'Backspace' && e.key !== 'Delete' && e.key !== 'ArrowLeft' && e.key !== 'ArrowRight' && e.key !== 'Tab') {
                             e.preventDefault()
                         }
                     }}
@@ -333,7 +366,7 @@ const CarsTableView = () => {
                     label='Price' 
                     variant='standard' 
                     onKeyDown={(e) => {
-                        if (!(e.key >= '0' && e.key <= '9') && e.key !== 'Backspace' && e.key !== 'Delete' && e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') {
+                        if (!(e.key >= '0' && e.key <= '9') && e.key !== 'Backspace' && e.key !== 'Delete' && e.key !== 'ArrowLeft' && e.key !== 'ArrowRight' && e.key !== 'Tab') {
                             e.preventDefault()
                         }
                     }}
@@ -343,11 +376,29 @@ const CarsTableView = () => {
                     }}
                 />
 
-                <TextField className='edit-container-text-field' id='description' label='Description' variant='standard' defaultValue={car.getDescription()} 
+                <Button className='edit-container-button' 
+                    onClick={() => window.open(Values.siteUrl + Values.estimateCarPriceUrl, '_blank')}>
+                        Estimate price
+                </Button>
+
+                <TextField className='edit-container-text-field' 
+                    id='description' 
+                    label='Description' 
+                    variant='standard' 
+                    multiline 
+                    maxRows={4}
+                    defaultValue={car.getDescription()} 
+                    value={dealershipSuggestion}
                     onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                         car.setDescription(event.target.value);
                     }}
                 />
+
+                <LoadingButton className='edit-container-button' 
+                    loading={suggestionLoading}
+                    onClick={suggestDescription}>
+                        Suggest description
+                </LoadingButton>
 
                 <>
                     <Autocomplete className='edit-container-text-field'
