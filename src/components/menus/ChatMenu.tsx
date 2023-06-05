@@ -209,7 +209,7 @@ const ChatMenu: React.FC = () => {
           placeholder="Type a message..."
           className="send-box-input"
         />
-        <Button disabled={!userData.connected} type="submit" className="send-box-button">
+        <Button type="submit" className="send-box-button">
           Send
         </Button>
       </form>
