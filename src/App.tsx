@@ -23,7 +23,6 @@ import ProtectedRoute from './helpers/ProtectedRoute';
 import ManageUsersPage from './pages/ManageUsersPage';
 import ManageDatabasePage from './pages/ManageDatabasePage';
 import ChatPage from './pages/ChatPage';
-import EstimateCarPricePage from './pages/EstimateCarPricePage';
 
 function App() {
 
@@ -84,7 +83,6 @@ function App() {
               <Route path={Values.usersPageUrl + "/:uId"} element={<ProtectedRoute><UserInfoPage/></ProtectedRoute>}/>
               <Route path={Values.manageDatabasePageUrl} element={<ProtectedRoute><ManageDatabasePage/></ProtectedRoute>}/>
               <Route path={Values.chatPageUrl} element={<ProtectedRoute><ChatPage/></ProtectedRoute>}/>
-              <Route path={Values.estimateCarPriceUrl} element={<EstimateCarPricePage/>}/>
               <Route path="*" element={<ProtectedRoute><NoPage/></ProtectedRoute>} />
             </Route>
           </Routes>

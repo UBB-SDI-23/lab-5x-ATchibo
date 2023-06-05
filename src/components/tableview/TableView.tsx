@@ -12,8 +12,8 @@ import LocalStorageManager from '../../helpers/LocalStorageManager';
 const TableView = () => {
 
     const tableNames = ["Dealerships", "Cars", "Employees", "Contracts", "Suppliers"];
-    const [tableName, setTableName] = useState(LocalStorageManager.getTableName() || '');
-    const [tableNameIndex, setTableNameIndex] = useState(""+tableNames.indexOf(tableName) || '');
+    const [tableName, setTableName] = useState(LocalStorageManager.getTableName() || 'Dealerships');
+    const [tableNameIndex, setTableNameIndex] = useState(""+tableNames.indexOf(tableName) || '0');
 
     const menuItems = tableNames.map((name, index) => {
         return <MenuItem key={index} value={index}>{name}</MenuItem>
