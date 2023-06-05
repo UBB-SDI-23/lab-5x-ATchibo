@@ -99,13 +99,8 @@ const ChatMenu: React.FC = () => {
 
   const handleUserName = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
-    console.log(value);
     setUserName(value);
   };
-
-  useEffect(() => {
-    console.log("userName", userName);
-  }, [userName]);
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
