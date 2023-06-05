@@ -27,28 +27,6 @@ class AIRequests {
 
         return completion.data.choices[0].text.trim();
     }
-
-    async suggestCarPrice (year: any, 
-                            price: any,
-                            mileage: any,
-                            previousOwners: any,
-                            fuel: any,
-                            seller: any,
-                            transmission: any
-        ) {
-
-        const data = {
-            "Year": year as number,
-            "Present_Price": price as number,
-            "Kms_Driven": mileage as number,
-            "Owner": previousOwners as number,
-            "Fuel_Type_Petrol": fuel,
-            "Seller_Type_Individual": seller,
-            "Transmission_Manual": transmission
-        }
-
-        return await getApi(Values.aiPriceBackendUrl).post("", JSON.parse(JSON.stringify(data)));
-    }
 }
 
 // eslint-disable-next-line

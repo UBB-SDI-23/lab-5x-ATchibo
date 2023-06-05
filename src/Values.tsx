@@ -23,9 +23,6 @@ class Values {
     static backendUrl = "https://exquisite-fox.chickenkiller.com";
     // static backendUrl = "http://localhost:8080";
 
-    // static aiPriceBackendUrl = "http://localhost:5000/predict";
-    static aiPriceBackendUrl = "https://exquisite-fox.chickenkiller.com/predict";
-
     static baseBackendUrl = this.backendUrl + "/api";
     static websocketUrl = this.backendUrl + "/ws";
 

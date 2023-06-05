@@ -287,7 +287,6 @@ const CarsTableView = () => {
             };
         }, [debouncedFetchSuggestions]);
 
-
         const suggestDescription = async () => {
 
             console.log("suggesting description");
@@ -375,11 +374,6 @@ const CarsTableView = () => {
                         car.setPrice(parseInt(event.target.value));
                     }}
                 />
-
-                {/* <Button className='edit-container-button' 
-                    onClick={() => window.open(Values.siteUrl + Values.estimateCarPriceUrl, '_blank')}>
-                        Estimate price
-                </Button> */}
 
                 <TextField className='edit-container-text-field' 
                     id='description' 
