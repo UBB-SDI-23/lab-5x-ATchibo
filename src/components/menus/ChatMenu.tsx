@@ -75,7 +75,7 @@ const ChatMenu: React.FC = () => {
   const [publicChats, setPublicChats] = useState<Chat[]>([]);
   const [userName, setUserName] = useState("");
   const [userData, setUserData] = useState({
-    username: "",
+    username: LocalStorageManager.getUsername() || "",
     message: "",
     connected: false,
   });
@@ -83,7 +83,9 @@ const ChatMenu: React.FC = () => {
   useEffect(() => {
     setUserName(LocalStorageManager.getUsername() || "");
     setUserData({ ...userData, username: LocalStorageManager.getUsername() || "" });
-  }, [userData]);
+  
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const clientRef = useRef<SockJsClient | null>(null);
 
@@ -97,8 +99,13 @@ const ChatMenu: React.FC = () => {
 
   const handleUserName = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
+    console.log(value);
     setUserName(value);
   };
+
+  useEffect(() => {
+    console.log("userName", userName);
+  }, [userName]);
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -209,7 +216,7 @@ const ChatMenu: React.FC = () => {
           placeholder="Type a message..."
           className="send-box-input"
         />
-        <Button type="submit" className="send-box-button">
+        <Button disabled={!userData.connected} type="submit" className="send-box-button">
           Send
         </Button>
       </form>
@@ -248,7 +255,7 @@ const ChatMenu: React.FC = () => {
               label="Nickname"
               type="text"
               fullWidth
-              defaultValue={userName}
+              value={userName}
               onChange={handleUserName}
               variant="outlined"
               size="small"
