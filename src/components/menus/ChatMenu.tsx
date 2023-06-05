@@ -75,7 +75,7 @@ const ChatMenu: React.FC = () => {
   const [publicChats, setPublicChats] = useState<Chat[]>([]);
   const [userName, setUserName] = useState("");
   const [userData, setUserData] = useState({
-    username: LocalStorageManager.getUsername() || "",
+    username: "",
     message: "",
     connected: false,
   });
@@ -248,7 +248,7 @@ const ChatMenu: React.FC = () => {
               label="Nickname"
               type="text"
               fullWidth
-              value={userName}
+              defaultValue={userName}
               onChange={handleUserName}
               variant="outlined"
               size="small"
