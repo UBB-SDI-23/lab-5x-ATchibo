@@ -83,7 +83,7 @@ const ChatMenu: React.FC = () => {
   useEffect(() => {
     setUserName(LocalStorageManager.getUsername() || "");
     setUserData({ ...userData, username: LocalStorageManager.getUsername() || "" });
-  }, []);
+  }, [userData]);
 
   const clientRef = useRef<SockJsClient | null>(null);
 
@@ -120,7 +120,7 @@ const ChatMenu: React.FC = () => {
       if (messagesRef.current) {
         messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
       }
-    }, [publicChats]);
+    }, []);
 
     return (
       <List className={classes.messageArea} ref={messagesRef}>
@@ -221,9 +221,9 @@ const ChatMenu: React.FC = () => {
       <SockJsClient
         url={Values.websocketUrl}
         topics={['/topic/public']}
-        onMessage={(msg) => handleMessageReceived(msg)}
+        onMessage={(msg: Chat) => handleMessageReceived(msg)}
         onConnect={handleConnect}
-        ref={(client) => {
+        ref={(client: SockJsClient) => {
           if (client) {
             clientRef.current = client;
           }

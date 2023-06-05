@@ -1,6 +1,3 @@
-import Values from "../Values";
-import { getApi } from "../helpers/AxiosHelper";
-
 const { Configuration, OpenAIApi } = require("openai");
 
 
