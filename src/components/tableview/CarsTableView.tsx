@@ -91,6 +91,7 @@ const CarsTableView = () => {
     const showAlertSuccess = () => {
         setLoading(false);
         setAlertSuccess(true);
+        setModalDeleteOpen(false);
         setTimeout(() => {
             setAlertSuccess(false);
         }, 3000);
@@ -514,6 +515,7 @@ const CarsTableView = () => {
                     className="pagination"
                     count={40000}
                     page={page}
+                    disabled={loading}
                     onChange={changePage}
                     boundaryCount={5}
                     siblingCount={5}
@@ -576,7 +578,7 @@ const CarsTableView = () => {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={() => setModalDeleteOpen(false)} autoFocus>Cancel</Button>
-                    <Button onClick={() => {deleteRows(); setModalDeleteOpen(false);}}>Proceed</Button>
+                    <Button onClick={() => {deleteRows();}}>Proceed</Button>
                 </DialogActions>
             </Dialog>
 
