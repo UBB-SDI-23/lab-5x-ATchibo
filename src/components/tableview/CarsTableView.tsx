@@ -257,6 +257,13 @@ const CarsTableView = () => {
             car.setAuthorUsername(user.getUsername());
         }
 
+        const [brandNotOk, setBrandNotOk] = useState<boolean>(!CarInfo.isBrandValid(car.getBrand()));
+        const [modelNotOk, setModelNotOk] = useState<boolean>(!CarInfo.isModelValid(car.getModel()));
+        const [yearNotOk, setYearNotOk] = useState<boolean>(!CarInfo.isYearValid(car.getYear()));
+        const [colorNotOk, setColorNotOk] = useState<boolean>(!CarInfo.isColorValid(car.getColor()));
+        const [priceNotOk, setPriceNotOk] = useState<boolean>(!CarInfo.isPriceValid(car.getPrice()));
+        const [dealershipNotOk, setDealershipNotOk] = useState<boolean>(!CarInfo.isDealershipValid(car.getDealershipId()));
+
         const initialDealership = new DealershipDTO(car.getDealershipId() || -1, car.getDealershipName() || "", "", "", "", "", 0);
 
         const [dealershipsDTOs, setDealershipsDTOs] = useState<DealershipDTO[]>([initialDealership]);
@@ -318,26 +325,34 @@ const CarsTableView = () => {
         return (
             <div className='entity-edit-container-div'>                    
                 <TextField className='edit-container-text-field' 
+                    error={brandNotOk}
+                    helperText={brandNotOk ? "Brand must not be null" : ""}
                     id='brand' 
                     label='Brand' 
                     variant='standard' 
                     defaultValue={car.getBrand()} 
                     onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                         car.setBrand(event.target.value);
+                        setBrandNotOk(!CarInfo.isBrandValid(event.target.value));
                     }}
                 />
 
                 <TextField className='edit-container-text-field' 
+                    error={modelNotOk}
+                    helperText={modelNotOk ? "Model must not be null" : ""}
                     id='model' 
                     label='Model' 
                     variant='standard' 
                     defaultValue={car.getModel()} 
                     onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                         car.setModel(event.target.value);
+                        setModelNotOk(!CarInfo.isModelValid(event.target.value));
                     }}
                 />
 
                 <TextField className='edit-container-text-field' 
+                    error={yearNotOk}
+                    helperText={yearNotOk ? "Year must be between 1000 and 2023" : ""}
                     id='year' 
                     label='Year' 
                     variant='standard' 
@@ -349,20 +364,26 @@ const CarsTableView = () => {
                     defaultValue={car.getYear()} 
                     onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                         car.setYear(parseInt(event.target.value));
+                        setYearNotOk(!CarInfo.isYearValid(event.target.value as unknown as number));
                     }}
                 />
 
                 <TextField className='edit-container-text-field' 
+                    error={colorNotOk}
+                    helperText={colorNotOk ? "Color must not be null" : ""}
                     id='color' 
                     label='Color' 
                     variant='standard' 
                     defaultValue={car.getColor()} 
                     onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                         car.setColor(event.target.value);
+                        setColorNotOk(!CarInfo.isColorValid(event.target.value));
                     }}
                 />
 
                 <TextField className='edit-container-text-field' 
+                    error={priceNotOk}
+                    helperText={priceNotOk ? "Price must be between 0 and 1000000" : ""}
                     id='price' 
                     label='Price' 
                     variant='standard' 
@@ -374,6 +395,7 @@ const CarsTableView = () => {
                     defaultValue={car.getPrice()} 
                     onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                         car.setPrice(parseInt(event.target.value));
+                        setPriceNotOk(!CarInfo.isPriceValid(event.target.value as unknown as number));
                     }}
                 />
 
@@ -405,13 +427,14 @@ const CarsTableView = () => {
                             //@ts-ignore
                             return option.name;
                         }}
-                        renderInput={(params) => <TextField {...params} label='Dealership' variant='standard' />}
+                        renderInput={(params) => <TextField {...params} label='Dealership' variant='standard' 
+                                                    error={dealershipNotOk} helperText={dealershipNotOk ? "Invalid dealership" : "" } />}
                         onInputChange={handleInputChange}
                         onChange={(event: any, newValue: any) => {
                             if (newValue) {
-                                console.log(newValue);
                                 car.setDealershipId(newValue.id);
                                 car.setDealershipName(newValue.name);
+                                setDealershipNotOk(!CarInfo.isDealershipValid(newValue.id));
                             }
                         }}
                     />

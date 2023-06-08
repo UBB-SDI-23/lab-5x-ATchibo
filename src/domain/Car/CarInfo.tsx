@@ -5,6 +5,25 @@ import Values from "../../Values";
 
 
 class CarInfo {
+    static isBrandValid(arg0: string) {
+        return arg0.length > 0;
+    }
+    static isModelValid(arg0: string) {
+        return arg0.length > 0;
+    }
+    static isYearValid(arg0: number) {
+        return arg0 > 1000 && arg0 < 2023;
+    }
+    static isColorValid(arg0: string) {
+        return arg0.length > 0;
+    }
+    static isPriceValid(arg0: number) {
+        return arg0 > 0;
+    }
+    static isDealershipValid(arg0: number) {
+        return arg0 > 0;
+    }
+
     static columns: GridColDef[] = [
         { field: 'id', headerName: 'ID', width: 100 },
         { field: 'brand', headerName: 'Brand', width: 200 },
