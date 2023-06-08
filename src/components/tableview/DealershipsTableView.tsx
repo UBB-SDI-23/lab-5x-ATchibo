@@ -392,6 +392,7 @@ const DealershipsTableView = () => {
                 <Pagination
                     className="pagination"
                     count={40000}
+                    disabled={loading}
                     page={page}
                     onChange={changePage}
                     boundaryCount={5}
