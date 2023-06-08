@@ -154,6 +154,7 @@ const CarsTableView = () => {
     const updateRows = () => {
         if (checkUpdatedCars()) {
             fetchUpdate();
+            setSelectedRowsFields([]);
         } else {
             setAlertErrorText("Please fix all errors before proceeding");
             showAlertError();
@@ -558,7 +559,7 @@ const CarsTableView = () => {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={() => {cancelUpdateRows(); setSelectedRowsFields([]);}} autoFocus>Cancel</Button>
-                    <Button onClick={() => {updateRows(); setSelectedRowsFields([]);}}>Proceed</Button>
+                    <Button onClick={() => {updateRows(); }}>Proceed</Button>
                 </DialogActions>
             </Dialog>
 

@@ -90,7 +90,10 @@ const Header = () => {
                         'aria-labelledby': 'basic-button',
                         }}
                     >
-                        <MenuItem onClick={goToProfile}>Profile</MenuItem>
+                        {
+                            user?.getRole() !== "ROLE_GUEST" &&
+                            <MenuItem onClick={goToProfile}>Profile</MenuItem>
+                        }
                         <MenuItem id="logout" onClick={logout}>{user?.getRole() === "ROLE_GUEST" ? "Log in" : "Logout"}</MenuItem>
                     </Menu>
                 </div>
